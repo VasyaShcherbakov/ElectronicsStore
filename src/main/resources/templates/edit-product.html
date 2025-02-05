@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Редактировать товар</title>
+</head>
+<body>
+<h1>Редактировать товар</h1>
+<form action="/products/update" method="post">
+    <input type="hidden" th:value="${product.id}" name="id">
+    <p>
+        <label>Название:</label>
+        <input type="text" th:value="${product.name}" name="name" required>
+    </p>
+    <p>
+        <label>Описание:</label>
+        <textarea name="description" required th:text="${product.description}"></textarea>
+    </p>
+    <p>
+        <label>Цена:</label>
+        <input type="number" step="0.01" th:value="${product.price}" name="price" required>
+    </p>
+    <p>
+        <label>Количество:</label>
+        <input type="number" th:value="${product.quantity}" name="quantity" required>
+    </p>
+    <p>
+        <label>URL изображения:</label>
+        <input type="text" name="imageUrl" th:value="${product.imageUrl}">
+    </p>
+
+    <button type="submit">Сохранить</button>
+</form>
+<a href="/products">Вернуться к списку</a>
+<td>
+    <img th:src="${product.imageUrl}" alt="Изображение" style="max-width: 100px; height: auto;">
+</td>
+<td>
+    <a th:href="@{/products/edit/{id}(id=${product.id})}">Редактировать</a>
+</td>
+</body>
+</html>
+
+
+
+
+

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <title>Список товаров</title>
+</head>
+
+
+
+
+<body>
+<h1>Список товаров</h1>
+<form action="/products/search" method="get">
+<input type="text" name="query" placeholder="Поиск товаров" th:value="${query}">
+<button type="submit">Поиск</button>
+</form>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Название</th>
+        <th>Описание</th>
+        <th>Цена</th>
+        <th>Количество</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="product : ${products}">
+
+        <td th:text="${product.name}"></td>
+        <td th:text="${product.description}"></td>
+        <td th:text="${product.price}"></td>
+        <td th:text="${product.quantity}"></td>
+       <!-- <td>
+            <img th:src="${product.imageUrl}" alt="Изображение" style="max-width: 100px; height: auto;">
+        </td>-->
+        <img th:if="${product.imageUrl != null and not #strings.isEmpty(product.imageUrl)}"
+             th:src="${product.imageUrl}" alt="Изображение"
+             style="max-width: 100px; height: auto;">
+
+
+
+
+
+        <form th:action="@{/cart/add/{id}(id=${product.id})}" method="post">
+            <button type="submit" class="btn btn-success btn-sm">Добавить в корзину</button>
+        </form>
+
+
+
+        <td>
+            <a th:href="@{/products/{id}(id=${product.id})}" class="btn btn-info btn-sm">Детали</a>
+            <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-warning btn-sm">Редактировать</a>
+            <a th:href="@{/products/delete/{id}(id=${product.id})}"
+               class="btn btn-danger btn-sm"
+               onclick="return confirm('Удалить товар?')">Удалить</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+
+<h2>Добавить товар</h2>
+<form action="/products" method="post">
+    <input type="text" name="name" placeholder="Название" required>
+    <input type="text" name="description" placeholder="Описание" required>
+    <input type="number" name="price" placeholder="Цена" required>
+    <input type="number" name="quantity" placeholder="Количество" required>
+    <td>
+        <img th:if="${product.imageUrl != null and not #strings.isEmpty(product.imageUrl)}"
+             th:src="${product.imageUrl}" alt="Изображение"
+             style="max-width: 100px; height: auto;">
+    </td>
+
+     <p>
+         <label>URL изображения:</label>
+         <input type="text" name="imageUrl" th:value="${product.imageUrl}">
+     </p>
+
+
+
+    <button type="submit">Добавить</button>
+
+</form>
+</body>
+</html>
