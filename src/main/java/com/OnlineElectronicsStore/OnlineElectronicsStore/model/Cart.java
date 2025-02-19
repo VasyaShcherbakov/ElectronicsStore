@@ -11,6 +11,12 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToOne
+    @JoinColumn(name = "user_id", unique = true)
+    private User user;
+
+
+
     @OneToMany (cascade = CascadeType.ALL)
     private List<Product> products = new ArrayList<>();
 
@@ -29,4 +35,6 @@ public class Cart {
     public void setProducts(List<Product> products) {
         this.products = products;
     }
+
+
 }
