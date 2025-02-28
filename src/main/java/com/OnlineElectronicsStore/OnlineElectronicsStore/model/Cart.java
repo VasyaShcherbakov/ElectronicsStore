@@ -35,6 +35,8 @@ public class Cart {
     public void setProducts(List<Product> products) {
         this.products = products;
     }
-
+    public void setUser (User user){
+        this.user=user;
+    }
 
 }
