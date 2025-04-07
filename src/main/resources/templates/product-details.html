@@ -8,6 +8,9 @@
 <p><strong>Описание:</strong> <span th:text="${product.description}"></span></p>
 <p><strong>Цена:</strong> <span th:text="${product.price}"></span></p>
 <p><strong>Количество на складе:</strong> <span th:text="${product.quantity}"></span></p>
-<a href="/products">Вернуться к списку товаров</a>
+<button onclick="history.back()" class="btn btn-secondary">Назад</button>
+
+
+
 </body>
 </html>

@@ -24,41 +24,39 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return new UserDetailsServiceImpl();
-    }
+
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        System.out.println("SecurityFilterChain загружен!");
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/user/**").hasRole("USER")
-                        .anyRequest().permitAll()
-                )
-                .formLogin(login -> login
-                        .loginPage("/login")  // URL страницы логина
-                        .defaultSuccessUrl("/user/home", true) // Перенаправление после успешного входа
-                        .permitAll()
+                        .requestMatchers("/login", "/register", "/products").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll() // Разрешаем доступ к статическим файлам
+                        .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
                         .loginPage("/login")
-                        .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/user/home", true)
-                        .failureUrl("/login?error") // <-- покажет ошибку при неудачном входе
                         .permitAll()
-
-
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login")
+                )
+                .sessionManagement(session -> session
+                        .sessionFixation().migrateSession()
                 );
 
         return http.build();
     }
+
+
+
 
 }

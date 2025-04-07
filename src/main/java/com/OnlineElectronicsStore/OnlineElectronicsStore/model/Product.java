@@ -18,6 +18,8 @@ public class Product {
     private Double price;
     private Integer quantity;
 
+
+
     @Column(nullable = true)
     private String imageUrl;
 

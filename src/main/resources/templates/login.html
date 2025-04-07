@@ -4,18 +4,24 @@
     <title>Вход</title>
 </head>
 <body>
+<h2>Вход</h2>
+
+<!-- Вывод ошибки при неудачном входе -->
+<div th:if="${param.error}" style="color: red;">
+    Неправильный логин или пароль
+</div>
+
 <form th:action="@{/login}" method="post">
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-    <label>Имя пользователя: <input type="text" name="username"/></label><br>
-    <label>Пароль: <input type="password" name="password"/></label><br>
-    <button type="submit">Войти</button>
-</form>
-<p>CSRF токен: <span th:text="${_csrf.token}"></span></p>
-<form th:action="@{/login}" method="post">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-    <label>Имя пользователя: <input type="text" name="username"/></label><br>
-    <label>Пароль: <input type="password" name="password"/></label><br>
+    <label>Имя пользователя: <input type="text" name="username" required/></label><br>
+    <label>Пароль: <input type="password" name="password" required/></label><br>
     <button type="submit">Войти</button>
 </form>
 
+<!-- Кнопка регистрации -->
+<form th:action="@{/register}" method="get">
+    <button type="submit">Регистрация</button>
+</form>
+
 </body>
+</html>
