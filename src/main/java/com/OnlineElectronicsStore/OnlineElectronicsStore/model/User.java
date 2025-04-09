@@ -2,6 +2,8 @@ package com.OnlineElectronicsStore.OnlineElectronicsStore.model;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
@@ -13,7 +15,14 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+    @NotBlank(message = "Имя пользователя не может быть пустым")
+    @Size(min = 3, max = 20, message = "Имя пользователя должно быть от 3 до 20 символов")
     private String username;
+
+    @NotBlank(message = "Пароль не может быть пустым")
+    @Size(min = 6, message = "Пароль должен содержать минимум 6 символов")
+
     private String password;
 
     @Enumerated(EnumType.STRING)
