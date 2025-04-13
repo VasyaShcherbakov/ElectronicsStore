@@ -51,11 +51,6 @@ public class UserController {
     }
 
 
-   /* @PostMapping("/add-product")
-    public String addProduct(@ModelAttribute Product product) {
-        productService.addProduct(product);
-        return "redirect:/user/home";
-    }*/
 
 
 

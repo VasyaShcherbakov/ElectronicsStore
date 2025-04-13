@@ -1,4 +1,6 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.model;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 
 
 import jakarta.persistence.*;
@@ -27,6 +29,24 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Email(message = "Введите корректный email")
+    private String email;
+
+    @Pattern(regexp = "\\+?[0-9\\-\\s]{7,15}", message = "Введите корректный номер телефона")
+    private String phoneNumber;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getPhoneNumber() { return phoneNumber; }
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+
+    public Gender getGender() { return gender; }
+    public void setGender(Gender gender) { this.gender = gender; }
 
     // Геттеры и сеттеры
     public Long getId() {
@@ -60,10 +80,15 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
-
-
-
 }
+
+
+
+
+
+
+
+
 
 
 

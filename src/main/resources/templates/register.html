@@ -3,7 +3,7 @@
 <head>
     <title>Регистрация</title>
 </head>
-<body>
+<body style="background-color: lightblue;">
 <h2>Регистрация</h2>
 
 <!-- Вывод ошибки при регистрации -->
@@ -21,6 +21,24 @@
         <input type="password" th:field="*{password}" required />
         <div th:if="${#fields.hasErrors('password')}" style="color: red;" th:errors="*{password}"></div>
     </label><br>
+    <label>Email:
+        <input type="email" th:field="*{email}" />
+        <div th:if="${#fields.hasErrors('email')}" style="color: red;" th:errors="*{email}"></div>
+    </label><br>
+
+    <label>Телефон:
+        <input type="text" th:field="*{phoneNumber}" />
+        <div th:if="${#fields.hasErrors('phoneNumber')}" style="color: red;" th:errors="*{phoneNumber}"></div>
+    </label><br>
+
+    <label>Пол:
+        <select th:field="*{gender}">
+            <option th:value="MALE">Мужской</option>
+            <option th:value="FEMALE">Женский</option>
+        </select>
+        <div th:if="${#fields.hasErrors('gender')}" style="color: red;" th:errors="*{gender}"></div>
+    </label><br>
+
 
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
     <button type="submit">Зарегистрироваться</button>
