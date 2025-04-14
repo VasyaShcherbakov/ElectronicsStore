@@ -25,7 +25,7 @@ public class ProductService {
     public void addProduct(Product product, MultipartFile imageFile) throws IOException {
         if (imageFile != null && !imageFile.isEmpty()) {
             // Указываем путь, куда сохраняем файл
-            String uploadDir = "uploads/";
+            String uploadDir = "src/main/resources/static/uploads/";
             String fileName = System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
 
             Path uploadPath = Paths.get(uploadDir);
@@ -37,7 +37,7 @@ public class ProductService {
             imageFile.transferTo(filePath.toFile());
 
             // Устанавливаем путь к картинке в объект продукта
-            product.setImageUrl("/" + uploadDir + fileName);
+            product.setImageUrl("/uploads/" + fileName);
         }
 
         productRepository.save(product);
