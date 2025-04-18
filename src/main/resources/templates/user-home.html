@@ -5,7 +5,7 @@
     <title>Главная страница</title>
 </head>
 <body class="container mt-4">
-<h2>Добро пожаловать, <span th:text="${user_role}"></span>!</h2>
+<h2>Добро пожаловать, <span th:text="${user.username}"></span>!</h2>
 
 <nav class="mb-4">
     <a href="/cart" class="btn btn-primary">Перейти в корзину</a>
@@ -46,7 +46,7 @@
         <td th:text="${product.quantity}"></td>
         <td>
             <img th:if="${product.imageUrl != null and not #strings.isEmpty(product.imageUrl)}"
-                 th:src="${product.imageUrl}" alt="Изображение"
+                 th:src="@{'/uploads/' + ${product.imageUrl}}" alt="Изображение"
                  style="max-width: 100px; height: auto;">
         </td>
 
@@ -61,6 +61,7 @@
 </table>
 <h3>Добавить товар</h3>
 
+<!--
 <form action="/user/home/add" method="post" enctype="multipart/form-data">
 <input type="text" name="name" class="form-control w-25" placeholder="Название" required><br>
 <input type="text" name="description" class="form-control w-50" placeholder="Описание" required><br>
@@ -69,8 +70,17 @@
 <input type="file" name="imageFile" class="form-control w-50" required><br>
 <button type="submit" class="btn btn-success">Добавить</button>
 </form>
+-->
 
 
+<form th:action="@{/user/home/add}" method="post" enctype="multipart/form-data">
+    <input type="text" name="name" placeholder="Название">
+    <input type="text" name="description" placeholder="Описание">
+    <input type="number" name="price" placeholder="Цена">
+    <input type="number" name="quantity" placeholder="Количество">
+    <input type="file" name="image">
+    <button type="submit">Добавить товар</button>
+</form>
 
 
 
