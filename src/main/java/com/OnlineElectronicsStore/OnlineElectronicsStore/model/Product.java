@@ -23,7 +23,20 @@ public class Product {
     @Column(nullable = true)
     private String imageUrl;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
+
+
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Category getCategory() {
         return category;

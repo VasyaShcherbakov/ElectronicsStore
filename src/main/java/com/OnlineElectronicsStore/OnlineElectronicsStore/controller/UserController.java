@@ -54,14 +54,27 @@ public class UserController {
 
     @PostMapping("/add")
     public String addProduct(@ModelAttribute Product product,
-                             @RequestParam("imageFile") MultipartFile imageFile) {
+                             @RequestParam("imageFile") MultipartFile imageFile,
+                             @AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
+            return "redirect:/login";
+        }
+
+        User user = userRepository.findByUsername(userDetails.getUsername()).orElse(null);
+        if (user == null) {
+            return "redirect:/login";
+        }
+
         try {
+            product.setUser(user); // привязка товара к пользователю
             productService.addProduct(product, imageFile);
         } catch (IOException e) {
-            e.printStackTrace(); // можешь позже заменить на логгер
+            e.printStackTrace(); // можно заменить на логгер позже
         }
+
         return "redirect:/user/home/main";
     }
+
 
 
 

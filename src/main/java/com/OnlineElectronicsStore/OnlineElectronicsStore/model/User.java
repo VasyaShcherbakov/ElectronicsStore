@@ -8,6 +8,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 
@@ -38,6 +40,18 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Product> products;
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }

@@ -74,13 +74,18 @@
 
 
 <form th:action="@{/user/home/add}" method="post" enctype="multipart/form-data">
-    <input type="text" name="name" placeholder="Название">
-    <input type="text" name="description" placeholder="Описание">
-    <input type="number" name="price" placeholder="Цена">
-    <input type="number" name="quantity" placeholder="Количество">
-    <input type="file" name="image">
+    <!-- поля товара -->
+    <input type="text" name="name" placeholder="Название" required>
+    <input type="text" name="description" placeholder="Описание" required>
+    <input type="number" name="price" placeholder="Цена" required>
+    <input type="number" name="quantity" placeholder="Количество" required>
+
+    <!-- Загрузка картинки -->
+    <input type="file" name="imageFile" accept="image/*" required>
+
     <button type="submit">Добавить товар</button>
 </form>
+
 
 
 
