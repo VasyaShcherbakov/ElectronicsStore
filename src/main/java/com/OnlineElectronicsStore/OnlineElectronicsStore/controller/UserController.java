@@ -56,24 +56,14 @@ public class UserController {
     public String addProduct(@ModelAttribute Product product,
                              @RequestParam("imageFile") MultipartFile imageFile,
                              @AuthenticationPrincipal UserDetails userDetails) {
-        if (userDetails == null) {
-            return "redirect:/login";
-        }
-
-        User user = userRepository.findByUsername(userDetails.getUsername()).orElse(null);
-        if (user == null) {
-            return "redirect:/login";
-        }
-
         try {
-            product.setUser(user); // привязка товара к пользователю
-            productService.addProduct(product, imageFile);
+            productService.addProduct(product, imageFile, userDetails.getUsername());
         } catch (IOException e) {
-            e.printStackTrace(); // можно заменить на логгер позже
+            e.printStackTrace();
         }
-
         return "redirect:/user/home/main";
     }
+
 
 
 
