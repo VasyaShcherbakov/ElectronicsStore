@@ -15,6 +15,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 @Controller
@@ -54,7 +58,7 @@ public class UserController {
     }
 */
 
-    @PostMapping("/add")
+   /* @PostMapping("/add")
     public String addProduct(@ModelAttribute Product product,
                              @RequestParam("imageFile") MultipartFile imageFile) {
 
@@ -81,7 +85,36 @@ public class UserController {
         product.setImageUrl(imageFile.getOriginalFilename());
         return "redirect:/user/home";
 
+    }*/
+
+    @PostMapping("/add")
+    public String addProduct(@ModelAttribute Product product,
+                             @RequestParam("imageFile") MultipartFile imageFile) {
+        if (!imageFile.isEmpty()) {
+            try {
+                String uploadDir = "uploads/";
+                String fileName = imageFile.getOriginalFilename();
+                Path uploadPath = Paths.get(uploadDir);
+
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+
+                Path filePath = uploadPath.resolve(fileName);
+                Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+                product.setImagePath(fileName);  // путь к файлу
+                product.setImageUrl(fileName);   // ссылка для отображения на странице
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        productRepository.save(product);
+        return "redirect:/user/home/main";
     }
+
+
+
 
     @GetMapping("/main")
     public String userHome(@AuthenticationPrincipal UserDetails userDetails,
