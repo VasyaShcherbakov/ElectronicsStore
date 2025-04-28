@@ -73,12 +73,12 @@
 -->
 
 
-<form th:action="@{/user/home/add}" method="post" enctype="multipart/form-data">
+<form th:action="@{/user/home/add}" th:object="${product}" method="post" enctype="multipart/form-data">
     <!-- поля товара -->
-    <input type="text" name="name" placeholder="Название" required>
-    <input type="text" name="description" placeholder="Описание" required>
-    <input type="number" name="price" placeholder="Цена" required>
-    <input type="number" name="quantity" placeholder="Количество" required>
+    <input type="text" th:field="*{name}" placeholder="Название" required>
+    <input type="text" th:field="*{description}" placeholder="Описание" required>
+    <input type="number" th:field="*{price}" placeholder="Цена" required>
+    <input type="number" th:field="*{quantity}" placeholder="Количество" required>
 
     <!-- Загрузка картинки -->
     <input type="file" name="imageFile" accept="image/*" required>

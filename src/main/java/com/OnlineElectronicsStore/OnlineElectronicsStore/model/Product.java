@@ -17,6 +17,7 @@ public class Product {
     private String description;
     private Double price;
     private Integer quantity;
+    private String imagePath;
 
 
 
@@ -26,6 +27,13 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+
+
 
 
 
@@ -91,6 +99,10 @@ public class Product {
     }
 
     public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
+      this.quantity=quantity;
+    }
+
+    public void setImagePath(String filePath) {
+        this.imagePath = filePath;
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -24,13 +25,13 @@ public class UserController {
     private final ProductService productService;
 
 
-    public UserController(UserRepository userRepository, ProductRepository productRepository,ProductService productService) {
+    public UserController(UserRepository userRepository, ProductRepository productRepository, ProductService productService) {
         this.userRepository = userRepository;
         this.productRepository = productRepository;
-        this.productService =productService;
+        this.productService = productService;
     }
 
-    @GetMapping("/main")
+   /* @GetMapping("/main")
     public String userHome(@AuthenticationPrincipal UserDetails userDetails,
                            @RequestParam(value = "query", required = false) String query,
                            Model model) {
@@ -51,23 +52,64 @@ public class UserController {
         model.addAttribute("query", query);
         return "user-home";
     }
+*/
 
     @PostMapping("/add")
     public String addProduct(@ModelAttribute Product product,
-                             @RequestParam("imageFile") MultipartFile imageFile,
-                             @AuthenticationPrincipal UserDetails userDetails) {
-        try {
-            productService.addProduct(product, imageFile, userDetails.getUsername());
-        } catch (IOException e) {
-            e.printStackTrace();
+                             @RequestParam("imageFile") MultipartFile imageFile) {
+
+
+        // Здесь ты можешь сохранить product в базу данных
+        // А imageFile сохранить на диск или в облачное хранилище
+
+        if (!imageFile.isEmpty()) {
+            // например, сохраним картинку на диск
+            try {
+                String uploadDir = "uploads/"; // Папка для загрузок
+                String filePath = uploadDir + imageFile.getOriginalFilename();
+                imageFile.transferTo(new File(filePath));
+                product.setImagePath(filePath); // сохраняем путь в объект товара
+            } catch (IOException e) {
+                e.printStackTrace();
+                // Можешь добавить обработку ошибки
+            }
         }
-        return "redirect:/user/home/main";
+        // После сохранения, например, отправляем на главную страницу товаров
+        // Здесь нужно будет добавить сохранение в базу данных через репозиторий
+
+        productRepository.save(product);
+        product.setImageUrl(imageFile.getOriginalFilename());
+        return "redirect:/user/home";
+
+    }
+
+    @GetMapping("/main")
+    public String userHome(@AuthenticationPrincipal UserDetails userDetails,
+                           @RequestParam(value = "query", required = false) String query,
+                           Model model) {
+        if (userDetails == null) {
+            return "redirect:/login";
+        }
+        User user = userRepository.findByUsername(userDetails.getUsername()).orElse(null);
+        if (user == null) {
+            return "redirect:/login";
+        }
+        List<Product> products = (query != null && !query.isEmpty())
+                ? productRepository.findByNameContainingIgnoreCase(query)
+                : productService.getAllProducts();
+        model.addAttribute("products", products);
+        model.addAttribute("user", user);
+        model.addAttribute("user_role", user.getUsername());
+        model.addAttribute("query", query);
+        model.addAttribute("product", new Product()); // <--- ЭТО ДОБАВИТЬ!
+        return "user-home";
     }
 
 
 
 
 
-
-
 }
+
+
+

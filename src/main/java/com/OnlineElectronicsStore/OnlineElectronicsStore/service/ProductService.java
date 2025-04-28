@@ -30,6 +30,7 @@ public class ProductService {
 
     public void addProduct(Product product, MultipartFile imageFile, String username) throws IOException {
         if (imageFile != null && !imageFile.isEmpty()) {
+            System.out.println("Сохраняем картинку...");
             String uploadDir = "src/main/resources/static/uploads/";
             String fileName = System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
             Path uploadPath = Paths.get(uploadDir);
@@ -38,17 +39,17 @@ public class ProductService {
             }
             Path filePath = uploadPath.resolve(fileName);
             imageFile.transferTo(filePath.toFile());
-            product.setImageUrl(fileName);
+            product.setImageUrl("/uploads/" + fileName);
         }
-
-        // Здесь тебе надо найти юзера по username и привязать
-
         User user = userRepository.findByUsername(username).orElse(null);
         if (user != null) {
+            System.out.println("Пользователь найден: " + user.getUsername());
             product.setUser(user);
+        } else {
+            System.out.println("Пользователь не найден!");
         }
-
         productRepository.save(product);
+        System.out.println("Товар сохранен в базе!");
     }
 
 
