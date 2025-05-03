@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Магазин</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Твои стили -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <!-- Bootstrap JS (для меню) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Твои скрипты -->
+    <script th:src="@{/js/menu.js}" defer></script>
+</head>
+<body>
+<header class="bg-dark text-white p-3 d-flex justify-content-between align-items-center">
+    <!-- Кнопка-логотип -->
+    <div class="dropdown">
+        <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            МАГАЗИН
+        </button>
+        <ul class="dropdown-menu">
+            <li><h6 class="dropdown-header">Добро пожаловать в наш магазин</h6></li>
+            <li><a class="dropdown-item" th:href="@{/}">Главная</a></li>
+            <li><a class="dropdown-item" th:href="@{/products/add}">Добавить товар</a></li>
+            <li><a class="dropdown-item" th:href="@{/search}">Поиск</a></li>
+        </ul>
+    </div>
+
+    <h1 class="m-0">Добро пожаловать!</h1>
+</header>
+</body>
+</html>
+
