@@ -1,6 +1,7 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class Product {
@@ -28,15 +29,30 @@ public class Product {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public String getImagePath() {
-        return imagePath;
+
+    private LocalDateTime createdAt;
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Product() {
     }
 
 
 
 
-
-
+    public String getImagePath() {
+        return imagePath;
+    }
 
     public User getUser() {
         return user;
