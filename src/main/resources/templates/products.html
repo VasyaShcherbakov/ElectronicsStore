@@ -41,6 +41,7 @@
             <th>Цена</th>
             <th>Количество</th>
             <th>Изображение</th>
+            <th>Дата добавления</th>
             <th>Действия</th>
         </tr>
         </thead>
@@ -57,6 +58,9 @@
                              alt="Изображение"
                              style="width: 100%; max-height: 120px; object-fit: cover; border-radius: 4px;">
                     </td>
+            <td th:text="${#temporals.format(product.createdAt, 'dd.MM.yyyy HH:mm')}"></td>
+
+
             <td class="text-center">
                 <a th:href="@{/products/{id}(id=${product.id})}" class="btn btn-info btn-sm mb-1">Детали</a>
                 <form th:action="@{/cart/add/{id}(id=${product.id})}" method="post">
