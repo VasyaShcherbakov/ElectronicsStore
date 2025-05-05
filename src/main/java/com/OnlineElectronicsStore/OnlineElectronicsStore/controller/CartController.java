@@ -12,8 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @Controller
 @RequestMapping("/cart")
 public class CartController {
@@ -34,9 +32,16 @@ public class CartController {
     public String viewCart(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
-        User user = userRepository.findByUsername(username).orElseThrow();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
 
-        Cart cart = cartRepository.findByUser(user).orElse(new Cart());
+        Cart cart = cartRepository.findByUser(user)
+                .orElseGet(() -> {
+                    Cart newCart = new Cart();
+                    newCart.setUser(user);
+                    return cartRepository.save(newCart); // сохраняем, если корзина новая
+                });
+
         model.addAttribute("products", cart.getProducts());
 
         double total = cart.getProducts().stream()
@@ -52,21 +57,20 @@ public class CartController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         User user = userRepository.findByUsername(username).orElseThrow();
-
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Товар не найден"));
-
         Cart cart = cartRepository.findByUser(user).orElseGet(() -> {
             Cart newCart = new Cart();
             newCart.setUser(user);
             return newCart;
         });
-
         cart.getProducts().add(product);
         cartRepository.save(cart);
 
+        // ВАЖНО: редирект на /cart
         return "redirect:/cart";
     }
+
 }
 
 
