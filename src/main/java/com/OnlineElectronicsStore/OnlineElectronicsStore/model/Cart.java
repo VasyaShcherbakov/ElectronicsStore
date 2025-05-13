@@ -17,8 +17,30 @@ public class Cart {
 
 
 
-    @OneToMany (cascade = CascadeType.ALL)
-    private List<Product> products = new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartItem> items = new ArrayList<>();
+
+
+    @Transient
+    public double getTotal() {
+        return items.stream()
+                .mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity())
+                .sum();
+    }
+
+
+
+
+
+    public List<CartItem> getItems() {
+        return items;
+    }
+
+    public void setItems(List<CartItem> items) {
+        this.items = items;
+    }
 
     public Long getId() {
         return id;
@@ -28,13 +50,6 @@ public class Cart {
         this.id = id;
     }
 
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
     public void setUser (User user){
         this.user=user;
     }

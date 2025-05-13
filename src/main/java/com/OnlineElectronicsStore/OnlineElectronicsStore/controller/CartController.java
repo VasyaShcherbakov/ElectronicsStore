@@ -1,8 +1,10 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.controller;
 
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Cart;
+import com.OnlineElectronicsStore.OnlineElectronicsStore.model.CartItem;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Product;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.User;
+import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.CartItemRepository;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.CartRepository;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.ProductRepository;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.UserRepository;
@@ -12,18 +14,25 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/cart")
 public class CartController {
 
-    private final CartRepository cartRepository;
+    private final CartItemRepository cartItemRepository;
+
+
+
+
+
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
 
-    public CartController(CartRepository cartRepository,
+    public CartController(CartItemRepository cartItemRepository, CartRepository cartRepository,
                           ProductRepository productRepository,
                           UserRepository userRepository) {
-        this.cartRepository = cartRepository;
+        this.cartItemRepository = cartItemRepository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
     }
@@ -42,11 +51,12 @@ public class CartController {
                     return cartRepository.save(newCart); // сохраняем, если корзина новая
                 });
 
-        model.addAttribute("products", cart.getProducts());
+        model.addAttribute("items", cart.getCartItems());  /*<-здесь метод подсвечиваеться красным напомни зачем мы здесь его делали?*/
 
-        double total = cart.getProducts().stream()
-                .mapToDouble(Product::getPrice)
+        double total = cart.getCartItems().stream()
+                .mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity())
                 .sum();
+
         model.addAttribute("total", total);
 
         return "cart";
@@ -59,17 +69,32 @@ public class CartController {
         User user = userRepository.findByUsername(username).orElseThrow();
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Товар не найден"));
+
+        // Получаем корзину пользователя
         Cart cart = cartRepository.findByUser(user).orElseGet(() -> {
             Cart newCart = new Cart();
             newCart.setUser(user);
-            return newCart;
+            return cartRepository.save(newCart);
         });
-        cart.getProducts().add(product);
-        cartRepository.save(cart);
+        // Проверяем наличие CartItem
+        CartItemRepository cartItemRepository;
+        Optional<CartItem> existingItem = /*здесь подсвечиваеться ошибка ->*/ cartItemRepository.findByProductIdAndCartUserId(product.getId(), user.getId());
 
-        // ВАЖНО: редирект на /cart
+        if (((Optional<?>) existingItem).isPresent()) {
+            CartItem item = existingItem.get();
+            item.setQuantity(item.getQuantity() + 1); // увеличиваем количество
+            cartItemRepository.save(item);
+        } else {
+            CartItem newItem = new CartItem();
+            newItem.setProduct(product);
+            newItem.setCart(cart);
+            newItem.setQuantity(1);
+            cartItemRepository.save(newItem);
+        }
+
         return "redirect:/cart";
     }
+
 
 }
 
