@@ -19,19 +19,18 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="product : ${products}">
-            <td th:text="${product.name}"></td>
-            <td th:text="${product.description}"></td>
-            <td th:text="${product.price}"></td>
-            <td th:text="${product.quantity}"></td>
+        <tr th:each="item : ${cartItems}">
+            <td th:text="${item.product.name}"></td>
+            <td th:text="${item.product.description}"></td>
+            <td th:text="${item.product.price}"></td>
+            <td th:text="${item.quantity}"></td>
             <td>
-                <form th:action="@{/cart/remove}" method="post">
-                    <input type="hidden" name="productId" th:value="${product.id}" />
+                <form th:action="@{'/cart/remove/' + ${item.id}}" method="post">
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                     <button class="btn btn-danger btn-sm" type="submit">Удалить</button>
                 </form>
             </td>
-            <td th:text="${product.price * product.quantity} + ' Грн.'"></td>
+            <td th:text="${item.product.price * item.quantity} + ' Грн.'"></td>
         </tr>
         </tbody>
         <tfoot>
@@ -45,3 +44,4 @@
 </div>
 </body>
 </html>
+
