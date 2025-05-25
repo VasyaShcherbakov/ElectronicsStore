@@ -1,7 +1,7 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.model;
 
 import jakarta.persistence.*;
-
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,11 +24,12 @@ public class Cart {
 
 
     @Transient
-    public double getTotal() {
+    public BigDecimal getTotal() {
         return items.stream()
-                .mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity())
-                .sum();
+                .map(item -> item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
+
 
 
 

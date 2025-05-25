@@ -1,5 +1,6 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.controller;
 
+import java.math.BigDecimal;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Cart;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.CartItem;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Product;
@@ -8,25 +9,15 @@ import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.CartItemRepo
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.CartRepository;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.ProductRepository;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.UserRepository;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 
 
-
-
-
-
-
-
-
-
-
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -60,21 +51,17 @@ public class CartController {
             return cartRepository.save(newCart);
         });
 
-        // Получаем все CartItem для корзины
-        java.util.List<CartItem> cartItems = cartItemRepository.findByCart(cart);
+        List<CartItem> cartItems = cartItemRepository.findByCart(cart);/*Здесь карт подсвечиваеться*/
 
-        // Вычисляем сумму
+        // вычисление общей суммы
         java.math.BigDecimal total = cartItems.stream()
                 .map(item -> item.getProduct().getPrice().multiply(java.math.BigDecimal.valueOf(item.getQuantity())))
                 .reduce(java.math.BigDecimal.ZERO, java.math.BigDecimal::add);
 
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("total", total);
-
         return "cart";
     }
-
-
 
     @PostMapping("/add/{productId}")
     public String addToCart(@PathVariable Long productId,
@@ -88,7 +75,6 @@ public class CartController {
         Product product = productOpt.get();
 
         if (product.getUser().getId().equals(user.getId())) {
-            // Нельзя добавить свой товар в корзину
             return "redirect:/products?error=self-product";
         }
 
@@ -122,10 +108,13 @@ public class CartController {
         if (cartItemOpt.isPresent()) {
             CartItem item = cartItemOpt.get();
             String username = userDetails.getUsername();
-            if (item.getCart().getUser().getUsername().equals(username)) /*здесь .getUser() светиться красным */{
+            if (item.getCart().getUser().getUsername().equals(username)) {
                 cartItemRepository.delete(item);
             }
         }
         return "redirect:/cart";
     }
 }
+
+
+
