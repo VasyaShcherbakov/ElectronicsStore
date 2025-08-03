@@ -35,57 +35,7 @@ public class UserController {
         this.productService = productService;
     }
 
-   /* @GetMapping("/main")
-    public String userHome(@AuthenticationPrincipal UserDetails userDetails,
-                           @RequestParam(value = "query", required = false) String query,
-                           Model model) {
-        if (userDetails == null) {
-            return "redirect:/login";
-        }
-        User user = userRepository.findByUsername(userDetails.getUsername()).orElse(null);
-        if (user == null) {
-            return "redirect:/login";
-        }
-        List<Product> products = (query != null && !query.isEmpty())
-                ? productRepository.findByNameContainingIgnoreCase(query)
-                : productService.getAllProducts();
 
-        model.addAttribute("products", products);
-        model.addAttribute("user", user);
-        model.addAttribute("user_role", user.getUsername());
-        model.addAttribute("query", query);
-        return "user-home";
-    }
-*/
-
-   /* @PostMapping("/add")
-    public String addProduct(@ModelAttribute Product product,
-                             @RequestParam("imageFile") MultipartFile imageFile) {
-
-
-        // Здесь ты можешь сохранить product в базу данных
-        // А imageFile сохранить на диск или в облачное хранилище
-
-        if (!imageFile.isEmpty()) {
-            // например, сохраним картинку на диск
-            try {
-                String uploadDir = "uploads/"; // Папка для загрузок
-                String filePath = uploadDir + imageFile.getOriginalFilename();
-                imageFile.transferTo(new File(filePath));
-                product.setImagePath(filePath); // сохраняем путь в объект товара
-            } catch (IOException e) {
-                e.printStackTrace();
-                // Можешь добавить обработку ошибки
-            }
-        }
-        // После сохранения, например, отправляем на главную страницу товаров
-        // Здесь нужно будет добавить сохранение в базу данных через репозиторий
-
-        productRepository.save(product);
-        product.setImageUrl(imageFile.getOriginalFilename());
-        return "redirect:/user/home";
-
-    }*/
 
     @PostMapping("/add")
     public String addProduct(@ModelAttribute Product product,
