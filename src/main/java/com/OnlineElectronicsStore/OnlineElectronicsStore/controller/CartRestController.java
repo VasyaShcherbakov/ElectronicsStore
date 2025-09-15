@@ -1,6 +1,5 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.controller;
 
-import java.math.BigDecimal;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Cart;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.CartItem;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Product;
@@ -9,40 +8,38 @@ import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.CartItemRepo
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.CartRepository;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.ProductRepository;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.UserRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.util.*;
 
-
-import java.util.List;
-import java.util.Optional;
-
-@Controller
-@RequestMapping("/cart")
-public class CartController {
+@RestController
+@RequestMapping("/api/cart")
+public class CartRestController {
 
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
 
-    public CartController(CartRepository cartRepository,
-                          CartItemRepository cartItemRepository,
-                          ProductRepository productRepository,
-                          UserRepository userRepository) {
+    public CartRestController(CartRepository cartRepository,
+                              CartItemRepository cartItemRepository,
+                              ProductRepository productRepository,
+                              UserRepository userRepository) {
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
     }
 
+    // Получение содержимого корзины
     @GetMapping
-    public String showCart(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<Map<String, Object>> getCart(@AuthenticationPrincipal UserDetails userDetails) {
         Optional<User> userOpt = userRepository.findByUsername(userDetails.getUsername());
-        if (userOpt.isEmpty()) return "redirect:/login";
+        if (userOpt.isEmpty()) return ResponseEntity.status(401).build();
 
         User user = userOpt.get();
         Cart cart = cartRepository.findByUser(user).orElseGet(() -> {
@@ -51,31 +48,37 @@ public class CartController {
             return cartRepository.save(newCart);
         });
 
-        List<CartItem> cartItems = cartItemRepository.findByCart(cart);/*Здесь карт подсвечиваеться*/
+        List<CartItem> cartItems = cartItemRepository.findByCart(cart);
 
-        // вычисление общей суммы
-        java.math.BigDecimal total = cartItems.stream()
-                .map(item -> item.getProduct().getPrice().multiply(java.math.BigDecimal.valueOf(item.getQuantity())))
-                .reduce(java.math.BigDecimal.ZERO, java.math.BigDecimal::add);
+        // считаем сумму
+        BigDecimal total = cartItems.stream()
+                .map(item -> item.getProduct().getPrice()
+                        .multiply(BigDecimal.valueOf(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        model.addAttribute("cartItems", cartItems);
-        model.addAttribute("total", total);
-        return "cart";
+        Map<String, Object> response = new HashMap<>();
+        response.put("items", cartItems);
+        response.put("total", total);
+
+        return ResponseEntity.ok(response);
     }
 
+    // Добавить товар в корзину
     @PostMapping("/add/{productId}")
-    public String addToCart(@PathVariable Long productId,
-                            @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<?> addToCart(@PathVariable Long productId,
+                                       @AuthenticationPrincipal UserDetails userDetails) {
         Optional<User> userOpt = userRepository.findByUsername(userDetails.getUsername());
         Optional<Product> productOpt = productRepository.findById(productId);
 
-        if (userOpt.isEmpty() || productOpt.isEmpty()) return "redirect:/products";
+        if (userOpt.isEmpty() || productOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("Пользователь или товар не найден");
+        }
 
         User user = userOpt.get();
         Product product = productOpt.get();
 
         if (product.getUser().getId().equals(user.getId())) {
-            return "redirect:/products?error=self-product";
+            return ResponseEntity.status(403).body("Нельзя купить свой товар");
         }
 
         Cart cart = cartRepository.findByUser(user).orElseGet(() -> {
@@ -98,23 +101,23 @@ public class CartController {
             cartItemRepository.save(newItem);
         }
 
-        return "redirect:/cart";
+        return ResponseEntity.ok("Товар добавлен в корзину");
     }
 
-    @PostMapping("/remove/{cartItemId}")
-    public String removeFromCart(@PathVariable Long cartItemId,
-                                 @AuthenticationPrincipal UserDetails userDetails) {
+    // Удалить товар из корзины
+    @DeleteMapping("/remove/{cartItemId}")
+    public ResponseEntity<?> removeFromCart(@PathVariable Long cartItemId,
+                                            @AuthenticationPrincipal UserDetails userDetails) {
         Optional<CartItem> cartItemOpt = cartItemRepository.findById(cartItemId);
         if (cartItemOpt.isPresent()) {
             CartItem item = cartItemOpt.get();
-            String username = userDetails.getUsername();
-            if (item.getCart().getUser().getUsername().equals(username)) {
+            if (item.getCart().getUser().getUsername().equals(userDetails.getUsername())) {
                 cartItemRepository.delete(item);
+                return ResponseEntity.ok("Товар удалён");
             }
+            return ResponseEntity.status(403).body("Нет доступа");
         }
-        return "redirect:/cart";
+        return ResponseEntity.notFound().build();
     }
 }
-
-
 

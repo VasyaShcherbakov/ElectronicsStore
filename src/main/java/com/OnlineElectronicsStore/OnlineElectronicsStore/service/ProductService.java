@@ -12,9 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 
@@ -64,11 +62,12 @@ public class ProductService {
                 .orElseThrow(() -> new RuntimeException("Товар не найден"));
     }
 
-    public void saveProduct(Product product) {
+    public Product saveProduct(Product product) {
         if (product.getImageUrl() == null || product.getImageUrl().trim().isEmpty()) {
             product.setImageUrl("default.jpg"); // Задаем изображение по умолчанию
         }
         productRepository.save(product);
+        return product;
     }
 
     public void deleteProduct(Long id) {
