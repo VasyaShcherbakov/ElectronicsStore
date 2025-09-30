@@ -1,7 +1,6 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.service;
 
 
-import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Cart;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Role;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.User;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.CartRepository;
