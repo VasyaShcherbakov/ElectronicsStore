@@ -1,0 +1,7 @@
+# Исключаем лишнее
+**/target/
+**/node_modules/
+.git
+.gitignore
+.idea
+uploads

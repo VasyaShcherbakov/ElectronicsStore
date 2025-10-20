@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Игнорируем всё target кроме jar
+**/target/*
+!backend/target/*.jar

@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: electronics-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Vasya_3010
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - electronics-net
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: electronics-backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - DB_URL=jdbc:postgresql://postgres:5432/postgres
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=Vasya_3010
+    volumes:
+      - ./uploads:/app/uploads
+    networks:
+      - electronics-net
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: electronics-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - electronics-net
+
+volumes:
+  postgres_data:
+
+networks:
+  electronics-net:
+    driver: bridge
