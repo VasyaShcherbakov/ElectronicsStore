@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,23 +17,25 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final CartRepository cartRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder; // 👈 Изменили тип на PasswordEncoder
 
     @Autowired
-    public UserService(UserRepository userRepository, CartRepository cartRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository,
+                       CartRepository cartRepository,
+                       PasswordEncoder passwordEncoder) { // 👈 Этот бин уже есть в SecurityConfig
         this.userRepository = userRepository;
         this.cartRepository = cartRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
-    // ✅ Реализация метода, который требуется Spring Security
+    // ✅ Реализация метода, который Spring Security вызывает при логине
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден: " + username));
     }
 
-    // ✅ Метод регистрации с проверкой и созданием корзины
+    // ✅ Метод регистрации нового пользователя
     public void registerUser(User user) {
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new RuntimeException("Пользователь с таким именем уже существует!");

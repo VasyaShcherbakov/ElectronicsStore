@@ -47,6 +47,7 @@ public class AuthRestController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody @Valid User user) {
         try {
+            log.info("Пришёл запрос на регистрацию: {}", user);
             userService.registerUser(user);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(Map.of("message", "Пользователь успешно зарегистрирован"));

@@ -22,14 +22,27 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        // ⚠️ Здесь должна быть логика проверки токена (я оставил заглушку)
+        String path = request.getRequestURI();
+        System.out.println("➡️ Incoming request path: " + path);
+
+        // ✅ Пропускаем публичные эндпоинты без проверки токена
+        if (path.startsWith("/api/auth/register") ||
+                path.startsWith("/api/auth/login") ||
+                path.startsWith("/swagger") ||
+                path.startsWith("/v3/api-docs")) {
+
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // ⚠️ Здесь должна быть логика проверки токена (пока — заглушка)
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
 
             // TODO: проверить JWT токен (валидность, срок, подпись)
-            // Сейчас заглушка: просто пускаем как "user"
+            // Сейчас заглушка: просто создаём фиктивного пользователя
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(
                             new User("user", "", Collections.emptyList()),
@@ -38,10 +51,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     );
 
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
         filterChain.doFilter(request, response);
     }
 }
+

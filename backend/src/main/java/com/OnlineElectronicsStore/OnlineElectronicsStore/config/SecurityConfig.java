@@ -22,26 +22,23 @@ public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
     private final JwtAuthEntryPoint jwtAuthEntryPoint;
-    private final UserService userService;
 
-    // ✅ Конструктор с зависимостями
+    // 🔹 Убрали UserService из конструктора (чтобы разорвать цикл)
     public SecurityConfig(JwtAuthFilter jwtAuthFilter,
-                          JwtAuthEntryPoint jwtAuthEntryPoint,
-                          UserService userService) {
+                          JwtAuthEntryPoint jwtAuthEntryPoint) {
         this.jwtAuthFilter = jwtAuthFilter;
         this.jwtAuthEntryPoint = jwtAuthEntryPoint;
-        this.userService = userService;
     }
 
-    // ✅ Шифровка паролей
+    // ✅ Бин для шифрования паролей
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // ✅ AuthenticationProvider (использует наш UserService)
+    // ✅ Теперь UserService передаётся как параметр, а не поле
     @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
+    public DaoAuthenticationProvider authenticationProvider(UserService userService) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userService);
         provider.setPasswordEncoder(passwordEncoder());
@@ -56,19 +53,19 @@ public class SecurityConfig {
 
     // ✅ Основная цепочка фильтров безопасности
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                                   DaoAuthenticationProvider authenticationProvider) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configure(http)) // если есть CORS-конфиг, он подхватится
+                .cors(cors -> cors.configure(http))
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint(jwtAuthEntryPoint)
                 )
-                .authenticationProvider(authenticationProvider())
+                .authenticationProvider(authenticationProvider)
                 .authorizeHttpRequests(auth -> auth
-                        // публичные эндпоинты
                         .requestMatchers(
                                 "/api/auth/register",
                                 "/api/auth/login",
@@ -76,11 +73,9 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
                         ).permitAll()
-                        // всё остальное — только с JWT
                         .anyRequest().authenticated()
                 );
 
-        // Добавляем JWT-фильтр перед стандартным логином
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

@@ -6,8 +6,11 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -64,6 +67,32 @@ public class User implements UserDetails {
 
     public Gender getGender() { return gender; }
     public void setGender(Gender gender) { this.gender = gender; }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true; // Учетка всегда активна
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true; // Не заблокирована
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true; // Пароль не просрочен
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true; // Активна
+    }
+
 
     // Геттеры и сеттеры
     public Long getId() {
