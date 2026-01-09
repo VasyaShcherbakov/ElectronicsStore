@@ -13,36 +13,40 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
+    private static final List<String> EXCLUDED_PATHS = List.of(
+            "/api/auth/login",
+            "/api/auth/register",
+            "/v3/api-docs",
+            "/swagger-ui",
+            "/swagger-ui.html"
+    );
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+                                    FilterChain filterChain)
+            throws ServletException, IOException {
 
         String path = request.getRequestURI();
         System.out.println("➡️ Incoming request path: " + path);
 
-        // ✅ Пропускаем публичные эндпоинты без проверки токена
-        if (path.startsWith("/api/auth/register") ||
-                path.startsWith("/api/auth/login") ||
-                path.startsWith("/swagger") ||
-                path.startsWith("/v3/api-docs")) {
-
+        // 🔥 Корректная проверка: если путь совпадает с публичным — не проверяем токен
+        if (isExcluded(path)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // ⚠️ Здесь должна быть логика проверки токена (пока — заглушка)
+        // 🔥 Дальше идёт токен (ты пока сделал заглушку)
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
 
-            // TODO: проверить JWT токен (валидность, срок, подпись)
-            // Сейчас заглушка: просто создаём фиктивного пользователя
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(
                             new User("user", "", Collections.emptyList()),
@@ -50,11 +54,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                             Collections.emptyList()
                     );
 
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
         filterChain.doFilter(request, response);
     }
-}
 
+    private boolean isExcluded(String path) {
+        return EXCLUDED_PATHS.stream().anyMatch(path::startsWith);
+    }
+}

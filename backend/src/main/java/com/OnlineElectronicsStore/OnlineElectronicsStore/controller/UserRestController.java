@@ -4,7 +4,7 @@ import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Product;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.User;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.ProductRepository;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.UserRepository;
-import com.OnlineElectronicsStore.OnlineElectronicsStore.service.ProductService;
+import com.OnlineElectronicsStore.OnlineElectronicsStore.service.ProductServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,9 +23,9 @@ public class UserRestController {
 
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
-    private final ProductService productService;
+    private final ProductServiceImpl productService;
 
-    public UserRestController(UserRepository userRepository, ProductRepository productRepository, ProductService productService) {
+    public UserRestController(UserRepository userRepository, ProductRepository productRepository, ProductServiceImpl productService) {
         this.userRepository = userRepository;
         this.productRepository = productRepository;
         this.productService = productService;

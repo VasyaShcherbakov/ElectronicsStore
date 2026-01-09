@@ -8,6 +8,12 @@ public class OnlineElectronicsStoreApplication {
 
 	public static void main(String[] args) {
 		System.out.println("Aplication Started!");
+        System.out.println("Aplication Started!");
+        System.out.println("Aplication Started!");
+        System.out.println("Aplication Started!");
+        System.out.println("Aplication Started!");
+        System.out.println("Aplication Started!");
+
 		SpringApplication.run(OnlineElectronicsStoreApplication.class, args);
 	}
 

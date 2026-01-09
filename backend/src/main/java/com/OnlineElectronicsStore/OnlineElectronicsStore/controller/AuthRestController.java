@@ -61,6 +61,8 @@ public class AuthRestController {
     // ✅ Логин с выдачей JWT-токена
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> loginRequest) {
+        System.out.println("LOGIN STARTED Started!");
+
         String username = loginRequest.get("username");
         String password = loginRequest.get("password");
 

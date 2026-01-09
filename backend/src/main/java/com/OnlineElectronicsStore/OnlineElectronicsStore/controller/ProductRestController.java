@@ -1,7 +1,7 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.controller;
 
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Product;
-import com.OnlineElectronicsStore.OnlineElectronicsStore.service.ProductService;
+import com.OnlineElectronicsStore.OnlineElectronicsStore.service.ProductServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,9 +11,9 @@ import java.util.List;
 @RequestMapping("/api/products")
 public class ProductRestController {
 
-    private final ProductService productService;
+    private final ProductServiceImpl productService;
 
-    public ProductRestController(ProductService productService) {
+    public ProductRestController(ProductServiceImpl productService) {
         this.productService = productService;
     }
 
