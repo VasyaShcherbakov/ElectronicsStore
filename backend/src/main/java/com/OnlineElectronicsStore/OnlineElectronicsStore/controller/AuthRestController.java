@@ -5,6 +5,11 @@ import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.ProductRepos
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.UserRepository;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.security.JwtService;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +24,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+@Tag(
+        name = "Authentication",
+        description = "Регистрация, логин и получение данных текущего пользователя"
+)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthRestController {
@@ -43,7 +52,16 @@ public class AuthRestController {
         this.jwtService = jwtService;
     }
 
-    // ✅ Регистрация нового пользователя
+    // ================= REGISTER =================
+
+    @Operation(
+            summary = "Регистрация пользователя",
+            description = "Создаёт нового пользователя и корзину для него"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Пользователь успешно зарегистрирован"),
+            @ApiResponse(responseCode = "400", description = "Ошибка регистрации")
+    })
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody @Valid User user) {
         try {
@@ -58,10 +76,18 @@ public class AuthRestController {
         }
     }
 
-    // ✅ Логин с выдачей JWT-токена
+    // ================= LOGIN =================
+
+    @Operation(
+            summary = "Вход пользователя",
+            description = "Аутентификация пользователя и выдача JWT-токена"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Успешный вход, токен выдан"),
+            @ApiResponse(responseCode = "401", description = "Неверные учетные данные")
+    })
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> loginRequest) {
-        System.out.println("LOGIN STARTED Started!");
 
         String username = loginRequest.get("username");
         String password = loginRequest.get("password");
@@ -71,16 +97,12 @@ public class AuthRestController {
                     new UsernamePasswordAuthenticationToken(username, password)
             );
 
-            if (authentication.isAuthenticated()) {
-                String token = jwtService.generateToken(username);
-                return ResponseEntity.ok(Map.of(
-                        "token", token,
-                        "username", username
-                ));
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(Map.of("error", "Неверные учетные данные"));
-            }
+            String token = jwtService.generateToken(username);
+            return ResponseEntity.ok(Map.of(
+                    "token", token,
+                    "username", username
+            ));
+
         } catch (Exception e) {
             log.error("Ошибка входа: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -88,24 +110,48 @@ public class AuthRestController {
         }
     }
 
-    // ✅ Проверка "Кто я"
+    // ================= WHO AM I =================
+
+    @Operation(
+            summary = "Кто я",
+            description = "Возвращает имя текущего аутентифицированного пользователя"
+    )
+    @SecurityRequirement(name = "bearerAuth")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Пользователь авторизован"),
+            @ApiResponse(responseCode = "401", description = "Не авторизован")
+    })
     @GetMapping("/whoami")
     public ResponseEntity<?> whoAmI(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Не авторизован"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Не авторизован"));
         }
         return ResponseEntity.ok(Map.of("username", authentication.getName()));
     }
 
-    // ✅ Получить профиль текущего пользователя
+    // ================= ME =================
+
+    @Operation(
+            summary = "Профиль текущего пользователя",
+            description = "Возвращает данные текущего пользователя"
+    )
+    @SecurityRequirement(name = "bearerAuth")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Данные пользователя"),
+            @ApiResponse(responseCode = "401", description = "Не авторизован"),
+            @ApiResponse(responseCode = "404", description = "Пользователь не найден")
+    })
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Не авторизован"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Не авторизован"));
         }
 
         return userRepository.findByUsername(userDetails.getUsername())
                 .<ResponseEntity<?>>map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "Пользователь не найден")));
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("error", "Пользователь не найден")));
     }
 }
