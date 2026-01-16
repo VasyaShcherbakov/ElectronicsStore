@@ -26,7 +26,7 @@ import java.util.Map;
 
 @Tag(
         name = "Authentication",
-        description = "Регистрация, логин и получение данных текущего пользователя"
+        description = "Реєстрація, логін та отримання даних поточного користувача"
 )
 @RestController
 @RequestMapping("/api/auth")
@@ -55,36 +55,36 @@ public class AuthRestController {
     // ================= REGISTER =================
 
     @Operation(
-            summary = "Регистрация пользователя",
-            description = "Создаёт нового пользователя и корзину для него"
+            summary = "Реєстрація користувача",
+            description = "Створює нового користувача та кошик для нього"
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Пользователь успешно зарегистрирован"),
-            @ApiResponse(responseCode = "400", description = "Ошибка регистрации")
+            @ApiResponse(responseCode = "201", description = "Користувач успішно зареєстрований"),
+            @ApiResponse(responseCode = "400", description = "Помилка реєстрації")
     })
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody @Valid User user) {
         try {
-            log.info("Пришёл запрос на регистрацию: {}", user);
+            log.info("Надійшов запит на реєстрацію: {}", user);
             userService.registerUser(user);
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(Map.of("message", "Пользователь успешно зарегистрирован"));
+                    .body(Map.of("message", "Користувач успішно зареєстрований"));
         } catch (Exception e) {
-            log.error("Ошибка регистрации", e);
+            log.error("Помилка реєстрації", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("error", "Ошибка регистрации: " + e.getMessage()));
+                    .body(Map.of("error", "Помилка реєстрації: " + e.getMessage()));
         }
     }
 
     // ================= LOGIN =================
 
     @Operation(
-            summary = "Вход пользователя",
-            description = "Аутентификация пользователя и выдача JWT-токена"
+            summary = "Вхід користувача",
+            description = "Аутентифікація користувача та видача JWT-токену"
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Успешный вход, токен выдан"),
-            @ApiResponse(responseCode = "401", description = "Неверные учетные данные")
+            @ApiResponse(responseCode = "200", description = "Успішний вхід, токен виданий"),
+            @ApiResponse(responseCode = "401", description = "Невірні облікові дані")
     })
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> loginRequest) {
@@ -104,28 +104,28 @@ public class AuthRestController {
             ));
 
         } catch (Exception e) {
-            log.error("Ошибка входа: {}", e.getMessage());
+            log.error("Помилка входу: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("error", "Неверное имя пользователя или пароль"));
+                    .body(Map.of("error", "Неправильне ім'я користувача або пароль"));
         }
     }
 
     // ================= WHO AM I =================
 
     @Operation(
-            summary = "Кто я",
-            description = "Возвращает имя текущего аутентифицированного пользователя"
+            summary = "Хто я",
+            description = "Повертає ім'я автентифікованого користувача."
     )
     @SecurityRequirement(name = "bearerAuth")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Пользователь авторизован"),
-            @ApiResponse(responseCode = "401", description = "Не авторизован")
+            @ApiResponse(responseCode = "200", description = "Користувач авторизований"),
+            @ApiResponse(responseCode = "401", description = "Не авторизовано")
     })
     @GetMapping("/whoami")
     public ResponseEntity<?> whoAmI(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("error", "Не авторизован"));
+                    .body(Map.of("error", "Не авторизовано"));
         }
         return ResponseEntity.ok(Map.of("username", authentication.getName()));
     }
@@ -133,25 +133,25 @@ public class AuthRestController {
     // ================= ME =================
 
     @Operation(
-            summary = "Профиль текущего пользователя",
-            description = "Возвращает данные текущего пользователя"
+            summary = "Профіль поточного користувача",
+            description = "Повертає дані поточного користувача"
     )
     @SecurityRequirement(name = "bearerAuth")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Данные пользователя"),
-            @ApiResponse(responseCode = "401", description = "Не авторизован"),
-            @ApiResponse(responseCode = "404", description = "Пользователь не найден")
+            @ApiResponse(responseCode = "200", description = "Дані користувача"),
+            @ApiResponse(responseCode = "401", description = "Не авторизовано"),
+            @ApiResponse(responseCode = "404", description = "Користувач не знайдено")
     })
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("error", "Не авторизован"));
+                    .body(Map.of("error", "Не авторизовано"));
         }
 
         return userRepository.findByUsername(userDetails.getUsername())
                 .<ResponseEntity<?>>map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Map.of("error", "Пользователь не найден")));
+                        .body(Map.of("error", "Користувач не знайдено")));
     }
 }

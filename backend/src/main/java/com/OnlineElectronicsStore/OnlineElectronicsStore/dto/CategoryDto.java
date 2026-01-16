@@ -1,7 +1,20 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Категорія товарів")
 public class CategoryDto {
+
+    @Schema(
+            description = "ID категорії",
+            example = "5"
+    )
     private Long id;
+
+    @Schema(
+            description = "Назва категорії",
+            example = "Електроніка"
+    )
     private String name;
 
     public CategoryDto() {}
@@ -10,6 +23,8 @@ public class CategoryDto {
         this.id = id;
         this.name = name;
     }
+
+    // ====== Геттери та сеттери ======
 
     public Long getId() {
         return id;
@@ -27,4 +42,3 @@ public class CategoryDto {
         this.name = name;
     }
 }
-

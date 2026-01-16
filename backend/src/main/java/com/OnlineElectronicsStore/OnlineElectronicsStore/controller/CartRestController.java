@@ -1,13 +1,12 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.controller;
 
-import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Cart;
-import com.OnlineElectronicsStore.OnlineElectronicsStore.model.CartItem;
-import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Product;
-import com.OnlineElectronicsStore.OnlineElectronicsStore.model.User;
-import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.CartItemRepository;
-import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.CartRepository;
-import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.ProductRepository;
-import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.UserRepository;
+import com.OnlineElectronicsStore.OnlineElectronicsStore.model.*;
+import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,8 +15,13 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.*;
 
+@Tag(
+        name = "Cart",
+        description = "Операції з кошиком користувача: перегляд, додавання та видалення товарів"
+)
 @RestController
 @RequestMapping("/api/cart")
+@SecurityRequirement(name = "bearerAuth")
 public class CartRestController {
 
     private final CartRepository cartRepository;
@@ -25,19 +29,32 @@ public class CartRestController {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
 
-    public CartRestController(CartRepository cartRepository,
-                              CartItemRepository cartItemRepository,
-                              ProductRepository productRepository,
-                              UserRepository userRepository) {
+    public CartRestController(
+            CartRepository cartRepository,
+            CartItemRepository cartItemRepository,
+            ProductRepository productRepository,
+            UserRepository userRepository
+    ) {
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
     }
 
-    // Получение содержимого корзины
+    // ================= GET CART =================
+
+    @Operation(
+            summary = "Отримати кошик користувача",
+            description = "Повертає вміст кошика поточного автентифікованого користувача та загальну суму"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Кошик успішно отримано"),
+            @ApiResponse(responseCode = "401", description = "Користувач не авторизований")
+    })
     @GetMapping
-    public ResponseEntity<Map<String, Object>> getCart(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<Map<String, Object>> getCart(
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
         Optional<User> userOpt = userRepository.findByUsername(userDetails.getUsername());
         if (userOpt.isEmpty()) return ResponseEntity.status(401).build();
 
@@ -50,7 +67,6 @@ public class CartRestController {
 
         List<CartItem> cartItems = cartItemRepository.findByCart(cart);
 
-        // считаем сумму
         BigDecimal total = cartItems.stream()
                 .map(item -> item.getProduct().getPrice()
                         .multiply(BigDecimal.valueOf(item.getQuantity())))
@@ -63,22 +79,37 @@ public class CartRestController {
         return ResponseEntity.ok(response);
     }
 
-    // Добавить товар в корзину
+    // ================= ADD TO CART =================
+
+    @Operation(
+            summary = "Додати товар до кошика",
+            description = "Додає товар до кошика користувача. Якщо товар вже є — збільшує кількість"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Товар додано до кошика"),
+            @ApiResponse(responseCode = "400", description = "Користувач або товар не знайдені"),
+            @ApiResponse(responseCode = "403", description = "Неможливо додати власний товар"),
+            @ApiResponse(responseCode = "401", description = "Користувач не авторизований")
+    })
     @PostMapping("/add/{productId}")
-    public ResponseEntity<?> addToCart(@PathVariable Long productId,
-                                       @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<?> addToCart(
+            @PathVariable Long productId,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
         Optional<User> userOpt = userRepository.findByUsername(userDetails.getUsername());
         Optional<Product> productOpt = productRepository.findById(productId);
 
         if (userOpt.isEmpty() || productOpt.isEmpty()) {
-            return ResponseEntity.badRequest().body("Пользователь или товар не найден");
+            return ResponseEntity.badRequest()
+                    .body("Користувача або товар не знайдено");
         }
 
         User user = userOpt.get();
         Product product = productOpt.get();
 
         if (product.getUser().getId().equals(user.getId())) {
-            return ResponseEntity.status(403).body("Нельзя купить свой товар");
+            return ResponseEntity.status(403)
+                    .body("Неможливо додати власний товар до кошика");
         }
 
         Cart cart = cartRepository.findByUser(user).orElseGet(() -> {
@@ -87,12 +118,13 @@ public class CartRestController {
             return cartRepository.save(newCart);
         });
 
-        Optional<CartItem> cartItemOpt = cartItemRepository.findByProductIdAndCartUserId(productId, user.getId());
+        Optional<CartItem> cartItemOpt =
+                cartItemRepository.findByProductIdAndCartUserId(productId, user.getId());
 
         if (cartItemOpt.isPresent()) {
-            CartItem cartItem = cartItemOpt.get();
-            cartItem.setQuantity(cartItem.getQuantity() + 1);
-            cartItemRepository.save(cartItem);
+            CartItem item = cartItemOpt.get();
+            item.setQuantity(item.getQuantity() + 1);
+            cartItemRepository.save(item);
         } else {
             CartItem newItem = new CartItem();
             newItem.setCart(cart);
@@ -101,23 +133,39 @@ public class CartRestController {
             cartItemRepository.save(newItem);
         }
 
-        return ResponseEntity.ok("Товар добавлен в корзину");
+        return ResponseEntity.ok("Товар додано до кошика");
     }
 
-    // Удалить товар из корзины
+    // ================= REMOVE FROM CART =================
+
+    @Operation(
+            summary = "Видалити товар з кошика",
+            description = "Видаляє конкретну позицію з кошика користувача"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Товар видалено з кошика"),
+            @ApiResponse(responseCode = "403", description = "Немає доступу до цього кошика"),
+            @ApiResponse(responseCode = "404", description = "Товар у кошику не знайдено"),
+            @ApiResponse(responseCode = "401", description = "Користувач не авторизований")
+    })
     @DeleteMapping("/remove/{cartItemId}")
-    public ResponseEntity<?> removeFromCart(@PathVariable Long cartItemId,
-                                            @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<?> removeFromCart(
+            @PathVariable Long cartItemId,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
         Optional<CartItem> cartItemOpt = cartItemRepository.findById(cartItemId);
+
         if (cartItemOpt.isPresent()) {
             CartItem item = cartItemOpt.get();
-            if (item.getCart().getUser().getUsername().equals(userDetails.getUsername())) {
+            if (item.getCart().getUser().getUsername()
+                    .equals(userDetails.getUsername())) {
+
                 cartItemRepository.delete(item);
-                return ResponseEntity.ok("Товар удалён");
+                return ResponseEntity.ok("Товар видалено з кошика");
             }
-            return ResponseEntity.status(403).body("Нет доступа");
+            return ResponseEntity.status(403).body("Немає доступу");
         }
+
         return ResponseEntity.notFound().build();
     }
 }
-

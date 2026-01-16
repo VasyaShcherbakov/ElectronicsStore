@@ -1,13 +1,40 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.dto;
 
-import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Role;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Gender;
+import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Role;
+import io.swagger.v3.oas.annotations.media.Schema;
 
+@Schema(description = "Користувач системи (повна інформація)")
 public class UserDto {
+
+    @Schema(
+            description = "ID користувача",
+            example = "5"
+    )
     private Long id;
+
+    @Schema(
+            description = "Ім'я користувача (логін)",
+            example = "ivan_petrov"
+    )
     private String username;
+
+    @Schema(
+            description = "Email користувача",
+            example = "ivan.petrov@gmail.com"
+    )
     private String email;
+
+    @Schema(
+            description = "Стать користувача",
+            example = "MALE"
+    )
     private Gender gender;
+
+    @Schema(
+            description = "Роль користувача в системі",
+            example = "USER"
+    )
     private Role role;
 
     public UserDto() {}
@@ -19,6 +46,8 @@ public class UserDto {
         this.gender = gender;
         this.role = role;
     }
+
+    // ====== Геттери та сеттери ======
 
     public Long getId() {
         return id;
