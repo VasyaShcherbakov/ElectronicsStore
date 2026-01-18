@@ -58,11 +58,13 @@ public class SecurityConfig {
     // ==========================================================
     @Bean
     @Order(1)
-    public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http,
-                                                      DaoAuthenticationProvider authenticationProvider) throws Exception {
+    public SecurityFilterChain apiSecurityFilterChain(
+            HttpSecurity http,
+            DaoAuthenticationProvider authenticationProvider
+    ) throws Exception {
 
         http
-                .securityMatcher("/api/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
+                .securityMatcher("/api/**")
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -74,10 +76,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/auth/login",
-                                "/api/auth/register",
-                                "/v3/api-docs/**",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html"
+                                "/api/auth/register"
                         ).permitAll()
                         .anyRequest().authenticated()
                 );
@@ -86,6 +85,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 
 
     // ==========================================================
@@ -98,26 +98,32 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/",
                                 "/login",
                                 "/register",
                                 "/css/**",
                                 "/js/**",
-                                "/images/**"
+                                "/images/**",
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/", true)
-                        .permitAll()
+                        .loginProcessingUrl("/login") // POST
+                        .defaultSuccessUrl("/user/home", true)
+                        .failureUrl("/login?error")
                 )
                 .logout(logout -> logout
+                        .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
                 );
 
+        // ❗ CSRF ВКЛЮЧЁН (по умолчанию)
         return http.build();
     }
+
 
 }
 
