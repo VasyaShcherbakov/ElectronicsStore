@@ -1,4 +1,4 @@
-package com.OnlineElectronicsStore.OnlineElectronicsStore.controller;
+package com.OnlineElectronicsStore.OnlineElectronicsStore.controller.rest;
 
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.*;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.*;

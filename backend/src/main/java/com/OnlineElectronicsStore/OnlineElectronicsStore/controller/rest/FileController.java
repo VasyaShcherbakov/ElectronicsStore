@@ -1,4 +1,4 @@
-package com.OnlineElectronicsStore.OnlineElectronicsStore.controller;
+package com.OnlineElectronicsStore.OnlineElectronicsStore.controller.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
