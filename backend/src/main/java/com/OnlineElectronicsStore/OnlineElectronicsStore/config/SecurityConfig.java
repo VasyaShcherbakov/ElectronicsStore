@@ -5,6 +5,7 @@ import com.OnlineElectronicsStore.OnlineElectronicsStore.security.JwtAuthFilter;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -23,20 +24,19 @@ public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
     private final JwtAuthEntryPoint jwtAuthEntryPoint;
 
-    // 🔹 Убрали UserService из конструктора (чтобы разорвать цикл)
     public SecurityConfig(JwtAuthFilter jwtAuthFilter,
                           JwtAuthEntryPoint jwtAuthEntryPoint) {
         this.jwtAuthFilter = jwtAuthFilter;
         this.jwtAuthEntryPoint = jwtAuthEntryPoint;
     }
 
-    // ✅ Бин для шифрования паролей
+    // ===== Password encoder =====
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // ✅ Теперь UserService передаётся как параметр, а не поле
+    // ===== Authentication provider =====
     @Bean
     public DaoAuthenticationProvider authenticationProvider(UserService userService) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -45,30 +45,36 @@ public class SecurityConfig {
         return provider;
     }
 
-    // ✅ AuthenticationManager (для AuthController)
+    // ===== AuthenticationManager =====
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration authConfig
+    ) throws Exception {
         return authConfig.getAuthenticationManager();
     }
 
-    // ✅ Основная цепочка фильтров безопасности
+    // ==========================================================
+    // 🔐 1️⃣ REST API — JWT (STATELESS)
+    // ==========================================================
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http,
-                                                   DaoAuthenticationProvider authenticationProvider) throws Exception {
+    @Order(1)
+    public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http,
+                                                      DaoAuthenticationProvider authenticationProvider) throws Exception {
+
         http
+                .securityMatcher("/api/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configure(http))
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint(jwtAuthEntryPoint)
+                .exceptionHandling(ex ->
+                        ex.authenticationEntryPoint(jwtAuthEntryPoint)
                 )
                 .authenticationProvider(authenticationProvider)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/api/auth/register",
                                 "/api/auth/login",
+                                "/api/auth/register",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
@@ -80,4 +86,38 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+
+    // ==========================================================
+    // 🌐 2️⃣ THYMELEAF — FORM LOGIN + CSRF
+    // ==========================================================
+    @Bean
+    @Order(2)
+    public SecurityFilterChain webSecurityFilterChain(HttpSecurity http) throws Exception {
+
+        http
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/",
+                                "/login",
+                                "/register",
+                                "/css/**",
+                                "/js/**",
+                                "/images/**"
+                        ).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/", true)
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/login?logout")
+                );
+
+        return http.build();
+    }
+
 }
+
