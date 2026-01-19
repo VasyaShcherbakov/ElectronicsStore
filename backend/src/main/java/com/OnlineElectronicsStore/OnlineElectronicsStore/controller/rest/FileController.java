@@ -22,7 +22,7 @@ import java.nio.file.Paths;
         name = "Files",
         description = "Завантаження та отримання файлів (зображення товарів)"
 )
-@RestController
+@RestController("restFileController")
 @RequestMapping("/uploads")
 public class FileController {
 
