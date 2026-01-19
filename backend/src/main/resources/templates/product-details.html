@@ -18,10 +18,13 @@
         body {
             min-height: 100vh;
             background-color: #d0e7ff;
+        }
+
+        main {
+            min-height: calc(100vh - 160px);
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
         }
 
         /* === КАРТОЧКА === */
@@ -80,7 +83,7 @@
 
 <body>
 
-<div th:replace="fragments/header :: site-header"></div>
+<div th:replace="fragments/product-details_header :: site-header"></div>
 
 <main>
 
@@ -117,6 +120,5 @@
     </div>
 
 </div>
-
 </body>
 </html>

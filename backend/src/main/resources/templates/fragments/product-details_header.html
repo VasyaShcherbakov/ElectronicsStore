@@ -3,7 +3,6 @@
 <body>
 
 <header th:fragment="site-header">
-
     <div style="
         background: linear-gradient(135deg, #1e88e5, #42a5f5);
         padding: 25px 35px;
@@ -45,51 +44,10 @@
                     border-radius: 20px;
                     background: rgba(255,255,255,0.15);
                 ">
-                    <div class="welcome" >
-                        Ласкаво просимо в наш магазин!🛍️
-                        <span th:text="${user.username}"></span>!
-                        <br><br>
-
-                    </div>
+                    🛒 Товари
                 </a>
 
-                <a href="/cart" style="
-                color: white;
-                text-decoration: none;
-                font-weight: 500;
-                padding: 8px 14px;
-                border-radius: 20px;
-                background: rgba(255,255,255,0.15);
-                ">
-                    Корзина🛒 (<span th:text="${cartSize}"></span>)
-                </a>
 
-                <a href="/products" style="
-                    color: white;
-                    text-decoration: none;
-                    font-weight: 500;
-                    padding: 8px 14px;
-                    border-radius: 20px;
-                    background: rgba(255,255,255,0.15);
-                ">
-                     Товари 📦
-                </a>
-
-                <form th:action="@{/logout}" method="post" style="display:inline;">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                    <button type="submit" style="
-                color: #1e88e5;
-                background: white;
-                font-weight: 600;
-                padding: 8px 18px;
-                border-radius: 20px;
-                border: none;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                ">
-                        Вихід
-                    </button>
-                </form>
             </nav>
         </div>
     </div>

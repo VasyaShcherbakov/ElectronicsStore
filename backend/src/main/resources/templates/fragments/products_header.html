@@ -46,22 +46,9 @@
                     background: rgba(255,255,255,0.15);
                 ">
                     <div class="welcome" >
-                        Ласкаво просимо в наш магазин!🛍️
+                        Ласкаво просимо в наш магазин!
                         <span th:text="${user.username}"></span>!
-                        <br><br>
-
                     </div>
-                </a>
-
-                <a href="/cart" style="
-                color: white;
-                text-decoration: none;
-                font-weight: 500;
-                padding: 8px 14px;
-                border-radius: 20px;
-                background: rgba(255,255,255,0.15);
-                ">
-                    Корзина🛒 (<span th:text="${cartSize}"></span>)
                 </a>
 
                 <a href="/products" style="
@@ -72,24 +59,33 @@
                     border-radius: 20px;
                     background: rgba(255,255,255,0.15);
                 ">
-                     Товари 📦
+                    <a href="/cart">Корзина (<span th:text="${cartSize}"></span>)</a>
                 </a>
 
-                <form th:action="@{/logout}" method="post" style="display:inline;">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                    <button type="submit" style="
-                color: #1e88e5;
-                background: white;
-                font-weight: 600;
-                padding: 8px 18px;
-                border-radius: 20px;
-                border: none;
-                cursor: pointer;
-                transition: all 0.3s ease;
+                <a href="/products" style="
+                    color: white;
+                    text-decoration: none;
+                    font-weight: 500;
+                    padding: 8px 14px;
+                    border-radius: 20px;
+                    background: rgba(255,255,255,0.15);
                 ">
-                        Вихід
-                    </button>
-                </form>
+                    🛒 Товари
+                </a>
+
+                <a href="/login" style="
+                    color: #1e88e5;
+                    background: white;
+                    text-decoration: none;
+                    font-weight: 600;
+                    padding: 8px 18px;
+                    border-radius: 20px;
+                ">
+                    <form th:action="@{/logout}" method="post" style="display:inline;">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <button type="submit">Вихiд</button>
+                    </form>
+                </a>
             </nav>
         </div>
     </div>

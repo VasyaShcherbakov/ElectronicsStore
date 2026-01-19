@@ -2,7 +2,7 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Главная страница</title>
+    <title>Ваш особистий кабінет</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
@@ -24,6 +24,20 @@
             align-items: center;
             justify-content: center;
         }
+
+        .page-title {
+            margin: 30px auto;
+            text-align: center;
+            font-size: 36px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #42a5f5, #1e88e5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+
         .page-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -207,6 +221,8 @@
 
 <div th:replace="fragments/user_header :: site-header"></div>
 
+<h2 class="page-title">Ваш особистий кабінет</h2>
+
 <main>
 <div class="page-container">
 
@@ -248,12 +264,10 @@
                 <a th:href="@{/products/{id}(id=${product.id})}" class="btn-details">
                     Детали
                 </a>
-                <form th:action="@{/cart/add/{id}(id=${product.id})}" method="post">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                    <button type="submit" class="btn-cart">
-                        В корзину
-                    </button>
-                </form>
+                <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn-cart">
+                    ✏️ Редагувати товар
+                </a>
+
             </td>
         </tr>
         </tbody>
