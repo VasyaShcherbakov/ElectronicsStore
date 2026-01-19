@@ -1,29 +1,139 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Вход</title>
+
+    <!-- Чтобы одинаково отображалось в разных браузерах -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        /* === CSS RESET === */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: #d0e7ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* === КАРТОЧКА === */
+        .login-card {
+            background: #ffffff;
+            padding: 30px;
+            width: 100%;
+            max-width: 380px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .login-card h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* === ФОРМА === */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4a90e2;
+        }
+
+        /* === КНОПКИ === */
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .btn-login {
+            background-color: #4a90e2;
+            color: white;
+        }
+
+        .btn-login:hover {
+            background-color: #357abd;
+        }
+
+        .btn-register {
+            background-color: #eeeeee;
+        }
+
+        .btn-register:hover {
+            background-color: #dddddd;
+        }
+
+        /* === ОШИБКА === */
+        .error {
+            color: red;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+    </style>
 </head>
-<body class="container mt-4" style="background-color:#d0e7ff;">
 
+<body>
 
-<h2>Вход</h2>
+<div class="login-card">
 
-<!-- Вывод ошибки при неудачном входе -->
-<div th:if="${param.error}" style="color: red;">
-    Неправильный логин или пароль
+    <h2>Вход</h2>
+
+    <!-- Ошибка входа -->
+    <div th:if="${param.error}" class="error">
+        Неправильный логин или пароль
+    </div>
+
+    <form th:action="@{/login}" method="post">
+        <input type="hidden"
+               th:name="${_csrf.parameterName}"
+               th:value="${_csrf.token}"/>
+
+        <div class="form-group">
+            <label for="username">Имя пользователя</label>
+            <input id="username" type="text" name="username" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Пароль</label>
+            <input id="password" type="password" name="password" required>
+        </div>
+
+        <button type="submit" class="btn-login">Войти</button>
+    </form>
+
+    <form th:action="@{/register}" method="get">
+        <button type="submit" class="btn-register">Регистрация</button>
+    </form>
+
 </div>
-
-<form th:action="@{/login}" method="post">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-    <label>Имя пользователя: <input type="text" name="username" required/></label><br>
-    <label>Пароль: <input type="password" name="password" required/></label><br>
-    <button type="submit">Войти</button>
-</form>
-
-<!-- Кнопка регистрации -->
-<form th:action="@{/register}" method="get">
-    <button type="submit">Регистрация</button>
-</form>
 
 </body>
 </html>
