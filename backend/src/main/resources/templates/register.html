@@ -17,10 +17,13 @@
         body {
             min-height: 100vh;
             background-color: #d0e7ff;
+        }
+
+        main {
+            min-height: calc(100vh - 160px);
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
         }
 
         /* === CARD === */
@@ -96,6 +99,13 @@
 
 <body>
 
+
+
+<div th:replace="fragments/header :: site-header"></div>
+
+
+
+<main>
 <div class="register-card">
 
     <h2>Регистрация</h2>
@@ -161,4 +171,6 @@
 </div>
 
 </body>
+</main>
+
 </html>

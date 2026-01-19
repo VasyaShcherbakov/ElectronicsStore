@@ -15,11 +15,15 @@
         }
 
         body {
-            background-color: #d0e7ff;
             min-height: 100vh;
-            padding: 20px;
+            background-color: #d0e7ff;
         }
-
+        main {
+            min-height: calc(100vh - 160px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
         .page-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -201,24 +205,10 @@
 
 <body>
 
+<div th:replace="fragments/user_header :: site-header"></div>
+
+<main>
 <div class="page-container">
-
-    <!-- HEADER -->
-    <div class="top-bar">
-        <div class="welcome">
-            Добро пожаловать, <span th:text="${user.username}"></span>!
-        </div>
-
-        <div class="nav-buttons">
-            <a href="/cart">Корзина (<span th:text="${cartSize}"></span>)</a>
-            <a href="/products">К покупкам</a>
-
-            <form th:action="@{/logout}" method="post" style="display:inline;">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                <button type="submit">Выход</button>
-            </form>
-        </div>
-    </div>
 
     <!-- SEARCH -->
     <form action="/user/home" method="get" class="search-form">
@@ -228,6 +218,8 @@
 
     <!-- TABLE -->
     <table>
+        <caption>Мої товари виставлені на продаж</caption>
+
         <thead>
         <tr>
             <th>Название</th>
@@ -287,6 +279,6 @@
     </div>
 
 </div>
-
+</main>
 </body>
 </html>

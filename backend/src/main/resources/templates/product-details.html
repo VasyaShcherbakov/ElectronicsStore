@@ -80,7 +80,11 @@
 
 <body>
 
-<div class="product-card">
+<div th:replace="fragments/header :: site-header"></div>
+
+<main>
+
+    <div class="product-card">
 
     <img th:if="${product.imageUrl != null and not #strings.isEmpty(product.imageUrl)}"
          th:src="@{'/uploads/' + ${product.imageUrl}}"
