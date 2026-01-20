@@ -1,9 +1,12 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.controller.web;
 
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Product;
+import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.UserRepository;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.ProductServiceImpl;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,29 +19,37 @@ import java.util.List;
 @Controller
 public class ProductController {
     private final ProductServiceImpl productService;
+    private final UserRepository userRepository;
 
-    public ProductController(ProductServiceImpl productService) {
+
+    public ProductController(ProductServiceImpl productService, UserRepository userRepository) {
         this.productService = productService;
+        this.userRepository = userRepository;
     }
 
 
 
     @GetMapping("/products")
-    public String getAllProducts(Model model) {
-        // Добавляем список товаров
+    public String getAllProducts(Model model,
+                                 @AuthenticationPrincipal UserDetails userDetails) {
+
         model.addAttribute("products", productService.getAllProducts());
         model.addAttribute("product", new Product());
 
-        // Получаем имя пользователя
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal())) {
-            model.addAttribute("username", auth.getName());
-        } else {
-            model.addAttribute("username", null);
+        if (userDetails != null) {
+            model.addAttribute("user",
+                    userRepository
+                            .findByUsername(userDetails.getUsername())
+                            .orElse(null)
+            );
         }
+
+
+        model.addAttribute("cartSize", 0); // временно
 
         return "products";
     }
+
 
 
     @PostMapping("/products")

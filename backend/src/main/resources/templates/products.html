@@ -17,9 +17,15 @@
         }
 
         body {
-            background-color: #d0e7ff;
             min-height: 100vh;
-            padding: 20px;
+            background-color: #d0e7ff;
+        }
+
+        main {
+            min-height: calc(100vh - 160px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* === КОНТЕЙНЕР === */
@@ -182,27 +188,17 @@
 
 <body>
 
+<div th:replace="fragments/products_header :: site-header"></div>
+
+<main>
 <div class="page-container">
 
     <!-- ХЕДЕР -->
     <div class="header">
 
-        <div class="header-left">
-            <a href="/user/home" sec:authorize="isAuthenticated()">Мои товары</a>
-        </div>
-
         <div class="header-right">
             <a th:href="@{/login}" sec:authorize="isAnonymous()">Вход</a>
             <a th:href="@{/register}" sec:authorize="isAnonymous()">Регистрация</a>
-
-            <span class="welcome" sec:authorize="isAuthenticated()">
-                Рады видеть вас, <span sec:authentication="name"></span>!
-            </span>
-
-            <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="display:inline;">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                <button type="submit">Выход</button>
-            </form>
         </div>
 
     </div>
@@ -250,6 +246,6 @@
     </div>
 
 </div>
-
+</main>
 </body>
 </html>
