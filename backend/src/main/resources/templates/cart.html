@@ -117,10 +117,25 @@
 
         <tbody>
         <tr th:each="item : ${cartItems}">
+
+            <!-- ФОТО -->
+            <td>
+                <img th:if="${item.product.imageUrl != null}"
+                     th:src="@{'/uploads/' + ${item.product.imageUrl}}"
+                     alt="Фото"
+                     style="
+                width: 80px;
+                height: 80px;
+                object-fit: cover;
+                border-radius: 8px;
+             ">
+            </td>
+
             <td th:text="${item.product.name}"></td>
             <td th:text="${item.product.description}"></td>
             <td th:text="${item.product.price}"></td>
             <td th:text="${item.quantity}"></td>
+
             <td>
                 <form th:action="@{'/cart/remove/' + ${item.id}}" method="post">
                     <input type="hidden"
@@ -131,9 +146,12 @@
                     </button>
                 </form>
             </td>
+
             <td th:text="${item.product.price * item.quantity} + ' грн'"></td>
+
         </tr>
         </tbody>
+
 
         <tfoot>
         <tr>
