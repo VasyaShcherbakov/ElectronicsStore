@@ -21,9 +21,17 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 @Controller
 @RequestMapping("/user/home")
 public class UserController {
+
+    private static final Logger log =
+            LoggerFactory.getLogger(UserController.class);
+
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final ProductServiceImpl productService;
@@ -39,7 +47,15 @@ public class UserController {
 
     @PostMapping("/add")
     public String addProduct(@ModelAttribute Product product,
-                             @RequestParam("imageFile") MultipartFile imageFile) {
+                             @RequestParam("imageFile") MultipartFile imageFile,
+                             @AuthenticationPrincipal UserDetails userDetails) {
+
+        User user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow();
+
+        product.setUser(user); // 🔥 ВАЖНО
+
+        // загрузка картинки
         if (!imageFile.isEmpty()) {
             try {
                 String uploadDir = "uploads/";
@@ -50,18 +66,25 @@ public class UserController {
                     Files.createDirectories(uploadPath);
                 }
 
-                Path filePath = uploadPath.resolve(fileName);
-                Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(imageFile.getInputStream(),
+                        uploadPath.resolve(fileName),
+                        StandardCopyOption.REPLACE_EXISTING);
 
-                product.setImagePath(fileName);  // путь к файлу
-                product.setImageUrl(fileName);   // ссылка для отображения на странице
+                product.setImagePath(fileName);
+                product.setImageUrl(fileName);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        log.info("Добавляем товар {} от продавца {}",
+                product.getId(),
+                product.getUser().getUsername());
+
         productRepository.save(product);
         return "redirect:/user/home/main";
     }
+
+
 
 
 

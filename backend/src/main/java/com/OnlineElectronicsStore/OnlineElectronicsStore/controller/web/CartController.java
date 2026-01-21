@@ -25,6 +25,9 @@ import java.util.Optional;
 @RequestMapping("/cart")
 public class CartController {
 
+    private static final Logger log =
+            LoggerFactory.getLogger(CartController.class);
+
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
     private final ProductRepository productRepository;
@@ -64,13 +67,21 @@ public class CartController {
         return "cart";
     }
 
-    @PostMapping("/add/{productId}")
+
+        @PostMapping("/add/{productId}")
     public String addToCart(@PathVariable Long productId,
                             @AuthenticationPrincipal UserDetails userDetails) {
+            log.info(">>> ProductController: /products called");
+            if (userDetails == null) {
+                return "redirect:/login";
+            }
+
         Optional<User> userOpt = userRepository.findByUsername(userDetails.getUsername());
         Optional<Product> productOpt = productRepository.findById(productId);
 
         if (userOpt.isEmpty() || productOpt.isEmpty()) return "redirect:/products";
+
+
 
         User user = userOpt.get();
         Product product = productOpt.get();
@@ -85,7 +96,7 @@ public class CartController {
             return cartRepository.save(newCart);
         });
 
-        Optional<CartItem> cartItemOpt = cartItemRepository.findByProductIdAndCartUserId(productId, user.getId());
+            Optional<CartItem> cartItemOpt = cartItemRepository.findByCartAndProduct(cart, product);
 
         if (cartItemOpt.isPresent()) {
             CartItem cartItem = cartItemOpt.get();
