@@ -103,7 +103,7 @@ public class SecurityConfig {
                                 "/products",
                                 "/css/**",
                                 "/js/**",
-                                "/images/**",
+                                "/uploads/**",
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
