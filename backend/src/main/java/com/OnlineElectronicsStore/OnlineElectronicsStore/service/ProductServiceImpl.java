@@ -21,10 +21,16 @@ public class ProductServiceImpl {
 
     private final UserRepository userRepository;
 
+
     public ProductServiceImpl(ProductRepository productRepository, UserRepository userRepository) {
         this.productRepository = productRepository;
         this.userRepository = userRepository;
     }
+
+    public List<Product> getProductsByUser(User user) {
+        return productRepository.findByOwner(user);
+    }
+
 
     public void addProduct(Product product, MultipartFile imageFile, String username) throws IOException {
         if (imageFile != null && !imageFile.isEmpty()) {

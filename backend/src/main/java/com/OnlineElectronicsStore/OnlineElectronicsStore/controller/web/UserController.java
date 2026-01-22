@@ -102,7 +102,7 @@ public class UserController {
         }
         List<Product> products = (query != null && !query.isEmpty())
                 ? productRepository.findByNameContainingIgnoreCase(query)
-                : productService.getAllProducts();
+                : productService.getProductsByUser(user);
         model.addAttribute("products", products);
         model.addAttribute("user", user);
         model.addAttribute("user_role", user.getUsername());

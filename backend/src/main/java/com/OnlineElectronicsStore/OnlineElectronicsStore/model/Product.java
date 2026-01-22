@@ -22,12 +22,11 @@ public class Product {
         this.price = price;
     }
 
-     private String name;
+    private String name;
     private String description;
     private BigDecimal price;
     private Integer quantity;
     private String imagePath;
-
 
 
     @Column(nullable = true)
@@ -36,6 +35,20 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
 
 
     private LocalDateTime createdAt;
