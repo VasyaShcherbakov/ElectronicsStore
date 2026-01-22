@@ -22,7 +22,7 @@ public class Product {
         this.price = price;
     }
 
-    private String name;
+     private String name;
     private String description;
     private BigDecimal price;
     private Integer quantity;

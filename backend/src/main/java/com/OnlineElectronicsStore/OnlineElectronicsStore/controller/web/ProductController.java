@@ -14,6 +14,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 @Controller
@@ -77,10 +82,50 @@ public class ProductController {
     }
 
     @PostMapping("/products/update")
-    public String updateProduct(@ModelAttribute Product product) {
+    public String updateProduct(
+            @ModelAttribute Product formProduct,
+            @RequestParam("imageFile") MultipartFile imageFile
+    ) {
+        // 1️⃣ Достаем существующий товар из БД
+        Product product = productService.getProductById(formProduct.getId());
+
+        // 2️⃣ Обновляем поля
+        product.setName(formProduct.getName());
+        product.setDescription(formProduct.getDescription());
+        product.setPrice(formProduct.getPrice());
+        product.setQuantity(formProduct.getQuantity());
+
+        // 3️⃣ Логика загрузки картинки — ТАКАЯ ЖЕ, как в addProduct
+        if (!imageFile.isEmpty()) {
+            try {
+                String uploadDir = "uploads/";
+                String fileName = imageFile.getOriginalFilename();
+                Path uploadPath = Paths.get(uploadDir);
+
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+
+                Files.copy(
+                        imageFile.getInputStream(),
+                        uploadPath.resolve(fileName),
+                        StandardCopyOption.REPLACE_EXISTING
+                );
+
+                product.setImagePath(fileName);
+                product.setImageUrl(fileName);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        // ⚠️ если файл НЕ выбран — старая картинка останется
+
         productService.saveProduct(product);
-        return "redirect:/products";
+
+        return "redirect:/user/home";
     }
+
 
     @GetMapping("/products/search")
     public String searchProducts(@RequestParam String query, Model model) {
