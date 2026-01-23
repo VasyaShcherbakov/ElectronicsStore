@@ -28,13 +28,16 @@ public class Product {
     private Integer quantity;
     private String imagePath;
 
-
     @Column(nullable = true)
     private String imageUrl;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = true)
     private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User owner;
 
     public User getOwner() {
         return owner;
@@ -43,13 +46,6 @@ public class Product {
     public void setOwner(User owner) {
         this.owner = owner;
     }
-
-
-
-    @ManyToOne
-    @JoinColumn(name = "owner_id")
-    private User owner;
-
 
     private LocalDateTime createdAt;
     @PrePersist
@@ -67,9 +63,6 @@ public class Product {
 
     public Product() {
     }
-
-
-
 
     public String getImagePath() {
         return imagePath;
@@ -122,8 +115,6 @@ public class Product {
     public void setDescription(String description) {
         this.description = description;
     }
-
-
 
     public Integer getQuantity() {
         return quantity;

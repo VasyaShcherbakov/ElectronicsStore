@@ -20,6 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,37 +51,42 @@ public class UserController {
                              @RequestParam("imageFile") MultipartFile imageFile,
                              @AuthenticationPrincipal UserDetails userDetails) {
 
+        if (userDetails == null) {
+            return "redirect:/login";
+        }
+
         User user = userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow();
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        product.setUser(user); // 🔥 ВАЖНО
+        // 🔥 ВАЖНО
+        product.setOwner(user);   // кто ВЫЛОЖИЛ товар
+        product.setUser(null);    // товар пока НИ У КОГО в корзине
 
-        // загрузка картинки
-        if (!imageFile.isEmpty()) {
+        // 📸 загрузка картинки
+        if (imageFile != null && !imageFile.isEmpty()) {
             try {
                 String uploadDir = "uploads/";
-                String fileName = imageFile.getOriginalFilename();
-                Path uploadPath = Paths.get(uploadDir);
+                Files.createDirectories(Paths.get(uploadDir));
 
-                if (!Files.exists(uploadPath)) {
-                    Files.createDirectories(uploadPath);
-                }
+                String fileName = UUID.randomUUID() + "_" + imageFile.getOriginalFilename();
+                Path filePath = Paths.get(uploadDir).resolve(fileName);
 
-                Files.copy(imageFile.getInputStream(),
-                        uploadPath.resolve(fileName),
-                        StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
                 product.setImagePath(fileName);
                 product.setImageUrl(fileName);
+
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new RuntimeException("Ошибка загрузки изображения", e);
             }
         }
-        log.info("Добавляем товар {} от продавца {}",
-                product.getId(),
-                product.getUser().getUsername());
 
-        productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
+
+        log.info("Добавлен товар id={} от owner={}",
+                savedProduct.getId(),
+                savedProduct.getOwner().getUsername());
+
         return "redirect:/user/home/main";
     }
 
