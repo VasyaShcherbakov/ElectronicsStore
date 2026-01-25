@@ -1,5 +1,6 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.controller.web;
 
+import com.OnlineElectronicsStore.OnlineElectronicsStore.exception.ImageUploadException;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Product;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.User;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.ProductRepository;
@@ -76,8 +77,8 @@ public class UserController {
                 product.setImagePath(fileName);
                 product.setImageUrl(fileName);
 
-            } catch (IOException e) {
-                throw new RuntimeException("Ошибка загрузки изображения", e);
+            } catch (IOException ex) {
+                throw new RuntimeException("Ошибка загрузки изображения", ex);
             }
         }
 
