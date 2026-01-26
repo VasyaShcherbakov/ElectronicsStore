@@ -229,6 +229,7 @@
 <!-- ALERT -->
 
 <div th:replace="fragments/products_header :: site-header"></div>
+
 <div th:if="${errorMessage}" class="alert" id="errorAlert">
     <span th:text="${errorMessage}"></span>
     <button class="close-btn" onclick="closeAlert()">✖</button>
