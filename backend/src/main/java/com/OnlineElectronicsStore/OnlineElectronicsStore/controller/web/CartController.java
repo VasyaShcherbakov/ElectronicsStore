@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -68,26 +69,31 @@ public class CartController {
     }
 
 
-        @PostMapping("/add/{productId}")
+    @PostMapping("/add/{productId}")
     public String addToCart(@PathVariable Long productId,
-                            @AuthenticationPrincipal UserDetails userDetails) {
-            log.info(">>> ProductController: /products called");
-            if (userDetails == null) {
-                return "redirect:/login";
-            }
+                            @AuthenticationPrincipal UserDetails userDetails,
+                            RedirectAttributes redirectAttributes) {
 
-        Optional<User> userOpt = userRepository.findByUsername(userDetails.getUsername());
-        Optional<Product> productOpt = productRepository.findById(productId);
+        if (userDetails == null) {
+            return "redirect:/login";
+        }
 
-        if (userOpt.isEmpty() || productOpt.isEmpty()) return "redirect:/products";
+        User user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow();
 
+        Product product = productRepository.findById(productId)
+                .orElseThrow();
 
+        // 🚫 ЗАПРЕТ добавления своего товара
+        if (product.getOwner() != null &&
+                product.getOwner().getId().equals(user.getId())) {
 
-        User user = userOpt.get();
-        Product product = productOpt.get();
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    "❌ Вы не можете добавить в корзину свой собственный товар"
+            );
 
-        if (product.getUser().getId().equals(user.getId())) {
-            return "redirect:/products?error=self-product";
+            return "redirect:/products";
         }
 
         Cart cart = cartRepository.findByUser(user).orElseGet(() -> {
@@ -96,7 +102,8 @@ public class CartController {
             return cartRepository.save(newCart);
         });
 
-            Optional<CartItem> cartItemOpt = cartItemRepository.findByCartAndProduct(cart, product);
+        Optional<CartItem> cartItemOpt =
+                cartItemRepository.findByCartAndProduct(cart, product);
 
         if (cartItemOpt.isPresent()) {
             CartItem cartItem = cartItemOpt.get();
@@ -112,6 +119,7 @@ public class CartController {
 
         return "redirect:/cart";
     }
+
 
     @PostMapping("/remove/{cartItemId}")
     public String removeFromCart(@PathVariable Long cartItemId,
