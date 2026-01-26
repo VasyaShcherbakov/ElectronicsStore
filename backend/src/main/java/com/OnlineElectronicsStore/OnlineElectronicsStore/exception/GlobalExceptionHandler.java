@@ -17,14 +17,14 @@ public class GlobalExceptionHandler {
         return "error";
     }
 
-    /*@ExceptionHandler(ProductNotFoundException.class)
+    @ExceptionHandler(ProductNotFoundException.class)
     public String handleProduct(ProductNotFoundException ex, Model model) {
         model.addAttribute("title", "Товар не найден");
         model.addAttribute("message", ex.getMessage());
         model.addAttribute("code", "PRD-404");
         model.addAttribute("backUrl", "/products");
         return "error";
-    }*/
+    }
 
     @ExceptionHandler(Exception.class)
     public String handleAny(Exception ex, Model model) {

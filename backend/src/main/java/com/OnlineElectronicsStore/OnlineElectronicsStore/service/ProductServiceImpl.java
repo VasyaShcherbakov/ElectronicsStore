@@ -1,6 +1,7 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.service;
 
 
+import com.OnlineElectronicsStore.OnlineElectronicsStore.exception.ProductNotFoundException;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Product;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.User;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.ProductRepository;
@@ -65,7 +66,7 @@ public class ProductServiceImpl {
 
     public Product getProductById(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Товар не найден"));
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     public Product saveProduct(Product product) {
