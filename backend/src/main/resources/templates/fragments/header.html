@@ -48,10 +48,12 @@
 
                 <!-- Welcome -->
                 <div class="nav-welcome"
-                     sec:authorize="isAuthenticated()">
-                    Ласкаво просимо,
-                    <strong th:text="${user.username}">user</strong>!
+                     sec:authorize="isAuthenticated()"
+                     th:unless="${isProductsPage}"> <!-- Показывать, пока НЕ наступит isProductsPage -->
+
+                    Ласкаво просимо, <strong th:text="${user.username}">user</strong>!
                 </div>
+
                 <a href="/user/home"
                    sec:authorize="isAuthenticated()"
                    th:if="${isProductsPage}"
