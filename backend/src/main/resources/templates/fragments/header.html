@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
 
 <header th:fragment="site-header">
+
     <div style="
         background: linear-gradient(135deg, #1e88e5, #42a5f5);
         padding: 25px 35px;
@@ -19,48 +22,83 @@
             align-items: center;
             gap: 20px;
         ">
-            <!-- Ліва частина -->
+
+            <!-- ЛЕВАЯ ЧАСТЬ -->
             <div>
-                <h1 style="margin: 0; font-size: 32px; font-weight: 700;">
-                    ⚡ ЕлектроМаркет
-                </h1>
-                <p style="margin: 6px 0 0; font-size: 15px; opacity: 0.95;">
-                    Купівля та продаж електроніки від користувачів
-                </p>
-                <p style="margin: 2px 0 0; font-size: 14px; opacity: 0.85;">
-                    Тут ви можете продати свою стару електронну техніку
-                    <br>
-                    або переглянути товари, які пропонують інші користувачі
+                <h1 style="margin: 0; font-size: 32px;">⚡ ЕлектроМаркет</h1>
+                <p style="font-size: 14px; opacity: 0.9;">
+                    Купівля та продаж електроніки
                 </p>
             </div>
 
-            <!-- Права частина -->
-            <nav style="display: flex; align-items: center; gap: 15px;">
-                <a href="/products" style="
-                    color: white;
-                    text-decoration: none;
-                    font-weight: 500;
-                    padding: 8px 14px;
-                    border-radius: 20px;
-                    background: rgba(255,255,255,0.15);
-                ">
-                    🛒 Товари
+            <!-- ПРАВАЯ ЧАСТЬ -->
+            <nav style="display:flex; gap:12px; align-items:center;">
+
+                <!-- Всегда -->
+                <a href="/products" class="nav-btn">Товари 📦</a>
+
+                <!-- АНОНИМ -->
+                <a href="/login"
+                   sec:authorize="isAnonymous()"
+                   class="nav-btn white">
+                    Вхід
                 </a>
 
-                <a href="/login" style="
-                    color: #1e88e5;
-                    background: white;
-                    text-decoration: none;
-                    font-weight: 600;
-                    padding: 8px 18px;
-                    border-radius: 20px;
-                ">
-                    🔐 Вхід
+                <a href="/register"
+                   sec:authorize="isAnonymous()"
+                   class="nav-btn white">
+                    Реєстрація
                 </a>
+
+                <!-- АВТОРИЗОВАН -->
+                <a href="/user/home"
+                   sec:authorize="isAuthenticated()"
+                   class="nav-btn">
+                    Мої товари
+                </a>
+
+                <a href="/cart"
+                   sec:authorize="isAuthenticated()"
+                   class="nav-btn">
+                    🛒 Корзина
+                    <span th:if="${cartSize > 0}">
+                        (<span th:text="${cartSize}"></span> |
+                         <span th:text="${cartTotal}"></span> грн)
+                    </span>
+                </a>
+
+                <form th:action="@{/logout}"
+                      method="post"
+                      sec:authorize="isAuthenticated()">
+                    <input type="hidden"
+                           th:name="${_csrf.parameterName}"
+                           th:value="${_csrf.token}" />
+                    <button class="nav-btn white">Вихід</button>
+                </form>
+
             </nav>
         </div>
     </div>
+
 </header>
+
+<style>
+    .nav-btn {
+        color: white;
+        text-decoration: none;
+        padding: 8px 14px;
+        border-radius: 20px;
+        background: rgba(255,255,255,0.15);
+        font-weight: 500;
+        border: none;
+        cursor: pointer;
+    }
+    .nav-btn.white {
+        background: white;
+        color: #1e88e5;
+        font-weight: 600;
+    }
+</style>
 
 </body>
 </html>
