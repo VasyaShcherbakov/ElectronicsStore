@@ -59,7 +59,8 @@
                 border-radius: 20px;
                 background: rgba(255,255,255,0.15);
                 ">
-                    Корзина🛒 (<span th:text="${cartSize}"></span>)
+                    Корзина🛒 (<span th:text="${cartSize}"></span>|
+                    <span th:text="${cartTotal}"></span> грн)
                 </a>
 
                 <a href="/products" style="

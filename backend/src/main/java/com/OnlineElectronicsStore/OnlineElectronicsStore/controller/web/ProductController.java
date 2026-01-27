@@ -50,7 +50,7 @@ public class ProductController {
         }
 
 
-        model.addAttribute("cartSize", 0); // временно
+        /*model.addAttribute("cartSize", 0); */// временно
 
         return "products";
     }
