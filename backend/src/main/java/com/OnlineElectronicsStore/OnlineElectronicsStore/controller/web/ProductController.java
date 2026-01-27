@@ -40,7 +40,7 @@ public class ProductController {
 
         model.addAttribute("products", productService.getAllProducts());
         model.addAttribute("product", new Product());
-
+        model.addAttribute("isProductsPage", true);
         if (userDetails != null) {
             model.addAttribute("user",
                     userRepository

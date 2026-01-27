@@ -52,6 +52,12 @@
                     Ласкаво просимо,
                     <strong th:text="${user.username}">user</strong>!
                 </div>
+                <a href="/user/home"
+                   sec:authorize="isAuthenticated()"
+                   th:if="${isProductsPage}"
+                   class="nav-btn">
+                    Мої товари на продаж
+                </a>
 
                 <a href="/products" class="nav-btn">
                     Товари 📦
