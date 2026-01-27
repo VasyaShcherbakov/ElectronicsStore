@@ -1,28 +1,4 @@
-/*
-.header-container {
-    background-color: #f8f8f8;
-    padding: 10px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-.logo-button {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    cursor: pointer;
-}
-
-.menu {
-    background-color: #eee;
-    padding: 15px;
-    transition: all 0.3s ease;
-}
-
-.hidden {
-    display: none;
-}
+/* КАПСУЛА НАВИГАЦИИ */
 .nav-capsule {
     display: flex;
     align-items: center;
@@ -34,9 +10,7 @@
     box-shadow: 0 6px 18px rgba(0,0,0,0.18);
 }
 
-*/
-/* WELCOME ТЕКСТ *//*
-
+/* WELCOME ТЕКСТ */
 .nav-welcome {
     color: white;
     font-size: 14px;
@@ -47,9 +21,7 @@
     white-space: nowrap;
 }
 
-*/
-/* КНОПКИ (как в старом хедере) *//*
-
+/* КНОПКИ (как в старом хедере) */
 .nav-btn {
     color: white;
     text-decoration: none;
@@ -63,17 +35,13 @@
     transition: all 0.25s ease;
 }
 
-*/
-/* hover *//*
-
+/* hover */
 .nav-btn:hover {
     background: rgba(255,255,255,0.28);
     transform: translateY(-1px);
 }
 
-*/
-/* БЕЛЫЕ КНОПКИ (вход / выход) *//*
-
+/* БЕЛЫЕ КНОПКИ (вход / выход) */
 .nav-btn.white {
     background: white;
     color: #1e88e5;
@@ -83,4 +51,3 @@
 .nav-btn.white:hover {
     background: #f2f2f2;
 }
-*/

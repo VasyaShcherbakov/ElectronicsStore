@@ -2,10 +2,16 @@
 <html
         xmlns:th="http://www.thymeleaf.org"
         xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Магазин електронiки</title>
+
+
+</head>
+
 <body>
-
 <header th:fragment="site-header">
-
+    <link rel="stylesheet" th:href="@{/css/header.css}">
     <div style="
         background: linear-gradient(135deg, #1e88e5, #42a5f5);
         padding: 25px 35px;
@@ -38,33 +44,30 @@
             </div>
 
             <!-- ПРАВАЯ ЧАСТЬ -->
-            <nav style="display:flex; gap:12px; align-items:center; flex-wrap: wrap;">
+            <nav class="nav-capsule">
 
-                <!-- Welcome (только для логина) -->
-                <div class="nav-btn"
-                     sec:authorize="isAuthenticated()"
-                     style="cursor: default;">
+                <!-- Welcome -->
+                <div class="nav-welcome"
+                     sec:authorize="isAuthenticated()">
                     Ласкаво просимо,
                     <strong th:text="${user.username}">user</strong>!
                 </div>
 
-                <!-- Всегда -->
                 <a href="/products" class="nav-btn">
                     Товари 📦
                 </a>
 
-                <!-- Корзина -->
                 <a href="/cart"
                    sec:authorize="isAuthenticated()"
                    class="nav-btn">
                     🛒 Корзина
                     <span th:if="${cartSize > 0}">
-                        (<span th:text="${cartSize}"></span> |
-                         <span th:text="${cartTotal}"></span> грн)
-                    </span>
+            (<span th:text="${cartSize}"></span> |
+             <span th:text="${cartTotal}"></span> грн)
+        </span>
                 </a>
 
-                <!-- АНОНИМ -->
+                <!-- Аноним -->
                 <a href="/login"
                    sec:authorize="isAnonymous()"
                    class="nav-btn white">
@@ -77,7 +80,7 @@
                     Реєстрація
                 </a>
 
-                <!-- ВЫХОД -->
+                <!-- Выход -->
                 <form th:action="@{/logout}"
                       method="post"
                       sec:authorize="isAuthenticated()"
@@ -95,35 +98,6 @@
     </div>
 
 </header>
-
-<style>
-    .nav-btn {
-        color: white;
-        text-decoration: none;
-        padding: 8px 16px;
-        border-radius: 20px;
-        background: rgba(255,255,255,0.15);
-        font-weight: 500;
-        border: none;
-        cursor: pointer;
-        white-space: nowrap;
-        transition: background 0.25s ease;
-    }
-
-    .nav-btn:hover {
-        background: rgba(255,255,255,0.25);
-    }
-
-    .nav-btn.white {
-        background: white;
-        color: #1e88e5;
-        font-weight: 600;
-    }
-
-    .nav-btn.white:hover {
-        background: #f2f2f2;
-    }
-</style>
 
 </body>
 </html>
