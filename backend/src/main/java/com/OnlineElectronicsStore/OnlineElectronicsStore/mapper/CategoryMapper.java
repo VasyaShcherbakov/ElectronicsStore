@@ -1,30 +1,29 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.mapper;
 
 import com.OnlineElectronicsStore.OnlineElectronicsStore.dto.CategoryDto;
-import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Category;
-import java.util.stream.Collectors;
+import com.OnlineElectronicsStore.OnlineElectronicsStore.model.ProductCategory;
 
 public class CategoryMapper {
 
-    public static CategoryDto toDto(Category category) {
-        if (category == null) return null;
+    public static CategoryDto toDto(ProductCategory productCategory) {
+        if (productCategory == null) return null;
 
         CategoryDto dto = new CategoryDto();
-        dto.setId(category.getId());
-        dto.setName(category.getName());
+        dto.setId(productCategory.getId());
+        dto.setName(productCategory.getName());
 
 
 
         return dto;
     }
 
-    public static Category toEntity(CategoryDto dto) {
+    public static ProductCategory toEntity(CategoryDto dto) {
         if (dto == null) return null;
 
-        Category category = new Category();
-        category.setId(dto.getId());
-        category.setName(dto.getName());
+        ProductCategory productCategory = new ProductCategory();
+        productCategory.setId(dto.getId());
+        productCategory.setName(dto.getName());
         // Продукты не маппим здесь, чтобы не зациклиться
-        return category;
+        return productCategory;
     }
 }
