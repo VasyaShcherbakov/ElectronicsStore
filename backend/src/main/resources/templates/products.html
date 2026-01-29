@@ -267,6 +267,11 @@
             <div class="product-body">
                 <h3 th:text="${product.name}">Название</h3>
                 <p th:text="${product.description}">Описание</p>
+                <p class="product-owner">
+                    Продавец:
+                    <span th:text="${product.owner.username}">username</span>
+                </p>
+
                 <p><strong>Цена:</strong> <span th:text="${product.price}"></span> грн</p>
                 <p><strong>На складе:</strong> <span th:text="${product.quantity}"></span></p>
                 <p><strong>Дата:</strong>
