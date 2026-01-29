@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
 <head>
     <meta charset="UTF-8">
     <title>Ваш особистий кабінет</title>
@@ -224,7 +227,13 @@
 
 <h2 class="page-title">Ваш особистий кабінет</h2>
 
+
 <main>
+    <div sec:authorize="hasRole('ADMIN')">
+        <a href="/admin/categories" class="btn btn-warning">
+            Управление категориями
+        </a>
+    </div>
 <div class="page-container">
 
     <!-- SEARCH -->
