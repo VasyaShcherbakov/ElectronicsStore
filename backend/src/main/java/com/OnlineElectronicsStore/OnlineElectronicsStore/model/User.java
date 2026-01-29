@@ -74,6 +74,7 @@ public class User implements UserDetails {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
+
     @Override
     public boolean isAccountNonExpired() {
         return true; // Учетка всегда активна

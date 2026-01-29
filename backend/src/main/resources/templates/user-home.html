@@ -229,7 +229,7 @@
 
 
 <main>
-    <div sec:authorize="hasRole('ADMIN')">
+    <div sec:authorize="hasAuthority('ADMIN')">
         <a href="/admin/categories" class="btn btn-warning">
             Управление категориями
         </a>
