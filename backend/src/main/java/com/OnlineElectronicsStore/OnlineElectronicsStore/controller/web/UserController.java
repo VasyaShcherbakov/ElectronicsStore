@@ -5,6 +5,7 @@ import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Product;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.User;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.ProductRepository;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.UserRepository;
+import com.OnlineElectronicsStore.OnlineElectronicsStore.service.CategoryService;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -37,15 +38,14 @@ public class UserController {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final ProductServiceImpl productService;
+    private final CategoryService categoryService;
 
-
-    public UserController(UserRepository userRepository, ProductRepository productRepository, ProductServiceImpl productService) {
+    public UserController(UserRepository userRepository, ProductRepository productRepository, ProductServiceImpl productService, CategoryService categoryService ) {
         this.userRepository = userRepository;
         this.productRepository = productRepository;
         this.productService = productService;
+        this.categoryService = categoryService;
     }
-
-
 
     @PostMapping("/add")
     public String addProduct(@ModelAttribute Product product,
@@ -91,11 +91,6 @@ public class UserController {
         return "redirect:/user/home/main";
     }
 
-
-
-
-
-
     @GetMapping("/main")
     public String userHome(@AuthenticationPrincipal UserDetails userDetails,
                            @RequestParam(value = "query", required = false) String query,
@@ -114,12 +109,10 @@ public class UserController {
         model.addAttribute("user", user);
         model.addAttribute("user_role", user.getUsername());
         model.addAttribute("query", query);
-        model.addAttribute("product", new Product()); // <--- ЭТО ДОБАВИТЬ!
+        model.addAttribute("categories", categoryService.getAll());
+        model.addAttribute("product", new Product());
+
         return "user-home";
     }
-
-
-
-
 
 }

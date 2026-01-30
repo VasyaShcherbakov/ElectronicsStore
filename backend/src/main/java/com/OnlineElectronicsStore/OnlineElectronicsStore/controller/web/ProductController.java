@@ -2,6 +2,7 @@ package com.OnlineElectronicsStore.OnlineElectronicsStore.controller.web;
 
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Product;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.UserRepository;
+import com.OnlineElectronicsStore.OnlineElectronicsStore.service.CategoryService;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.ProductServiceImpl;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,21 +26,33 @@ import java.util.List;
 public class ProductController {
     private final ProductServiceImpl productService;
     private final UserRepository userRepository;
+    private final CategoryService categoryService;
 
-
-    public ProductController(ProductServiceImpl productService, UserRepository userRepository) {
+    public ProductController(ProductServiceImpl productService, UserRepository userRepository, CategoryService categoryService) {
         this.productService = productService;
         this.userRepository = userRepository;
+        this.categoryService= categoryService;
     }
 
 
 
     @GetMapping("/products")
-    public String getAllProducts(Model model,
-                                 @AuthenticationPrincipal UserDetails userDetails) {
+    public String getAllProducts(
+            @RequestParam(required = false) Long categoryId,
+            Model model,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        List<Product> products;
 
-        model.addAttribute("products", productService.getAllProducts());
-        model.addAttribute("product", new Product());
+        if (categoryId != null) {
+            products = productService.getProductsByCategory(categoryId);
+        } else {
+            products = productService.getAllProducts();
+        }
+
+        model.addAttribute("products", products); // ✅ ОДИН раз
+        model.addAttribute("categories", categoryService.getAll());
+        model.addAttribute("selectedCategoryId", categoryId); // ✅ из запроса
         model.addAttribute("isProductsPage", true);
 
         if (userDetails != null) {
@@ -50,11 +63,9 @@ public class ProductController {
             );
         }
 
-
-        /*model.addAttribute("cartSize", 0); */// временно
-
         return "products";
     }
+
 
 
 

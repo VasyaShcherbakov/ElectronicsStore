@@ -8,11 +8,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-
+    private static final Logger log =
+            LoggerFactory.getLogger(AdminController.class);
     private final CategoryService categoryService;
 
     public AdminController(CategoryService categoryService) {
@@ -21,6 +26,7 @@ public class AdminController {
 
     @GetMapping("/categories")
     public String categories(Model model, HttpServletRequest request) {
+
         model.addAttribute("categories", categoryService.getAll());
         model.addAttribute("category", new ProductCategory());
 
@@ -33,9 +39,9 @@ public class AdminController {
 
     @PostMapping("/add")
     public String hardcodedCategory() {
-        System.out.println(">>> ADMIN ADD CALLED");
+        log.info("🔥 POST /admin/add called");
         categoryService.create("HARDCODE_TEST");
-      
+
         return "redirect:/admin/categories";
 
     }

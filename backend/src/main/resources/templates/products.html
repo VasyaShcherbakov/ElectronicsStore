@@ -248,7 +248,17 @@
     </div>
 
     <h1>Список товаров</h1>
+    <form method="get" action="/products" style="margin-bottom: 20px;">
+        <select name="categoryId" onchange="this.form.submit()">
+            <option value="">📦 Все категории</option>
 
+            <option th:each="cat : ${categories}"
+                    th:value="${cat.id}"
+                    th:text="${cat.name}"
+                    th:selected="${cat.id == selectedCategoryId}">
+            </option>
+        </select>
+    </form>
     <!-- ПОИСК -->
     <form action="/products/search" method="get" class="search-form">
         <input type="text" name="query" placeholder="Поиск товаров" th:value="${query}">
@@ -267,6 +277,7 @@
             <div class="product-body">
                 <h3 th:text="'📦 ' + ${product.name}">Назва</h3>
                 <p th:text="'📝 ' + ${product.description}">Опис</p>
+                <p>📂 <strong th:text="${product.category.name}"></strong></p>
                 <p style="font-size:13px; opacity:0.75;">
                     👤 Продавец:
                     <strong th:text="${product.owner.username}"></strong>
