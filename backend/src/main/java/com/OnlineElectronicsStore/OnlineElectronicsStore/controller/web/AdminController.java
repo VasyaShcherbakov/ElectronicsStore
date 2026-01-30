@@ -38,13 +38,14 @@ public class AdminController {
 
 
     @PostMapping("/add")
-    public String hardcodedCategory() {
+    public String addCategory(@ModelAttribute("category") ProductCategory category) {
         log.info("🔥 POST /admin/add called");
-        categoryService.create("HARDCODE_TEST");
+        log.info("👉 Category name = {}", category.getName());
 
+        categoryService.create(category.getName());
         return "redirect:/admin/categories";
-
     }
+
 
 
 

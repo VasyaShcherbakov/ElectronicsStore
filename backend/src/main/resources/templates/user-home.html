@@ -229,12 +229,13 @@
 
 
 <main>
-    <div sec:authorize="hasAuthority('ADMIN')">
-        <a href="/admin/categories" class="btn btn-warning">
-            Управление категориями
-        </a>
-    </div>
 <div class="page-container">
+
+        <div sec:authorize="hasAuthority('ADMIN')" style="margin-bottom: 20px;">
+            <a href="/admin/categories" class="btn btn-warning">
+                ⚙️ Админка - Управление категориями
+            </a>
+        </div>
 
     <!-- SEARCH -->
     <form action="/user/home" method="get" class="search-form">
