@@ -21,12 +21,13 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
-    public ProductCategory create(String name) {
-        if (categoryRepository.existsByName(name)) {
-            throw new IllegalArgumentException("Категория уже существует");
-        }
-        ProductCategory category = new ProductCategory();
-        category.setName(name);
-        return categoryRepository.save(category);
+    public void addCategory(ProductCategory category) {
+        categoryRepository.save(category);
+    }
+    public void create(String name) {
+        ProductCategory productCategory = new ProductCategory();
+        productCategory.setName(name);
+        categoryRepository.save(productCategory);
+        System.out.println(">>> CATEGORY SAVED: " + name);// <-- вот это сохраняет в БД
     }
 }
