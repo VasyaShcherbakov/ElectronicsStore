@@ -87,4 +87,13 @@ public class ProductServiceImpl {
     public List<Product> getProductsByCategory(Long categoryId) {
         return productRepository.findByCategoryId(categoryId);}
 
+    public List<Product> search(String query) {
+        return productRepository
+                .findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(
+                        query,
+                        query
+                );
+    }
+
+
 }

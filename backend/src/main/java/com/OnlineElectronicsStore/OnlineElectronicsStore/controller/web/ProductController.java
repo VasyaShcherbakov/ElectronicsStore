@@ -138,16 +138,25 @@ public class ProductController {
         return "redirect:/user/home";
     }
 
-
     @GetMapping("/products/search")
-    public String searchProducts(@RequestParam String query, Model model) {
-        List<Product> products = productService.searchProducts(query);
+    public String search(
+            @RequestParam(required = false) String query,
+            Model model, @AuthenticationPrincipal UserDetails userDetails) {
+
+        List<Product> products;
+
+        if (query == null || query.isBlank()) {
+            products = productService.getAllProducts();
+        } else {
+            products = productService.search(query);
+        }
+
         model.addAttribute("products", products);
         model.addAttribute("query", query);
+        model.addAttribute("categories", categoryService.getAll());
+        model.addAttribute("user", userDetails);
+
         return "products";
     }
-
-
-
 
 }

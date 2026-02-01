@@ -101,6 +101,7 @@ public class SecurityConfig {
                                 "/login",
                                 "/register",
                                 "/products",
+                                "/products/search",
                                 "/css/**",
                                 "/js/**",
                                 "/uploads/**",
