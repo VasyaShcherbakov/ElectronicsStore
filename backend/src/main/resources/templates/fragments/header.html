@@ -67,13 +67,21 @@
 
                 <a href="/cart"
                    sec:authorize="isAuthenticated()"
-                   class="nav-btn">
-                    🛒 Корзина
-                    <span th:if="${cartSize > 0}">
-            (<span th:text="${cartSize}"></span> |
-             <span th:text="${cartTotal}"></span> грн)
+                   class="nav-btn cart-btn">
+
+                    <span class="cart-title">🛒 Корзина</span>
+
+                    <span class="cart-info" th:if="${cartSize > 0}">
+        <span class="cart-count">
+            Товаров: <b th:text="${cartSize}"></b>
         </span>
+        <span class="cart-total">
+            Сумма: <b th:text="${cartTotal}"></b> грн
+        </span>
+        </span>
+
                 </a>
+
 
                 <!-- Аноним -->
                 <a href="/login"
