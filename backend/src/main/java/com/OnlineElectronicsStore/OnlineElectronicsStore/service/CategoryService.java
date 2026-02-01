@@ -30,4 +30,10 @@ public class CategoryService {
         categoryRepository.save(productCategory);
         System.out.println(">>> CATEGORY SAVED: " + name);// <-- вот это сохраняет в БД
     }
+
+    public void deleteById(Long id) {
+        categoryRepository.deleteById(id);
+        System.out.println(">>> CATEGORY DELETED ID: " + id);}
+
+
 }
