@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Детали товара</title>
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
@@ -27,7 +26,7 @@
             justify-content: center;
         }
 
-        /* === КАРТОЧКА === */
+        /* === CARD === */
         .product-card {
             background: #ffffff;
             width: 100%;
@@ -50,20 +49,39 @@
 
         .product-title {
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
-        .product-info {
-            margin-bottom: 10px;
+        /* === ROWS === */
+        .product-row {
+            display: flex;
+            align-items: flex-start;
             font-size: 14px;
+            margin-bottom: 10px;
+            line-height: 1.5;
         }
 
-        .product-info strong {
+        .emoji {
+            font-size: 1.2em;
+            line-height: 1;
             display: inline-block;
-            width: 160px;
+            width: 1.6em;
+            text-align: center;
+            flex-shrink: 0;
         }
 
-        /* === КНОПКА === */
+        /* === DESCRIPTION === */
+        .product-description {
+            display: flex;
+            align-items: flex-start;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 14px;
+        }
+
+        /* === BUTTON === */
         .btn-back {
             width: 100%;
             margin-top: 20px;
@@ -87,36 +105,42 @@
 
     <div class="product-card">
 
-    <img th:if="${product.imageUrl != null and not #strings.isEmpty(product.imageUrl)}"
-         th:src="@{'/uploads/' + ${product.imageUrl}}"
-         alt="Изображение товара"
-         class="product-image"/>
+        <img th:if="${product.imageUrl != null and not #strings.isEmpty(product.imageUrl)}"
+             th:src="@{'/uploads/' + ${product.imageUrl}}"
+             alt="Изображение товара"
+             class="product-image"/>
 
-    <div class="product-content">
-        <h2 class="product-title" th:text="${product.name}">
-            Название товара
-        </h2>
+        <div class="product-content">
 
-        <div class="product-info">
-            <strong>Описание:</strong>
-            <span th:text="${product.description}"></span>
+            <h2 class="product-title">
+                📦 <span th:text="${product.name}">Название товара</span>
+            </h2>
+
+            <div class="product-description">
+                <span class="emoji">📝</span>
+                <span th:text="${product.description}"></span>
+            </div>
+
+            <div class="product-row">
+                <span class="emoji">💰</span>
+                <span>Цiна: <strong th:text="${product.price}"></strong> грн</span>
+            </div>
+
+            <div class="product-row">
+                <span class="emoji">📥</span>
+                <span>Кiлькiсть в продавця:
+                    <strong th:text="${product.quantity}"></strong>
+                </span>
+            </div>
+
+            <button onclick="history.back()" class="btn-back">
+                Назад
+            </button>
+
         </div>
-
-        <div class="product-info">
-            <strong>Цена:</strong>
-            <span th:text="${product.price}"></span> руб.
-        </div>
-
-        <div class="product-info">
-            <strong>Количество:</strong>
-            <span th:text="${product.quantity}"></span>
-        </div>
-
-        <button onclick="history.back()" class="btn-back">
-            Назад
-        </button>
     </div>
 
-</div>
+</main>
+
 </body>
 </html>

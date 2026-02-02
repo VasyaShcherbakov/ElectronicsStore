@@ -270,20 +270,23 @@
 
         <div class="product-card" th:each="product : ${products}">
 
-            <img th:if="${product.imageUrl != null and not #strings.isEmpty(product.imageUrl)}"
-                 th:src="@{'/uploads/' + ${product.imageUrl}}"
-                 alt="Изображение товара">
+            <a th:href="@{/products/{id}(id=${product.id})}">
+                <img th:if="${product.imageUrl != null and not #strings.isEmpty(product.imageUrl)}"
+                     th:src="@{'/uploads/' + ${product.imageUrl}}"
+                     alt="Изображение товара">
+            </a>
+
 
             <div class="product-body">
                 <h3 th:text="'📦 ' + ${product.name}">Назва</h3>
-                <p th:text="'📝 ' + ${product.description}">Опис</p>
+
                 <p>📂 <strong th:text="${product.category.name}"></strong></p>
                 <p style="font-size:13px; opacity:0.75;">
                     👤 Продавец:
                     <strong th:text="${product.owner.username}"></strong>
                 </p>
-                <p><strong>💰 Цена:</strong> <span th:text="${product.price}"></span> грн</p>
-                <p><strong>📥 а складе:</strong> <span th:text="${product.quantity}"></span></p>
+                <p><strong>💰 Цiна:</strong> <span th:text="${product.price}"></span> грн</p>
+                <p><strong>📥 Кiлькiсть в продавця:</strong> <span th:text="${product.quantity}"></span></p>
                 <p><strong>📅 Дата:</strong>
                     <span th:text="${#temporals.format(product.createdAt, 'dd.MM.yyyy HH:mm')}"></span>
                 </p>

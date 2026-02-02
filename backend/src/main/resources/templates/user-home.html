@@ -207,6 +207,18 @@
         .add-product button:hover {
             background-color: #357abd;
         }
+        .add-product textarea {
+         width: 100%;
+        padding: 10px;
+        margin-bottom: 12px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+
+        resize: vertical;        /* можно тянуть вниз */
+        white-space: pre-wrap;   /* сохраняет переносы */
+        word-wrap: break-word;   /* ломает длинные слова */
+        }
+
 
         @media (max-width: 800px) {
             table {
@@ -255,7 +267,11 @@
             <input type="file" name="imageFile" placeholder="Изображение">
 
             <input type="text" th:field="*{name}" placeholder="Название">
-            <input type="text" th:field="*{description}" placeholder="Описание">
+
+            <textarea th:field="*{description}"
+                      placeholder="Описание"
+                      rows="5"></textarea>
+
             <input type="number" th:field="*{price}" placeholder="Цена">
             <input type="number" th:field="*{quantity}" placeholder="Количество">
 
