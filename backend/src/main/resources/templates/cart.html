@@ -165,5 +165,77 @@
 
 </div>
 
+<div class="page-container">
+
+    <h1>Корзина</h1>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Название</th>
+            <th>Описание</th>
+            <th>Цена</th>
+            <th>Количество</th>
+            <th>Удалить</th>
+            <th>Сумма</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="item : ${cartItems}">
+
+            <!-- ФОТО -->
+            <td>
+                <img th:if="${item.product.imageUrl != null}"
+                     th:src="@{'/uploads/' + ${item.product.imageUrl}}"
+                     alt="Фото"
+                     style="
+                        width: 80px;
+                        height: 80px;
+                        object-fit: cover;
+                        border-radius: 8px;
+                     ">
+            </td>
+
+            <td th:text="${item.product.name}"></td>
+            <td th:text="${item.product.description}"></td>
+            <td th:text="${item.product.price}"></td>
+            <td th:text="${item.quantity}"></td>
+
+            <td>
+                <form th:action="@{'/cart/remove/' + ${item.id}}" method="post">
+                    <input type="hidden"
+                           th:name="${_csrf.parameterName}"
+                           th:value="${_csrf.token}" />
+                    <button type="submit" class="btn-remove">
+                        Удалить
+                    </button>
+                </form>
+            </td>
+
+            <td th:text="${item.product.price * item.quantity} + ' грн'"></td>
+
+        </tr>
+        </tbody>
+
+        <tfoot>
+        <tr>
+            <td colspan="5">Итого:</td>
+            <td th:text="${total} + ' грн'"></td>
+        </tr>
+        </tfoot>
+    </table>
+
+    <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+        <a href="/products" class="btn-back">Вернуться к товарам</a>
+        <a href="/order/checkout" class="btn-back" style="background-color:#28a745;">
+            Оформити замовлення
+        </a>
+    </div>
+
+</div>
+
+
+
 </body>
 </html>
