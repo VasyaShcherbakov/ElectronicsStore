@@ -3,6 +3,9 @@ package com.OnlineElectronicsStore.OnlineElectronicsStore.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "orders")
 public class CustomerOrder {
@@ -18,6 +21,47 @@ public class CustomerOrder {
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
+
+    @ManyToOne
+    @JoinColumn(name = "buyer_id")
+    private User buyer;
+
+    @OneToOne(mappedBy = "customerOrder")
+    private Chat chat;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderItem> items = new ArrayList<>();
+
+    public List<OrderItem> getItems() {
+        return items;
+    }
+
+    public void addItem(OrderItem item) {
+        items.add(item);
+        item.setOrder(this);
+    }
+
+
+    public void setItems(List<OrderItem> items) {
+        this.items = items;
+    }
+
+    public User getBuyer() {
+        return buyer;
+    }
+
+    public Chat getChat() {
+        return chat;
+    }
+
+    public void setChat(Chat chat) {
+        this.chat = chat;
+    }
+
+
+    public void setBuyer(User buyer) {
+        this.buyer = buyer;
+    }
 
     public CustomerOrder() {
     }

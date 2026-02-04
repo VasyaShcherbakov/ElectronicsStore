@@ -7,10 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
-    @Controller
+@Controller
     public class OrderController {
 
         private final OrderService orderService;
@@ -25,18 +27,24 @@ import org.springframework.web.bind.annotation.PostMapping;
             return "checkout"; // имя Thymeleaf шаблона checkout.html
         }
 
-        @PostMapping("/order/checkout")
-        public String checkout(@ModelAttribute OrderCreateDto orderDto) {
+    @GetMapping("/order/success/{orderId}")
+    public String success(@PathVariable Long orderId, Model model) {
+        CustomerOrder order = orderService.getById(orderId);
+        model.addAttribute("order", order);
+        return "order/success";
+    }
 
-            CustomerOrder customerOrder = new CustomerOrder();
-            customerOrder.setCustomerName(orderDto.getCustomerName());
-            customerOrder.setPhone(orderDto.getPhone());
-            customerOrder.setAddress(orderDto.getAddress());
-            customerOrder.setStatus(OrderStatus.PAID);
+    @PostMapping("/order/checkout")
+        public String checkout(@ModelAttribute OrderCreateDto orderDto,
+                               RedirectAttributes redirectAttributes) {
 
-            orderService.save(customerOrder);
+            CustomerOrder order = orderService.createOrder(orderDto);
+            redirectAttributes.addAttribute("orderId", order.getId());
 
-            return "redirect:/order/success";
+            return "redirect:/order/success/{orderId}";
         }
+
+
+
     }
 

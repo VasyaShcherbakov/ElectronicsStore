@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Заказ оформлен успешно!</title>
+</head>
+<body>
+
+<h2>✅ Заказ оформлен успешно!</h2>
+
+<a th:if="${order.chat != null}"
+   th:href="@{/chats/{id}(id=${order.chat.id})}">
+    💬 Связаться с продавцом
+</a>
+
+</body>
+</html>

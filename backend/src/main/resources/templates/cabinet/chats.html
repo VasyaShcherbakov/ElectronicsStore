@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>Чат с продавцом</h2>
+
+<div class="chat-box">
+    <div th:each="msg : ${messages}">
+        <p>
+            <b th:text="${msg.sender.username}"></b>:
+            <span th:text="${msg.text}"></span>
+        </p>
+    </div>
+</div>
+
+<form th:action="@{/chats/{id}/send(id=${chat.id})}"
+      method="post">
+
+    <input type="text" name="text" placeholder="Введите сообщение..." required />
+
+    <button type="submit">Отправить</button>
+</form>
+</body>
+</html>
