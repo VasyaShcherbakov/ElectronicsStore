@@ -2,16 +2,109 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Заказ оформлен успешно!</title>
+    <title>Заказ оформлен</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        /* === RESET === */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: #d0e7ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* === CARD === */
+        .card {
+            background: #fff;
+            width: 100%;
+            max-width: 420px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            padding: 25px;
+            text-align: center;
+        }
+
+        .card h2 {
+            margin-bottom: 15px;
+        }
+
+        .success-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .order-info {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        /* === BUTTONS === */
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 15px;
+            text-decoration: none;
+            margin-bottom: 10px;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-primary {
+            background-color: #2196f3;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: #1976d2;
+        }
+
+        .btn-secondary {
+            background-color: #f1f1f1;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
 </head>
+
 <body>
 
-<h2>✅ Заказ оформлен успешно!</h2>
+<div class="card">
 
-<a th:if="${order.chat != null}"
-   th:href="@{/chats/{id}(id=${order.chat.id})}">
-    💬 Связаться с продавцом
-</a>
+    <div class="success-icon">✅</div>
+
+    <h2>Заказ оформлен!</h2>
+
+    <p class="order-info">
+        Спасибо за покупку 🙌<br>
+        Продавец уже получил ваш заказ.
+    </p>
+
+    <a th:if="${order.chat != null}"
+       th:href="@{/chats/{id}(id=${order.chat.id})}"
+       class="btn btn-primary">
+        💬 Связаться с продавцом
+    </a>
+
+    <a href="/"
+       class="btn btn-secondary">
+        ⬅ Вернуться на главную
+    </a>
+
+</div>
 
 </body>
 </html>

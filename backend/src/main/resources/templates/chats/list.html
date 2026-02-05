@@ -1,27 +1,142 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Мои чаты</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        /* === RESET === */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: #d0e7ff;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* === CONTAINER === */
+        .page-container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* === CARD === */
+        .chat-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            padding: 15px;
+        }
+
+        .empty {
+            text-align: center;
+            font-size: 14px;
+            color: #555;
+        }
+
+        /* === CHAT ITEM === */
+        .chat-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #000;
+            transition: background-color 0.2s;
+        }
+
+        .chat-item:hover {
+            background-color: #f2f6fb;
+        }
+
+        .chat-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #2196f3;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .chat-name {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .arrow {
+            font-size: 18px;
+            color: #888;
+        }
+    </style>
 </head>
+
 <body>
 
-<h2>💬 Мои сообщения</h2>
+<div class="page-container">
 
-<div th:if="${chats.isEmpty()}">
-    <p>Сообщений пока нет</p>
+    <h2>💬 Мои чаты</h2>
+
+    <div class="chat-card">
+
+        <div th:if="${chats.isEmpty()}" class="empty">
+            Сообщений пока нет
+        </div>
+
+        <div th:each="chat : ${chats}">
+            <a class="chat-item"
+               th:href="@{/chats/{id}(id=${chat.id})}">
+
+                <div class="chat-left">
+
+                    <div class="avatar"
+                         th:text="${
+                           chat.buyer.id == currentUser.id
+                           ? chat.seller.username.substring(0,1)
+                           : chat.buyer.username.substring(0,1)
+                         }">
+                    </div>
+
+                    <div class="chat-name"
+                         th:text="${
+                           chat.buyer.id == currentUser.id
+                           ? chat.seller.username
+                           : chat.buyer.username
+                         }">
+                    </div>
+
+                </div>
+
+                <div class="arrow">➤</div>
+
+            </a>
+        </div>
+
+    </div>
+
 </div>
-
-<ul th:each="chat : ${chats}">
-    <li>
-        <a th:href="@{/chats/{id}(id=${chat.id})}">
-            Чат с
-            <span th:text="${chat.buyer.username}"></span>
-            /
-            <span th:text="${chat.seller.username}"></span>
-        </a>
-    </li>
-</ul>
 
 </body>
 </html>

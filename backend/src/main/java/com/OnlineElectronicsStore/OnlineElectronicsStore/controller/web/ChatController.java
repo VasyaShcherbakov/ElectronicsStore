@@ -39,6 +39,7 @@ public class ChatController {
 
         Chat chat = chatService.getById(chatId);
 
+        model.addAttribute("currentUser", userService.getCurrentUser());
         model.addAttribute("messages", messageService.getMessages(chat));
         model.addAttribute("chat", chat);
 
@@ -66,7 +67,7 @@ public class ChatController {
 
         List<Chat> chats =
                 chatRepository.findByBuyerOrSeller(user, user);
-
+        model.addAttribute("currentUser", userService.getCurrentUser());
         model.addAttribute("chats", chats);
         return "chats/list";
     }
