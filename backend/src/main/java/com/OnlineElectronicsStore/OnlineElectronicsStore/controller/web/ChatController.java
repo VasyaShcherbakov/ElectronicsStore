@@ -60,12 +60,12 @@ public class ChatController {
         return "redirect:/chats/" + chatId;
     }
 
-    @GetMapping("/")
-
+    @GetMapping
     public String myChats(Model model) {
         User user = userService.getCurrentUser();
-        List<Chat> chats = chatRepository
-                .findByBuyerOrSeller(user, user);
+
+        List<Chat> chats =
+                chatRepository.findByBuyerOrSeller(user, user);
 
         model.addAttribute("chats", chats);
         return "chats/list";
