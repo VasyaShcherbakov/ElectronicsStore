@@ -5,78 +5,8 @@
     <title>Оформление заказа</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        /* === RESET === */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, Helvetica, sans-serif;
-        }
+    <link rel="stylesheet" th:href="@{/css/checkout.css}">
 
-        body {
-            min-height: 100vh;
-            background-color: #d0e7ff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* === CARD === */
-        .card {
-            background: #fff;
-            width: 100%;
-            max-width: 420px;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            padding: 20px;
-        }
-
-        .card h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            font-size: 14px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-        }
-
-        .btn-submit {
-            width: 100%;
-            padding: 12px;
-            margin-top: 10px;
-            background-color: #2196f3;
-            color: #fff;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .btn-submit:hover {
-            background-color: #1976d2;
-        }
-
-        hr {
-            margin: 20px 0;
-            border: none;
-            border-top: 1px solid #eee;
-        }
-    </style>
 </head>
 
 <body>

@@ -1,0 +1,95 @@
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: #d0e7ff;
+        }
+
+        /* ===== ОСНОВНОЙ КОНТЕЙНЕР ===== */
+        main {
+            min-height: calc(100vh - 160px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ===== КАРТОЧКА ===== */
+        .login-card {
+            background: #ffffff;
+            padding: 35px;
+            width: 100%;
+            max-width: 420px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .login-card h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 28px;
+        }
+
+        /* ===== ФОРМА ===== */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 11px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4a90e2;
+        }
+
+        /* ===== КНОПКИ ===== */
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .btn-login {
+            background-color: #4a90e2;
+            color: white;
+        }
+
+        .btn-login:hover {
+            background-color: #357abd;
+        }
+
+        .btn-register {
+            background-color: #eeeeee;
+        }
+
+        .btn-register:hover {
+            background-color: #dddddd;
+        }
+
+        /* ===== ОШИБКА ===== */
+        .error {
+            color: red;
+            text-align: center;
+            margin-bottom: 18px;
+        }
