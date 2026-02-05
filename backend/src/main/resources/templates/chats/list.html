@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Мои чаты</title>
+</head>
+<body>
+
+<h2>💬 Мои сообщения</h2>
+
+<div th:if="${chats.isEmpty()}">
+    <p>Сообщений пока нет</p>
+</div>
+
+<ul th:each="chat : ${chats}">
+    <li>
+        <a th:href="@{/chats/{id}(id=${chat.id})}">
+            Чат с
+            <span th:text="${chat.buyer.username}"></span>
+            /
+            <span th:text="${chat.seller.username}"></span>
+        </a>
+    </li>
+</ul>
+
+</body>
+</html>

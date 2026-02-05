@@ -7,27 +7,31 @@ import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.ChatReposito
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.MessageRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Service
 public class MessageService {
 
     private final MessageRepository messageRepository;
-    private final ChatRepository chatRepository;
 
-    public MessageService(MessageRepository messageRepository, ChatRepository chatRepository) {
+    public MessageService(MessageRepository messageRepository) {
         this.messageRepository = messageRepository;
-        this.chatRepository = chatRepository;
     }
 
-
-    public void send(Long chatId, User sender, String text) {
-        Chat chat = chatRepository.findById(chatId).orElseThrow();
-
+    public void sendMessage(Chat chat, User sender, String text) {
         Message message = new Message();
-        message.setChat(chat);
-        message.setSender(sender);
+        message.setChat(chat);      // важно
+        message.setSender(sender);  // важно
         message.setText(text);
+        message.setCreatedAt(LocalDateTime.now());
+        message.setRead(false);
 
         messageRepository.save(message);
+    }
+
+    public List<Message> getMessages(Chat chat) {
+        return messageRepository.findByChatOrderByCreatedAtAsc(chat);
     }
 }
 

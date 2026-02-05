@@ -9,24 +9,26 @@ import java.time.LocalDateTime;
 public class Message {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "chat_id", nullable = false)
     private Chat chat;
 
     @ManyToOne
+    @JoinColumn(name = "sender_id", nullable = false)
     private User sender;
 
-    @Column(nullable = false, length = 1000)
+    @Column(nullable = false)
     private String text;
 
-    private LocalDateTime sentAt;
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    @PrePersist
-    void onCreate() {
-        sentAt = LocalDateTime.now();
-    }
+    @Column(name = "read", nullable = false)
+    private boolean read = false;
+
 
     public Message() {
     }
@@ -63,11 +65,19 @@ public class Message {
         this.text = text;
     }
 
-    public LocalDateTime getSentAt() {
-        return sentAt;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setSentAt(LocalDateTime sentAt) {
-        this.sentAt = sentAt;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public boolean isRead() {
+        return read;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
     }
 }

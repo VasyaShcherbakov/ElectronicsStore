@@ -248,7 +248,9 @@
                 ⚙️ Админка - Управление категориями
             </a>
         </div>
-
+    <div class="nav-buttons">
+        <a th:href="@{/chats}">💬 Мои сообщения</a>
+    </div>
     <!-- SEARCH -->
     <form action="/user/home" method="get" class="search-form">
         <input type="text" name="query" placeholder="Поиск товаров" th:value="${query}">

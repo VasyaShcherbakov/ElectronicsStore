@@ -6,6 +6,8 @@ import com.OnlineElectronicsStore.OnlineElectronicsStore.model.User;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.CartRepository;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -55,4 +57,21 @@ public class UserService implements UserDetailsService {
         cart.setUser(user);
         cartRepository.save(cart);
     }
+
+    public User getCurrentUser() {
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new RuntimeException("Пользователь не авторизован");
+        }
+
+        String username = authentication.getName();
+
+        return userRepository.findByUsername(username)
+                .orElseThrow(() ->
+                        new RuntimeException("Пользователь не найден: " + username)
+                );
+    }
+
 }
