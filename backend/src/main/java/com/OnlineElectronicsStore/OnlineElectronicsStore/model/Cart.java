@@ -30,9 +30,9 @@ public class Cart {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-
-
-
+    public boolean isEmpty() {
+        return items == null || items.isEmpty();
+    }
 
 
     public List<CartItem> getItems() {

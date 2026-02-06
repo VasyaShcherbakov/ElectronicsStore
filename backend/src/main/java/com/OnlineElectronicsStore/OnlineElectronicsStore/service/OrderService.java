@@ -41,6 +41,10 @@ public OrderService(OrderRepository orderRepository,
         User currentUser = cartService.get();
         Cart cart = cartService.getByUser(currentUser);
 
+        if (cart == null || cart.isEmpty()) {
+            throw new IllegalStateException("Корзина пуста");
+        }
+
         CustomerOrder order = new CustomerOrder();
         order.setCustomerName(dto.getCustomerName());
         order.setPhone(dto.getPhone());

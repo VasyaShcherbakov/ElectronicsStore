@@ -76,7 +76,10 @@
 
     <div style="display: flex; justify-content: space-between; margin-top: 20px;">
         <a href="/products" class="btn-back">Вернуться к товарам</a>
-        <a href="/order/checkout" class="btn-back" style="background-color:#28a745;">
+        <a th:if="${!isCartEmpty}"
+           href="/order/checkout"
+           class="btn-back"
+           style="background-color:#28a745;">
             Оформити замовлення
         </a>
     </div>

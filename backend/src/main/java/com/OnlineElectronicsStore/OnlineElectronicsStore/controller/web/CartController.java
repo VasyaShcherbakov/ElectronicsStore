@@ -65,6 +65,8 @@ public class CartController {
 
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("total", total);
+        model.addAttribute("isCartEmpty", cartItems.isEmpty());
+
         return "cart";
     }
 
