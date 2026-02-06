@@ -12,9 +12,10 @@
             background-color: #d0e7ff;
             display: flex;
             justify-content: center;
-            align-items: center;
             padding: 20px;
+            padding-top: 160px; /* под большой хедер */
         }
+
 
         /* === CARD === */
         .chat-card {
@@ -136,4 +137,13 @@ body > header.chat-header {
     top: 0 !important;
     left: 0 !important;
     transform: none !important;
+}
+/* === CARD HEADER === */
+.chat-card-header {
+    padding: 16px;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
 }
