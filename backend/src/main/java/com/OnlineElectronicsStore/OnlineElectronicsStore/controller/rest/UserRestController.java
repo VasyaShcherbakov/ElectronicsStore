@@ -53,12 +53,14 @@ public class UserRestController {
             summary = "Додати новий товар",
             description = "Додає новий товар від імені користувача з можливістю завантаження зображення"
     )
+    
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Товар успішно створено"),
             @ApiResponse(responseCode = "400", description = "Некоректні дані товару"),
             @ApiResponse(responseCode = "401", description = "Користувач не авторизований"),
             @ApiResponse(responseCode = "500", description = "Помилка збереження файлу")
     })
+
     @PostMapping(
             value = "/add",
             consumes = { "multipart/form-data" }
@@ -67,32 +69,23 @@ public class UserRestController {
             @ModelAttribute Product product,
             @RequestParam("imageFile")
             @Schema(description = "Зображення товару", type = "string", format = "binary")
-            MultipartFile imageFile
+            MultipartFile imageFile,
+            @AuthenticationPrincipal UserDetails userDetails
     ) {
-        try {
-            if (!imageFile.isEmpty()) {
-                String uploadDir = "uploads/";
-                String fileName = imageFile.getOriginalFilename();
-                Path uploadPath = Paths.get(uploadDir);
 
-                if (!Files.exists(uploadPath)) {
-                    Files.createDirectories(uploadPath);
-                }
-
-                Path filePath = uploadPath.resolve(fileName);
-                Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-                product.setImagePath(fileName);
-                product.setImageUrl("/uploads/" + fileName);
-            }
-
-            Product savedProduct = productRepository.save(product);
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedProduct);
-
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Помилка збереження файлу: " + e.getMessage());
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("User not authenticated");
         }
+
+        Product savedProduct = productService.addProduct(
+                product,
+                imageFile,
+                userDetails.getUsername()
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(savedProduct);
     }
 
     // ================= USER HOME =================
@@ -110,6 +103,7 @@ public class UserRestController {
             @ApiResponse(responseCode = "401", description = "Користувач не авторизований"),
             @ApiResponse(responseCode = "404", description = "Користувача не знайдено")
     })
+
     @GetMapping("/main")
     public ResponseEntity<?> userHome(
             @AuthenticationPrincipal UserDetails userDetails,
