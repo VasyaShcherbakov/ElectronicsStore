@@ -96,45 +96,10 @@ public class ProductController {
             @ModelAttribute Product formProduct,
             @RequestParam("imageFile") MultipartFile imageFile
     ) {
-        // 1️⃣ Достаем существующий товар из БД
-        Product product = productService.getProductById(formProduct.getId());
-
-        // 2️⃣ Обновляем поля
-        product.setName(formProduct.getName());
-        product.setDescription(formProduct.getDescription());
-        product.setPrice(formProduct.getPrice());
-        product.setQuantity(formProduct.getQuantity());
-
-        // 3️⃣ Логика загрузки картинки — ТАКАЯ ЖЕ, как в addProduct
-        if (!imageFile.isEmpty()) {
-            try {
-                String uploadDir = "uploads/";
-                String fileName = imageFile.getOriginalFilename();
-                Path uploadPath = Paths.get(uploadDir);
-
-                if (!Files.exists(uploadPath)) {
-                    Files.createDirectories(uploadPath);
-                }
-
-                Files.copy(
-                        imageFile.getInputStream(),
-                        uploadPath.resolve(fileName),
-                        StandardCopyOption.REPLACE_EXISTING
-                );
-
-                product.setImagePath(fileName);
-                product.setImageUrl(fileName);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        // ⚠️ если файл НЕ выбран — старая картинка останется
-
-        productService.saveProduct(product);
-
+        productService.updateProduct(formProduct, imageFile);
         return "redirect:/user/home";
     }
+
 
     @GetMapping("/products/search")
     public String search(

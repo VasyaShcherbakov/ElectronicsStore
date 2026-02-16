@@ -1,6 +1,7 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public class ProductCategory {
     private String name;
 
     @OneToMany(mappedBy = "category")
+   /* @JsonIgnore*/
     private List<Product> products;
 
     public Long getId() {

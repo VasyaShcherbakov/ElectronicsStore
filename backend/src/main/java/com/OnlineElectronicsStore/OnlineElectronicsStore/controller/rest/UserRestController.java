@@ -5,6 +5,7 @@ import com.OnlineElectronicsStore.OnlineElectronicsStore.model.User;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.ProductRepository;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.UserRepository;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.ProductServiceImpl;
+import com.OnlineElectronicsStore.OnlineElectronicsStore.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -33,17 +34,11 @@ import java.util.Optional;
 @SecurityRequirement(name = "bearerAuth")
 public class UserRestController {
 
-    private final UserRepository userRepository;
-    private final ProductRepository productRepository;
+    private final UserService userService;
     private final ProductServiceImpl productService;
 
-    public UserRestController(
-            UserRepository userRepository,
-            ProductRepository productRepository,
-            ProductServiceImpl productService
-    ) {
-        this.userRepository = userRepository;
-        this.productRepository = productRepository;
+    public UserRestController(ProductServiceImpl productService,UserService userService) {
+        this.userService = userService;
         this.productService = productService;
     }
 
@@ -107,30 +102,25 @@ public class UserRestController {
     @GetMapping("/main")
     public ResponseEntity<?> userHome(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestParam(
-                    value = "query",
-                    required = false
-            )
-            @Schema(description = "Пошук товарів за назвою")
-            String query
+            @RequestParam(value = "query", required = false) String query
     ) {
+
         if (userDetails == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("Користувач не авторизований");
         }
 
-        Optional<User> userOpt = userRepository.findByUsername(userDetails.getUsername());
-        if (userOpt.isEmpty()) {
+        User user = userService.findByUsername(userDetails.getUsername());
+        if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Користувача не знайдено");
         }
 
-        User user = userOpt.get();
-        List<Product> products = (query != null && !query.isEmpty())
-                ? productRepository.findByNameContainingIgnoreCase(query)
-                : productService.getAllProducts();
+        List<Product> products = productService.getProductsForUser(user, query);
 
-        return ResponseEntity.ok(new UserHomeResponse(user, products, query));
+        return ResponseEntity.ok(
+                new UserHomeResponse(user, products, query)
+        );
     }
 
     // ================= DTO =================

@@ -119,5 +119,38 @@ public class ProductServiceImpl {
                 );
     }
 
+    @Transactional
+    public void updateProduct(Product formProduct, MultipartFile imageFile) {
+
+        Product product = getProductById(formProduct.getId());
+
+        product.setName(formProduct.getName());
+        product.setDescription(formProduct.getDescription());
+        product.setPrice(formProduct.getPrice());
+        product.setQuantity(formProduct.getQuantity());
+
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                String uploadDir = "uploads/";
+                Files.createDirectories(Paths.get(uploadDir));
+
+                String fileName = imageFile.getOriginalFilename();
+                Path filePath = Paths.get(uploadDir).resolve(fileName);
+
+                Files.copy(imageFile.getInputStream(),
+                        filePath,
+                        StandardCopyOption.REPLACE_EXISTING);
+
+                product.setImagePath(fileName);
+                product.setImageUrl(fileName);
+
+            } catch (IOException e) {
+                throw new RuntimeException("Ошибка загрузки файла", e);
+            }
+        }
+
+        productRepository.save(product);
+    }
+
 
 }
