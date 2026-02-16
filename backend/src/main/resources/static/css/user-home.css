@@ -220,3 +220,15 @@
                 height: 80px;
             }
         }
+
+        td {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        }
+
+.description {
+    max-width: 250px;
+    white-space: normal;
+    word-break: break-word;
+}
