@@ -1,11 +1,13 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.dto;
 
+import java.math.BigDecimal;
+
 public class OrderItemDto {
 
     private Long productId;
     private String productName;
     private Integer quantity;
-    private Double priceAtOrder;
+    private BigDecimal priceAtOrder;
 
 
     public Long getProductId() {
@@ -32,11 +34,11 @@ public class OrderItemDto {
         this.quantity = quantity;
     }
 
-    public Double getPriceAtOrder() {
+    public BigDecimal getPriceAtOrder() {
         return priceAtOrder;
     }
 
-    public void setPriceAtOrder(Double priceAtOrder) {
+    public void setPriceAtOrder(BigDecimal priceAtOrder) {
         this.priceAtOrder = priceAtOrder;
     }
 }
