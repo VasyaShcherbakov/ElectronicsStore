@@ -73,13 +73,10 @@ public class ChatRestController {
 
         List<Message> messages = messageService.getMessages(chat);
 
-        Message lastMessage = messages.isEmpty()
-                ? null
-                : messages.get(messages.size() - 1);
+        Message lastMessage = messages.get(messages.size() - 1);
+        MessageDto dto = ChatMapper.toMessageDto(lastMessage);
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ChatMapper.toMessageDto(lastMessage));
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(lastMessage);
     }
 }
