@@ -10,23 +10,43 @@ import java.util.stream.Collectors;
 public class CartMapper {
 
     public static CartDto toDto(Cart cart) {
+
         if (cart == null) return null;
+
         CartDto dto = new CartDto();
         dto.setId(cart.getId());
-        dto.setTotal(cart.getTotal());
+
+        dto.setItems(
+                cart.getItems().stream()
+                        .map(item -> {
+                            CartItemDto ci = new CartItemDto();
+                            ci.setProductId(item.getProduct().getId());
+                            ci.setProductName(item.getProduct().getName());
+                            ci.setQuantity(item.getQuantity());
+                            ci.setPrice(item.getProduct().getPrice());
+                            return ci;
+                        })
+                        .toList()
+        );
+
+        // 💎 считаем total здесь
+        var total = cart.getItems().stream()
+                .map(item ->
+                        item.getProduct().getPrice()
+                                .multiply(java.math.BigDecimal.valueOf(item.getQuantity()))
+                )
+                .reduce(java.math.BigDecimal.ZERO, java.math.BigDecimal::add);
+
+        dto.setTotal(total);
+
         if (cart.getUser() != null) {
-            dto.setUser(new UserSummaryDto(cart.getUser().getId(), cart.getUser().getUsername(), cart.getUser().getEmail()));
+            dto.setUser(new UserSummaryDto(
+                    cart.getUser().getId(),
+                    cart.getUser().getUsername(),
+                    cart.getUser().getEmail()
+            ));
         }
-        dto.setItems(cart.getItems().stream()
-                .map(item -> {
-                    CartItemDto ci = new CartItemDto();
-                    ci.setProductId(item.getProduct().getId());
-                    ci.setProductName(item.getProduct().getName());
-                    ci.setQuantity(item.getQuantity());
-                    ci.setPrice(item.getProduct().getPrice());
-                    return ci;
-                })
-                .collect(Collectors.toList()));
+
         return dto;
     }
 
