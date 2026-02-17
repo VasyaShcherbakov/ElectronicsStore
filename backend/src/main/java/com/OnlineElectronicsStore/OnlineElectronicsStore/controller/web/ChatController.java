@@ -34,15 +34,15 @@ public class ChatController {
 
 
     @GetMapping("/{chatId:\\d+}")
-
     public String openChat(@PathVariable Long chatId, Model model) {
+        User currentUser = userService.getCurrentUser();
 
-        Chat chat = chatService.getById(chatId);
+        // 🔒 Используем проверку доступа
+        Chat chat = chatService.getChatForUser(chatId, currentUser);
 
-        model.addAttribute("currentUser", userService.getCurrentUser());
+        model.addAttribute("currentUser", currentUser);
         model.addAttribute("messages", messageService.getMessages(chat));
         model.addAttribute("chat", chat);
-
 
         return "chats/chat";
     }
@@ -65,8 +65,8 @@ public class ChatController {
     public String myChats(Model model) {
         User user = userService.getCurrentUser();
 
-        List<Chat> chats =
-                chatRepository.findByBuyerOrSeller(user, user);
+        List<Chat> chats = chatService.getUserChats(user);
+
         model.addAttribute("currentUser", userService.getCurrentUser());
         model.addAttribute("chats", chats);
         return "chats/list";
