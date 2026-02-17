@@ -21,14 +21,17 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
-    public void addCategory(ProductCategory category) {
+    public ProductCategory addCategory(ProductCategory category) {
         categoryRepository.save(category);
+        return category;
     }
-    public void create(String name) {
+
+    public ProductCategory create(String name) {
         ProductCategory productCategory = new ProductCategory();
         productCategory.setName(name);
         categoryRepository.save(productCategory);
         System.out.println(">>> CATEGORY SAVED: " + name);// <-- вот это сохраняет в БД
+        return productCategory;
     }
 
     public void deleteById(Long id) {
