@@ -38,12 +38,18 @@ public OrderService(OrderRepository orderRepository,
 
     public CustomerOrder createOrder(OrderCreateDto dto) {
 
-        User currentUser = cartService.get();
-        Cart cart = cartService.getByUser(currentUser);
+        String username = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
 
-        if (cart == null || cart.isEmpty()) {
+        Cart cart = cartService.getOrCreateCart(username);
+
+        if (cart.getItems().isEmpty()) {
             throw new IllegalStateException("Корзина пуста");
         }
+
+        User currentUser = cart.getUser();
 
         CustomerOrder order = new CustomerOrder();
         order.setCustomerName(dto.getCustomerName());
@@ -53,16 +59,20 @@ public OrderService(OrderRepository orderRepository,
         order.setBuyer(currentUser);
 
         for (CartItem ci : cart.getItems()) {
+
             OrderItem oi = new OrderItem();
             oi.setOrder(order);
             oi.setProduct(ci.getProduct());
             oi.setQuantity(ci.getQuantity());
+
+            // 💎 ВАЖНО: цена фиксируется на момент заказа
             oi.setPriceAtOrder(ci.getProduct().getPrice());
 
             order.getItems().add(oi);
         }
 
         orderRepository.save(order);
+
         cartService.clear(cart);
 
         chatService.createChatForOrder(order);

@@ -9,6 +9,7 @@ import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.CartItemRepo
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.CartRepository;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.ProductRepository;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.UserRepository;
+import com.OnlineElectronicsStore.OnlineElectronicsStore.service.CartService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -26,50 +27,30 @@ import java.util.Optional;
 @RequestMapping("/cart")
 public class CartController {
 
-    private static final Logger log =
-            LoggerFactory.getLogger(CartController.class);
+    private final CartService cartService;
 
-    private final CartRepository cartRepository;
-    private final CartItemRepository cartItemRepository;
-    private final ProductRepository productRepository;
-    private final UserRepository userRepository;
-
-    public CartController(CartRepository cartRepository,
-                          CartItemRepository cartItemRepository,
-                          ProductRepository productRepository,
-                          UserRepository userRepository) {
-        this.cartRepository = cartRepository;
-        this.cartItemRepository = cartItemRepository;
-        this.productRepository = productRepository;
-        this.userRepository = userRepository;
+    public CartController(CartService cartService) {
+        this.cartService = cartService;
     }
 
     @GetMapping
-    public String showCart(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        Optional<User> userOpt = userRepository.findByUsername(userDetails.getUsername());
-        if (userOpt.isEmpty()) return "redirect:/login";
+    public String showCart(Model model,
+                           @AuthenticationPrincipal UserDetails userDetails) {
 
-        User user = userOpt.get();
-        Cart cart = cartRepository.findByUser(user).orElseGet(() -> {
-            Cart newCart = new Cart();
-            newCart.setUser(user);
-            return cartRepository.save(newCart);
-        });
+        if (userDetails == null) {
+            return "redirect:/login";
+        }
 
-        List<CartItem> cartItems = cartItemRepository.findByCart(cart);/*Здесь карт подсвечиваеться*/
+        Cart cart = cartService.getOrCreateCart(userDetails.getUsername());
+        var items = cartService.getCartItems(cart);
+        var total = cartService.calculateTotal(items);
 
-        // вычисление общей суммы
-        java.math.BigDecimal total = cartItems.stream()
-                .map(item -> item.getProduct().getPrice().multiply(java.math.BigDecimal.valueOf(item.getQuantity())))
-                .reduce(java.math.BigDecimal.ZERO, java.math.BigDecimal::add);
-
-        model.addAttribute("cartItems", cartItems);
+        model.addAttribute("cartItems", items);
         model.addAttribute("total", total);
-        model.addAttribute("isCartEmpty", cartItems.isEmpty());
+        model.addAttribute("isCartEmpty", items.isEmpty());
 
         return "cart";
     }
-
 
     @PostMapping("/add/{productId}")
     public String addToCart(@PathVariable Long productId,
@@ -80,60 +61,24 @@ public class CartController {
             return "redirect:/login";
         }
 
-        User user = userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow();
-
-        Product product = productRepository.findById(productId)
-                .orElseThrow();
-
-        // 🚫 ЗАПРЕТ добавления своего товара
-        if (product.getOwner() != null &&
-                product.getOwner().getId().equals(user.getId())) {
-
-            redirectAttributes.addFlashAttribute(
-                    "errorMessage",
-                    "❌ Вы не можете добавить в корзину свой собственный товар"
-            );
-
+        try {
+            cartService.addProduct(userDetails.getUsername(), productId);
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/products";
-        }
-
-        Cart cart = cartRepository.findByUser(user).orElseGet(() -> {
-            Cart newCart = new Cart();
-            newCart.setUser(user);
-            return cartRepository.save(newCart);
-        });
-
-        Optional<CartItem> cartItemOpt =
-                cartItemRepository.findByCartAndProduct(cart, product);
-
-        if (cartItemOpt.isPresent()) {
-            CartItem cartItem = cartItemOpt.get();
-            cartItem.setQuantity(cartItem.getQuantity() + 1);
-            cartItemRepository.save(cartItem);
-        } else {
-            CartItem newItem = new CartItem();
-            newItem.setCart(cart);
-            newItem.setProduct(product);
-            newItem.setQuantity(1);
-            cartItemRepository.save(newItem);
         }
 
         return "redirect:/cart";
     }
 
-
     @PostMapping("/remove/{cartItemId}")
     public String removeFromCart(@PathVariable Long cartItemId,
                                  @AuthenticationPrincipal UserDetails userDetails) {
-        Optional<CartItem> cartItemOpt = cartItemRepository.findById(cartItemId);
-        if (cartItemOpt.isPresent()) {
-            CartItem item = cartItemOpt.get();
-            String username = userDetails.getUsername();
-            if (item.getCart().getUser().getUsername().equals(username)) {
-                cartItemRepository.delete(item);
-            }
+
+        if (userDetails != null) {
+            cartService.removeItem(userDetails.getUsername(), cartItemId);
         }
+
         return "redirect:/cart";
     }
 }
