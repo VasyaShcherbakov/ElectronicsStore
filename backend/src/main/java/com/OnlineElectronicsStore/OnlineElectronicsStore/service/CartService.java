@@ -66,7 +66,7 @@ public class CartService {
 
         // 🚫 Запрет добавления своего товара
         if (product.getOwner() != null &&
-                product.getOwner().getId().equals(user.getId())) {
+                java.util.Objects.equals(user.getId(), product.getOwner().getId())) {
 
             throw new RuntimeException("Нельзя добавить свой товар");
         }
