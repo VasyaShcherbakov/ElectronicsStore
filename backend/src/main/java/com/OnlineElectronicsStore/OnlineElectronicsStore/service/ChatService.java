@@ -60,8 +60,8 @@ public class ChatService {
         Chat chat = chatRepository.findById(chatId)
                 .orElseThrow(() -> new RuntimeException("Chat not found"));
 
-        if (!chat.getBuyer().equals(user) &&
-                !chat.getSeller().equals(user)) {
+        if (!user.equals(chat.getBuyer()) &&
+                !user.equals(chat.getSeller())) {
             throw new RuntimeException("Access denied");
         }
 
