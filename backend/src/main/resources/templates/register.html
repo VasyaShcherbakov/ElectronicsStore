@@ -11,14 +11,10 @@
 
 <body>
 
-
-
 <div th:replace="fragments/header :: site-header"></div>
 
-
-
 <main>
-<div class="register-card">
+    <div class="register-card">
 
     <h2>Реєстрація</h2>
 
@@ -30,7 +26,7 @@
     <form th:action="@{/register}" th:object="${user}" method="post">
 
         <div class="form-group">
-            <label>Логин</label>
+            <label>Логін</label>
             <input type="text" th:field="*{username}" required>
             <div th:if="${#fields.hasErrors('username')}"
                  class="error"
@@ -65,8 +61,8 @@
             <label>Стать</label>
             <select th:field="*{gender}">
                 <option value="">— Выберите —</option>
-                <option th:value="MALE">Мужской</option>
-                <option th:value="FEMALE">Женский</option>
+                <option th:value="MALE">Чоловіча</option>
+                <option th:value="FEMALE">Жіноча</option>
             </select>
 
             <div th:if="${#fields.hasErrors('gender')}"

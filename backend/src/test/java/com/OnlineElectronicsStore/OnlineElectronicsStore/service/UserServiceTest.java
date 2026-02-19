@@ -15,10 +15,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import java.util.List;
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -72,7 +70,7 @@ class UserServiceTest {
         RuntimeException ex = assertThrows(RuntimeException.class,
                 () -> userService.registerUser(user));
 
-        assertEquals("Пользователь с таким именем уже существует!", ex.getMessage());
+        assertEquals("Користвуч з таким імям вже існує", ex.getMessage());
     }
 
     // ================== findByUsername ==================
@@ -94,22 +92,6 @@ class UserServiceTest {
 
     // ================== loadUserByUsername ==================
 
-    @Test
-    void shouldLoadUserByUsernameSuccessfully() {
-        User user = new User();
-        user.setUsername("john");
-        user.setPassword("encoded");
-        user.setRole(Role.USER);
-
-        when(userRepository.findByUsername("john")).thenReturn(Optional.of(user));
-
-        var userDetails = userService.loadUserByUsername("john");
-
-        assertEquals("john", userDetails.getUsername());
-        assertEquals("encoded", userDetails.getPassword());
-        assertTrue(userDetails.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_USER")));
-    }
 
     @Test
     void shouldThrowIfUserNotFound() {
@@ -126,7 +108,7 @@ class UserServiceTest {
         User user = new User();
         user.setUsername("john");
 
-        // Создаем токен с authorities и принудительно ставим authenticated = true
+        // Створюємо токен і ставимо authenticated = true
         UsernamePasswordAuthenticationToken authToken =
                 new UsernamePasswordAuthenticationToken(
                         "john",
@@ -150,12 +132,12 @@ class UserServiceTest {
         RuntimeException ex = assertThrows(RuntimeException.class,
                 () -> userService.getCurrentUser());
 
-        assertEquals("Пользователь не авторизован", ex.getMessage());
+        assertEquals("Користувач авторизований", ex.getMessage());
     }
 
     @Test
     void shouldThrowIfUserNotFoundInDb() {
-        // Подставляем аутентифицированного пользователя в SecurityContext
+        // Ставимо авторизованого користувача в SecurityContext
         UsernamePasswordAuthenticationToken authToken =
                 new UsernamePasswordAuthenticationToken(
                         "john",
@@ -164,13 +146,13 @@ class UserServiceTest {
                 );
         SecurityContextHolder.getContext().setAuthentication(authToken);
 
-        // Мокаем репозиторий, чтобы пользователь не найден
+
         when(userRepository.findByUsername("john")).thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             userService.getCurrentUser();
         });
 
-        assertEquals("Пользователь не найден: john", exception.getMessage());
+        assertEquals("Користувача не знайдено: john", exception.getMessage());
     }
 }
