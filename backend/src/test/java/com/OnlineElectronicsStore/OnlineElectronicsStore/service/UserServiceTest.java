@@ -70,7 +70,7 @@ class UserServiceTest {
         RuntimeException ex = assertThrows(RuntimeException.class,
                 () -> userService.registerUser(user));
 
-        assertEquals("Користвуч з таким імям вже існує", ex.getMessage());
+        assertEquals("Користвуч з таким іменем вже існує", ex.getMessage());
     }
 
     // ================== findByUsername ==================

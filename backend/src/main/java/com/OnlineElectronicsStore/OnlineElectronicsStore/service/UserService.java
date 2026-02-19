@@ -40,11 +40,11 @@ public class UserService implements UserDetailsService {
     // Метод реєстраціх нового користувача
     public void registerUser(User user) {
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-            throw new RuntimeException("Користувач з таким іменем вже є");
+            throw new RuntimeException("Користвуч з таким іменем вже існує");
         }
 
         user.setRole(Role.USER);
-        System.out.println("Створюємо користувача з ролью: " + user.getRole());
+        System.out.println("Створюємо користувача з ролью:" + user.getRole());
 
         // Шифруем пароль перед зберіганням
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -67,7 +67,7 @@ public class UserService implements UserDetailsService {
                 SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
-            throw new RuntimeException("Користувач авторизованнний");
+            throw new RuntimeException("Користувач авторизований");
         }
 
         String username = authentication.getName();
