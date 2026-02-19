@@ -14,17 +14,12 @@
 
 <div th:replace="fragments/header :: site-header"></div>
 
-<div class="page-container">
 
+    <div class="page-container">
 
-    <h2>
-        <div class="header-container">
-            <h2 class="header-title">💬 Мої чати</h2>
-            <a th:href="@{/user/home/main}" class="back-button">← Назад</a>
-        </div>
-    </h2>
+        <h2 class="page-title">💬 Мої чати</h2>
 
-    <div class="chat-card">
+        <div class="chat-card">
 
         <div th:if="${chats.isEmpty()}" class="empty">
             Повідомлень поки немає
@@ -64,4 +59,5 @@
 </div>
 
 </body>
+
 </html>
