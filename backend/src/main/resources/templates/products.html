@@ -10,6 +10,7 @@
     <link rel="stylesheet" th:href="@{/css/products.css}">
 
 </head>
+
 <script>
     function closeAlert() {
         const alert = document.getElementById("errorAlert");
@@ -34,7 +35,7 @@
     <div class="header">
 
         <div class="header-right">
-            <a th:href="@{/login}" sec:authorize="isAnonymous()">Вихід</a>
+        <!--    <a th:href="@{/login}" sec:authorize="isAnonymous()">Вихід</a>-->
             <a th:href="@{/register}" sec:authorize="isAnonymous()">Реєстрація</a>
         </div>
 
