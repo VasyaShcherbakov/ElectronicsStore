@@ -2,11 +2,14 @@ package com.OnlineElectronicsStore.OnlineElectronicsStore.controller.web;
 
 
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Chat;
+import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Product;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.User;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.ChatService;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.UserService;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.MessageService;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.ChatRepository;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -62,13 +65,15 @@ public class ChatController {
 
 
     @GetMapping
-    public String myChats(Model model) {
+    public String myChats(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         User user = userService.getCurrentUser();
 
         List<Chat> chats = chatService.getUserChats(user);
 
         model.addAttribute("currentUser", userService.getCurrentUser());
         model.addAttribute("chats", chats);
+        model.addAttribute("user", user);
+
         return "chats/list";
     }
 

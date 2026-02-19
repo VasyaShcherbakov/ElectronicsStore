@@ -84,3 +84,25 @@
             color: #888;
         }
 
+/* === HEADER FIXED === */
+header[th\\:fragment="site-header"] > div {
+    position: sticky;   /* или fixed, если хочешь всегда видно */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+}
+
+/* === ОТСТУП ПОД HEADER === */
+.page-container {
+    margin-top: 150px; /* подгоняешь под реальную высоту header */
+}
+
+/* === BODY === */
+body {
+    display: block; /* убираем flex-центрирование, чтобы header нормально “прилип” */
+    padding: 0;
+    margin: 0;
+    min-height: 100vh;
+    background-color: #d0e7ff;
+}
