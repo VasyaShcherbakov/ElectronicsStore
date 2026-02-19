@@ -12,8 +12,6 @@ public class CategoryMapper {
         dto.setId(productCategory.getId());
         dto.setName(productCategory.getName());
 
-
-
         return dto;
     }
 
@@ -23,7 +21,7 @@ public class CategoryMapper {
         ProductCategory productCategory = new ProductCategory();
         productCategory.setId(dto.getId());
         productCategory.setName(dto.getName());
-        // Продукты не маппим здесь, чтобы не зациклиться
+
         return productCategory;
     }
 }

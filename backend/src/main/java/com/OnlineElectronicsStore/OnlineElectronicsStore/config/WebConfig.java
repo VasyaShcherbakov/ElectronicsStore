@@ -15,7 +15,7 @@ public class WebConfig {
             @Override
             public void addCorsMappings(@NotNull CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOriginPatterns("*") // <-- вместо allowedOrigins, чтобы разрешить все порты
+                        .allowedOriginPatterns("*")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);

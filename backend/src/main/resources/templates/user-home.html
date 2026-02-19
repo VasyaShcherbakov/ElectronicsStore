@@ -18,37 +18,36 @@
 
 <h2 class="page-title">Ваш особистий кабінет</h2>
 
-
 <main>
     <div class="page-container">
 
         <div sec:authorize="hasAuthority('ADMIN')" style="margin-bottom: 20px;">
             <a href="/admin/categories" class="btn btn-warning">
-                ⚙️ Админка - Управление категориями
+                🛠️ Адмінка - Керування Категоріями 🛠️
             </a>
         </div>
         <div class="nav-buttons">
-            <a th:href="@{/chats}">💬 Мои сообщения</a>
+            <a th:href="@{/chats}">💬 Мої повідомлення </a>
         </div>
-        <!-- SEARCH -->
+
         <form action="/user/home" method="get" class="search-form">
             <input type="text" name="query" placeholder="Поиск товаров" th:value="${query}">
             <button type="submit">Поиск</button>
         </form>
 
-        <!-- TABLE -->
+
         <table>
             <caption>Мої товари виставлені на продаж</caption>
 
             <thead>
             <tr>
-                <th>Название</th>
-                <th>Описание</th>
-                <th>Цена</th>
-                <th>Количество</th>
-                <th>Изображение</th>
-                <th>Дата</th>
-                <th>Действия</th>
+                <th>Назва🏷️</th>
+                <th>Опис📄</th>
+                <th>Ціна💵</th>
+                <th>Кількість🔢</th>
+                <th>Зображення🖼️</th>
+                <th>Дата📅</th>
+                <th>Дії⚙️</th>
             </tr>
             </thead>
             <tbody>
@@ -61,12 +60,12 @@
                     <img th:if="${product.imageUrl != null and not #strings.isEmpty(product.imageUrl)}"
                          th:src="@{'/uploads/' + ${product.imageUrl}}"
                          class="product-image"
-                         alt="Изображение">
+                         alt="Зображення">
                 </td>
                 <td th:text="${#temporals.format(product.createdAt, 'dd.MM.yyyy HH:mm')}"></td>
                 <td class="actions">
                     <a th:href="@{/products/{id}(id=${product.id})}" class="btn-details">
-                        Детали
+                        Деталі🔍
                     </a>
                     <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn-cart">
                         ✏️ Редагувати товар
@@ -78,35 +77,35 @@
         </table>
 
 
-        <!-- ADD PRODUCT -->
+
         <div class="add-product">
-            <h3>Добавить товар</h3>
+            <h3>Добавити товар</h3>
 
             <form th:action="@{/user/home/add}"
                   th:object="${product}"
                   method="post"
                   enctype="multipart/form-data">
 
-                <input type="file" name="imageFile" placeholder="Изображение">
+                <input type="file" name="imageFile" placeholder="Зображення">
 
-                <input type="text" th:field="*{name}" placeholder="Название">
+                <input type="text" th:field="*{name}" placeholder="Назва">
 
                 <textarea th:field="*{description}"
-                          placeholder="Описание"
+                          placeholder="Опис"
                           rows="5"></textarea>
 
-                <input type="number" th:field="*{price}" placeholder="Цена">
-                <input type="number" th:field="*{quantity}" placeholder="Количество">
+                <input type="number" th:field="*{price}" placeholder="Ціна">
+                <input type="number" th:field="*{quantity}" placeholder="Кількість">
 
-                <!-- Новое поле: выбор категории -->
+
                 <select th:field="*{category}" required>
-                    <option value="" disabled selected>Выберите категорию</option>
+                    <option value="" disabled selected>Виберіть категорію</option>
                     <option th:each="cat : ${categories}"
                             th:value="${cat.id}"
                             th:text="${cat.name}"></option>
                 </select>
 
-                <button type="submit">Добавить</button>
+                <button type="submit">Добавити</button>
             </form>
         </div>
 

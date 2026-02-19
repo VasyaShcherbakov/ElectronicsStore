@@ -9,12 +9,9 @@ import com.OnlineElectronicsStore.OnlineElectronicsStore.model.User;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.ChatService;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.MessageService;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.UserService;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,7 +44,7 @@ public class ChatRestController {
         return ResponseEntity.ok(dtos);
     }
 
-    // ================= Получить конкретный чат =================
+
     @GetMapping("/{chatId}")
     public ResponseEntity<ChatDto> getChat(
             @PathVariable Long chatId
@@ -60,7 +57,7 @@ public class ChatRestController {
         return ResponseEntity.ok(ChatMapper.toDto(chat, messages));
     }
 
-    // ================= Отправить сообщение =================
+
     @PostMapping("/{chatId}/send")
     public ResponseEntity<MessageDto> sendMessage(
             @PathVariable Long chatId,

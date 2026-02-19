@@ -7,7 +7,6 @@ import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,8 +38,8 @@ public class AdminController {
 
     @PostMapping("/add")
     public String addCategory(@ModelAttribute("category") ProductCategory category) {
-        log.info("🔥 POST /admin/add called");
-        log.info("👉 Category name = {}", category.getName());
+        log.info(" POST /admin/add called");
+        log.info(" Category name = {}", category.getName());
 
         categoryService.create(category.getName());
         return "redirect:/admin/categories";
@@ -52,8 +51,5 @@ public class AdminController {
         categoryService.deleteById(id);
         return "redirect:/admin/categories";
     }
-
-
-
 
 }

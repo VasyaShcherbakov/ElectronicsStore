@@ -32,7 +32,7 @@ public class CartItemDto {
     )
     private BigDecimal price;
 
-    // ====== Геттери та сеттери ======
+
 
     public Long getProductId() {
         return productId;

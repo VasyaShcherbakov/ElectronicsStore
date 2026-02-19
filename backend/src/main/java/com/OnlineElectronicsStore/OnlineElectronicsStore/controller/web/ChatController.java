@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,13 +20,12 @@ public class ChatController {
     private final ChatService chatService;
     private final UserService userService;
     private final MessageService messageService;
-    private final ChatRepository chatRepository;
 
-    public ChatController(ChatService chatService, UserService userService, MessageService messageService, ChatRepository chatRepository) {
+
+    public ChatController(ChatService chatService, UserService userService, MessageService messageService) {
         this.chatService = chatService;
         this.userService = userService;
         this.messageService = messageService;
-        this.chatRepository = chatRepository;
     }
 
     private static final Logger log = LoggerFactory.getLogger(ChatController.class);
@@ -60,6 +58,8 @@ public class ChatController {
 
         return "redirect:/chats/" + chatId;
     }
+
+
 
     @GetMapping
     public String myChats(Model model) {

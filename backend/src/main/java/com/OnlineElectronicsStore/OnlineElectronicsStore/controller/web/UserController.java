@@ -3,27 +3,18 @@ package com.OnlineElectronicsStore.OnlineElectronicsStore.controller.web;
 
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Product;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.User;
-import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.ProductRepository;
-import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.UserRepository;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.CategoryService;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.ProductServiceImpl;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
-import java.util.UUID;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 @Controller
@@ -44,6 +35,8 @@ public class UserController {
         this.userService = userService;
     }
 
+
+
     @PostMapping("/add")
     public String addProduct(@ModelAttribute Product product,
                              @RequestParam("imageFile") MultipartFile imageFile,
@@ -61,6 +54,8 @@ public class UserController {
 
         return "redirect:/user/home/main";
     }
+
+
 
     @GetMapping("/main")
     public String userHome(@AuthenticationPrincipal UserDetails userDetails,

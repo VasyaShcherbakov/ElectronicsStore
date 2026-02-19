@@ -148,7 +148,7 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/login?logout")
                 );
 
-        // ❗ CSRF ВКЛЮЧЁН (по умолчанию)
+
         return http.build();
     }
 

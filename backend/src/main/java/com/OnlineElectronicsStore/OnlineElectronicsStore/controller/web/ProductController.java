@@ -4,20 +4,12 @@ import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Product;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.UserRepository;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.CategoryService;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.ProductServiceImpl;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 @Controller
@@ -66,12 +58,13 @@ public class ProductController {
 
 
 
-
     @PostMapping("/products")
     public String addProduct(@ModelAttribute Product product) {
         productService.saveProduct(product);
         return "redirect:/products";
     }
+
+
 
     @GetMapping("/products/{id}")
     public String getProductDetails(@PathVariable Long id, Model model) {
@@ -79,17 +72,23 @@ public class ProductController {
         return "product-details";
     }
 
+
+
     @GetMapping("/products/delete/{id}")
     public String deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
         return "redirect:/products";
     }
 
+
+
     @GetMapping("/products/edit/{id}")
     public String editProduct(@PathVariable Long id, Model model) {
         model.addAttribute("product", productService.getProductById(id));
         return "edit-product";
     }
+
+
 
     @PostMapping("/products/update")
     public String updateProduct(
@@ -99,6 +98,7 @@ public class ProductController {
         productService.updateProduct(formProduct, imageFile);
         return "redirect:/user/home";
     }
+
 
 
     @GetMapping("/products/search")

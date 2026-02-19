@@ -42,13 +42,13 @@
                 </p>
             </div>
 
-            <!-- ПРАВАЯ ЧАСТЬ -->
+
             <nav class="nav-capsule">
 
-                <!-- Welcome -->
+
                 <div class="nav-welcome"
                      sec:authorize="isAuthenticated()"
-                     th:unless="${isProductsPage}"> <!-- Показывать, пока НЕ наступит isProductsPage -->
+                     th:unless="${isProductsPage}">
 
                     Ласкаво просимо, <strong th:text="${user.username}">user</strong>!
                 </div>
@@ -72,17 +72,17 @@
 
                     <span class="cart-info" th:if="${cartSize > 0}">
         <span class="cart-count">
-            Товаров: <b th:text="${cartSize}"></b>
+            Товарів: <b th:text="${cartSize}"></b>
         </span>
         <span class="cart-total">
-            Сумма: <b th:text="${cartTotal}"></b> грн
+            Сума: <b th:text="${cartTotal}"></b> грн
         </span>
         </span>
 
                 </a>
 
 
-                <!-- Аноним -->
+
                 <a href="/login"
                    sec:authorize="isAnonymous()"
                    class="nav-btn white">
@@ -95,7 +95,6 @@
                     Реєстрація
                 </a>
 
-                <!-- Выход -->
                 <form th:action="@{/logout}"
                       method="post"
                       sec:authorize="isAuthenticated()"
@@ -115,4 +114,5 @@
 </header>
 
 </body>
+
 </html>

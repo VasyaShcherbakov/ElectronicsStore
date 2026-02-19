@@ -2,7 +2,7 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Детали товара</title>
+    <title>Деталі товару</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" th:href="@{/css/product-details.css}">
@@ -17,13 +17,13 @@
 
         <img th:if="${product.imageUrl != null and not #strings.isEmpty(product.imageUrl)}"
              th:src="@{'/uploads/' + ${product.imageUrl}}"
-             alt="Изображение товара"
+             alt="Зображення товару"
              class="product-image"/>
 
         <div class="product-content">
 
             <h2 class="product-title">
-                📦 <span th:text="${product.name}">Название товара</span>
+                📦 <span th:text="${product.name}">Назва товару</span>
             </h2>
 
             <div class="product-description">

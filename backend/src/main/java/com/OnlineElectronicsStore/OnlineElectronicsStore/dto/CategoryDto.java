@@ -24,7 +24,7 @@ public class CategoryDto {
         this.name = name;
     }
 
-    // ====== Геттери та сеттери ======
+
 
     public Long getId() {
         return id;

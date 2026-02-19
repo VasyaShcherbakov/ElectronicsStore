@@ -1,8 +1,6 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.model;
 
-
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +12,7 @@ public class CustomerOrder {
     @GeneratedValue
     private Long id;
 
-    // ДАННЫЕ НА МОМЕНТ ЗАКАЗА
+    // ДАННI НА МОМЕНТ ЗАКАЗУ
     private String customerName;
     private String phone;
     private String address;
@@ -107,4 +105,3 @@ public class CustomerOrder {
     }
 
 }
-

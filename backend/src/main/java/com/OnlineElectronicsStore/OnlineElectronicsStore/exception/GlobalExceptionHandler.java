@@ -1,4 +1,3 @@
-/*
 package com.OnlineElectronicsStore.OnlineElectronicsStore.exception;
 
 
@@ -36,4 +35,3 @@ public class GlobalExceptionHandler {
         return "error";
     }
 }
-*/

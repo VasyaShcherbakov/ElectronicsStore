@@ -2,7 +2,7 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Мои чаты</title>
+    <title>Мої чати</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" th:href="@{/css/list.css}">
@@ -13,12 +13,12 @@
 
 <div class="page-container">
 
-    <h2>💬 Мои чаты</h2>
+    <h2>💬 Мої чати </h2>
 
     <div class="chat-card">
 
         <div th:if="${chats.isEmpty()}" class="empty">
-            Сообщений пока нет
+            Повідомлень поки немає
         </div>
 
         <div th:each="chat : ${chats}">

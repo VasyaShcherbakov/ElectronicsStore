@@ -4,7 +4,7 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Список товаров</title>
+    <title>Список товарів</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" th:href="@{/css/products.css}">
@@ -20,7 +20,7 @@
 </script>
 
 <body>
-<!-- ALERT -->
+
 
 <div th:replace="fragments/header :: site-header"></div>
 
@@ -31,20 +31,19 @@
 <main>
 <div class="page-container">
 
-    <!-- ХЕДЕР -->
     <div class="header">
 
         <div class="header-right">
-            <a th:href="@{/login}" sec:authorize="isAnonymous()">Вход</a>
-            <a th:href="@{/register}" sec:authorize="isAnonymous()">Регистрация</a>
+            <a th:href="@{/login}" sec:authorize="isAnonymous()">Вихід</a>
+            <a th:href="@{/register}" sec:authorize="isAnonymous()">Реєстрація</a>
         </div>
 
     </div>
 
-    <h1>Список товаров</h1>
+    <h1>Список товарів</h1>
     <form method="get" action="/products" style="margin-bottom: 20px;">
         <select name="categoryId" onchange="this.form.submit()">
-            <option value="">📦 Все категории</option>
+            <option value="">📦 Всі категорії</option>
 
             <option th:each="cat : ${categories}"
                     th:value="${cat.id}"
@@ -53,13 +52,13 @@
             </option>
         </select>
     </form>
-    <!-- ПОИСК -->
+
     <form action="/products/search" method="get" class="search-form">
         <input type="text" name="query" placeholder="Поиск товаров" th:value="${query}">
         <button type="submit">Поиск</button>
     </form>
 
-    <!-- ТОВАРЫ -->
+
     <div class="products-grid">
 
         <div class="product-card" th:each="product : ${products}">
@@ -67,16 +66,15 @@
             <a th:href="@{/products/{id}(id=${product.id})}">
                 <img th:if="${product.imageUrl != null and not #strings.isEmpty(product.imageUrl)}"
                      th:src="@{'/uploads/' + ${product.imageUrl}}"
-                     alt="Изображение товара">
+                     alt="Зображення товару">
             </a>
-
 
             <div class="product-body">
                 <h3 th:text="'📦 ' + ${product.name}">Назва</h3>
 
                 <p>📂 <strong th:text="${product.category.name}"></strong></p>
                 <p style="font-size:13px; opacity:0.75;">
-                    👤 Продавец:
+                    👤 Продавець:
                     <strong th:text="${product.owner.username}"></strong>
                 </p>
                 <p><strong>💰 Цiна:</strong> <span th:text="${product.price}"></span> грн</p>
@@ -96,21 +94,20 @@
                            th:name="${_csrf.parameterName}"
                            th:value="${_csrf.token}" />
 
-                    <button type="submit" class="btn-buy">Купить</button>
+                    <button type="submit" class="btn-buy">Купити</button>
                 </form>
                 <a href="/login"
                    sec:authorize="isAnonymous()"
                    class="btn-buy">
-                    Войти для покупки
+                    Логін для покупки
                 </a>
 
                 <a th:href="@{/products/{id}(id=${product.id})}"
                    class="btn-details">
-                    Детали
+                    Деталі🔍
                 </a>
 
             </div>
-
 
         </div>
 

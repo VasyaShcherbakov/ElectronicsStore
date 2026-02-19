@@ -2,7 +2,6 @@ package com.OnlineElectronicsStore.OnlineElectronicsStore.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Schema(description = "DTO чата")
@@ -21,7 +20,7 @@ public class ChatDto {
     @Schema(description = "Сообщения в чате")
     private List<MessageDto> messages;
 
-    // ====== Геттеры и сеттеры ======
+
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

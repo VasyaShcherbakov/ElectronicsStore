@@ -2,7 +2,7 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Регистрация</title>
+    <title>Реєстрація</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" th:href="@{/css/register.css}">
@@ -20,9 +20,9 @@
 <main>
 <div class="register-card">
 
-    <h2>Регистрация</h2>
+    <h2>Реєстрація</h2>
 
-    <!-- Глобальная ошибка -->
+
     <div th:if="${error}" class="global-error">
         <p th:text="${error}"></p>
     </div>
@@ -62,12 +62,13 @@
         </div>
 
         <div class="form-group">
-            <label>Пол</label>
+            <label>Стать</label>
             <select th:field="*{gender}">
                 <option value="">— Выберите —</option>
                 <option th:value="MALE">Мужской</option>
                 <option th:value="FEMALE">Женский</option>
             </select>
+
             <div th:if="${#fields.hasErrors('gender')}"
                  class="error"
                  th:errors="*{gender}"></div>
@@ -77,12 +78,12 @@
                th:name="${_csrf.parameterName}"
                th:value="${_csrf.token}" />
 
-        <button type="submit">Зарегистрироваться</button>
+        <button type="submit">Зареєструватись</button>
     </form>
 
 </div>
 
-</body>
-</main>
 
+</main>
+</body>
 </html>

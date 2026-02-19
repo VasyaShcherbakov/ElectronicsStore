@@ -2,28 +2,22 @@ package com.OnlineElectronicsStore.OnlineElectronicsStore.controller.rest;
 
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Product;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.User;
-import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.ProductRepository;
-import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.UserRepository;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.ProductServiceImpl;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.nio.file.*;
 import java.util.List;
-import java.util.Optional;
 
 @Tag(
         name = "User",

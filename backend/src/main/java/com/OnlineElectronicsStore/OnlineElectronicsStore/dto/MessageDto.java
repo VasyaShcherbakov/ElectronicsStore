@@ -11,6 +11,8 @@ public class MessageDto {
     private UserSummaryDto sender;
     private LocalDateTime createdAt;
 
+
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

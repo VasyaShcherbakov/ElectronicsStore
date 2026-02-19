@@ -6,23 +6,26 @@ import java.time.LocalDateTime;
 
 @Entity
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private ProductCategory category;
 
 
-
     public BigDecimal getPrice() {
         return price;
     }
 
+
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
+
 
     private String name;
     private String description;
@@ -30,8 +33,10 @@ public class Product {
     private Integer quantity;
     private String imagePath;
 
+
     @Column(nullable = true)
     private String imageUrl;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = true)

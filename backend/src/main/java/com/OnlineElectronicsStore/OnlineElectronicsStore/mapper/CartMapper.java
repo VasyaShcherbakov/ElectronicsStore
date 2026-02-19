@@ -5,8 +5,6 @@ import com.OnlineElectronicsStore.OnlineElectronicsStore.dto.CartItemDto;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.dto.UserSummaryDto;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Cart;
 
-import java.util.stream.Collectors;
-
 public class CartMapper {
 
     public static CartDto toDto(Cart cart) {
@@ -29,7 +27,8 @@ public class CartMapper {
                         .toList()
         );
 
-        // 💎 считаем total здесь
+
+
         var total = cart.getItems().stream()
                 .map(item ->
                         item.getProduct().getPrice()
@@ -49,6 +48,4 @@ public class CartMapper {
 
         return dto;
     }
-
-    // при желании добавить обратный mapping: toEntity(...)
 }

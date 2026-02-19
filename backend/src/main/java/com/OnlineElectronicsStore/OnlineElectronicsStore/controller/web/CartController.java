@@ -1,27 +1,16 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.controller.web;
 
-import java.math.BigDecimal;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Cart;
-import com.OnlineElectronicsStore.OnlineElectronicsStore.model.CartItem;
-import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Product;
-import com.OnlineElectronicsStore.OnlineElectronicsStore.model.User;
-import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.CartItemRepository;
-import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.CartRepository;
-import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.ProductRepository;
-import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.UserRepository;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.CartService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/cart")
@@ -52,6 +41,8 @@ public class CartController {
         return "cart";
     }
 
+
+
     @PostMapping("/add/{productId}")
     public String addToCart(@PathVariable Long productId,
                             @AuthenticationPrincipal UserDetails userDetails,
@@ -71,6 +62,8 @@ public class CartController {
         return "redirect:/cart";
     }
 
+
+
     @PostMapping("/remove/{cartItemId}")
     public String removeFromCart(@PathVariable Long cartItemId,
                                  @AuthenticationPrincipal UserDetails userDetails) {
@@ -81,5 +74,7 @@ public class CartController {
 
         return "redirect:/cart";
     }
+
+
 }
 

@@ -5,7 +5,6 @@ import com.OnlineElectronicsStore.OnlineElectronicsStore.dto.MessageDto;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.dto.UserSummaryDto;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Chat;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Message;
-
 import java.util.stream.Collectors;
 
 public class ChatMapper {
@@ -19,6 +18,7 @@ public class ChatMapper {
         dto.setSeller(new UserSummaryDto(chat.getSeller().getId(), chat.getSeller().getUsername()));
         dto.setBuyer(new UserSummaryDto(chat.getBuyer().getId(), chat.getBuyer().getUsername()));
         dto.setMessages(messages.stream().map(ChatMapper::toMessageDto).collect(Collectors.toList()));
+
         return dto;
     }
 
@@ -30,6 +30,7 @@ public class ChatMapper {
         dto.setText(message.getText());
         dto.setSender(new UserSummaryDto(message.getSender().getId(), message.getSender().getUsername()));
         dto.setCreatedAt(message.getCreatedAt());
+
         return dto;
     }
 }

@@ -1,4 +1,3 @@
-/*
 package com.OnlineElectronicsStore.OnlineElectronicsStore.controller.web.advice;
 
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Cart;
@@ -9,10 +8,8 @@ import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.CartReposito
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.UserRepository;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -75,4 +72,3 @@ public class CartHeaderAdvice {
         model.addAttribute("cartTotal", cartTotal);
     }
 }
-*/

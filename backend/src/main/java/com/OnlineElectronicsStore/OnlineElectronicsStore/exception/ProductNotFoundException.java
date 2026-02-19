@@ -5,8 +5,4 @@ public class ProductNotFoundException extends RuntimeException {
         super("Товар с id = " + productId + " не найден");
     }
 
-    public ProductNotFoundException(String message) {
-        super(message);
-    }
-
 }
