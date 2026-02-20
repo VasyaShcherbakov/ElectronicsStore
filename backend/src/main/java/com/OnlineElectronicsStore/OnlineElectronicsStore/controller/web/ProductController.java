@@ -94,7 +94,12 @@ public class ProductController {
 
     @GetMapping("/products/edit/{id}")
     public String editProduct(@PathVariable Long id, Model model) {
+
+        User user = userService.getCurrentUser();
+
         model.addAttribute("product", productService.getProductById(id));
+        model.addAttribute("user", user);
+
         return "edit-product";
     }
 

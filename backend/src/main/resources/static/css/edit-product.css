@@ -8,12 +8,8 @@
         }
 
         body {
-            min-height: 100vh;
+            margin: 0;
             background-color: #d0e7ff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
         }
 
         /* === CARD === */
