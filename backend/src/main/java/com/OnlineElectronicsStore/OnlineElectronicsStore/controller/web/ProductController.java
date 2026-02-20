@@ -1,9 +1,11 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.controller.web;
 
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Product;
+import com.OnlineElectronicsStore.OnlineElectronicsStore.model.User;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.UserRepository;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.CategoryService;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.ProductServiceImpl;
+import com.OnlineElectronicsStore.OnlineElectronicsStore.service.UserService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -17,11 +19,14 @@ public class ProductController {
     private final ProductServiceImpl productService;
     private final UserRepository userRepository;
     private final CategoryService categoryService;
+    private final UserService userService;
 
-    public ProductController(ProductServiceImpl productService, UserRepository userRepository, CategoryService categoryService) {
+
+    public ProductController(ProductServiceImpl productService, UserRepository userRepository, CategoryService categoryService, UserService userService) {
         this.productService = productService;
         this.userRepository = userRepository;
-        this.categoryService= categoryService;
+        this.categoryService = categoryService;
+        this.userService = userService;
     }
 
 
@@ -67,8 +72,13 @@ public class ProductController {
 
 
     @GetMapping("/products/{id}")
-    public String getProductDetails(@PathVariable Long id, Model model) {
+    public String getProductDetails(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id, Model model) {
+
+        User user = userService.getCurrentUser();
+
         model.addAttribute("product", productService.getProductById(id));
+        model.addAttribute("user", user);
+
         return "product-details";
     }
 
