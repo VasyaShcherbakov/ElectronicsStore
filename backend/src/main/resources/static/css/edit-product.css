@@ -7,10 +7,10 @@
             font-family: Arial, Helvetica, sans-serif;
         }
 
-        body {
-            margin: 0;
-            background-color: #d0e7ff;
-        }
+     body {
+         margin: 0;
+         background-color: #d0e7ff;
+     }
 
         /* === CARD === */
         .edit-card {
@@ -20,6 +20,7 @@
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            margin: 120px auto 40px auto;
         }
 
         .edit-card h1 {
