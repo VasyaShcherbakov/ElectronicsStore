@@ -6,16 +6,10 @@
             padding: 0;
             font-family: Arial, Helvetica, sans-serif;
         }
-
-        body {
-            min-height: 100vh;
-            background-color: #d0e7ff;
-            display: flex;
-            justify-content: center;
-            padding: 20px;
-            padding-top: 160px; /* под большой хедер */
-        }
-
+body {
+    margin: 0;
+    background-color: #d0e7ff;
+}
 
         /* === CARD === */
         .chat-card {
@@ -127,7 +121,7 @@ html, body {
 
 /* отступ под фиксированный хедер */
 body {
-    padding-top: 140px; /* чуть больше, чтобы наверняка */
+  /*  padding-top: 140px;*/ /* чуть больше, чтобы наверняка */
     background-color: #d0e7ff; /* чтобы совпадало со стилем сайта */
 }
 
@@ -146,4 +140,24 @@ body > header.chat-header {
     font-size: 16px;
     font-weight: 700;
     text-align: center;
+}
+
+/* контейнер под верхним header */
+.chat-layout {
+    margin-top: 140px; /* высота site-header */
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 30px;
+}
+
+/* левая "книжка" */
+.chat-card-header {
+    width: 350px;
+    flex-shrink: 0;
+}
+
+/* правая часть - сам чат */
+.chat-card {
+    width: 500px;
 }
