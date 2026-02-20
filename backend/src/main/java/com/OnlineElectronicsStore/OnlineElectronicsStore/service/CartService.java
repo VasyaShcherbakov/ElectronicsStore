@@ -26,7 +26,7 @@ public class CartService {
         this.userRepository = userRepository;
     }
 
-    // 🔹 Получить или создать корзину
+    // Получити або строврити корзину
     public Cart getOrCreateCart(String username) {
 
         User user = userRepository.findByUsername(username)
@@ -40,12 +40,12 @@ public class CartService {
                 });
     }
 
-    // 🔹 Получить список товаров корзины
+    // Получити список товарів в корзині
     public List<CartItem> getCartItems(Cart cart) {
         return cartItemRepository.findByCart(cart);
     }
 
-    // 🔹 Посчитать total
+    // Загальна кількість
     public BigDecimal calculateTotal(List<CartItem> items) {
         return items.stream()
                 .map(item ->
@@ -55,7 +55,7 @@ public class CartService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    // 🔹 Добавить товар
+    // Добваити товар
     public void addProduct(String username, Long productId) {
 
         User user = userRepository.findByUsername(username)
@@ -64,7 +64,7 @@ public class CartService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
-        // 🚫 Запрет добавления своего товара
+        // Щоби не можливо добавити свій же товар
         if (product.getOwner() != null &&
                 java.util.Objects.equals(user.getId(), product.getOwner().getId())) {
 
@@ -89,7 +89,7 @@ public class CartService {
         }
     }
 
-    // 🔹 Удалить товар
+    // Видалити товар
     public void removeItem(String username, Long cartItemId) {
 
         CartItem item = cartItemRepository.findById(cartItemId)
@@ -102,7 +102,7 @@ public class CartService {
         cartItemRepository.delete(item);
     }
 
-    // 🔹 Очистить корзину
+    // Очистити корзину
     public void clear(Cart cart) {
         cart.getItems().clear();
         cartRepository.save(cart);

@@ -1,4 +1,4 @@
-/* КАПСУЛА НАВИГАЦИИ */
+
 .nav-capsule {
     display: flex;
     align-items: center;
@@ -8,6 +8,7 @@
     background: rgba(255, 255, 255, 0.18);
     backdrop-filter: blur(10px);
     box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+ /*   align-items: stretch; *//* растягиваем по высоте */
 }
 
 /* WELCOME ТЕКСТ */
