@@ -162,3 +162,26 @@ body > header.chat-header {
 .chat-card {
     width: 500px;
 }
+
+.chat-layout {
+    margin-top: 110px;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 0;
+    position: relative; /* важно */
+}
+
+/* Дизайнерская полоска */
+.chat-layout::before {
+    content: "";
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 57%;
+    height: 6px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #6a11cb, #2575fc);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
