@@ -97,7 +97,7 @@ header[th\\:fragment="site-header"] > div {
 
 /* === ОТСТУП ПОД HEADER === */
 .page-container {
-    margin-top: 150px; /* подгоняешь под реальную высоту header */
+    margin-top: 50px; /* подгоняешь под реальную высоту header */
 }
 
 /* === BODY === */

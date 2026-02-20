@@ -35,15 +35,17 @@ public class ChatController {
 
 
     @GetMapping("/{chatId:\\d+}")
-    public String openChat(@PathVariable Long chatId, Model model) {
+    public String openChat(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long chatId, Model model) {
+
         User currentUser = userService.getCurrentUser();
 
-        // 🔒 Используем проверку доступа
+        // Використаєм права доступу
         Chat chat = chatService.getChatForUser(chatId, currentUser);
 
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("messages", messageService.getMessages(chat));
         model.addAttribute("chat", chat);
+        model.addAttribute("user", currentUser);
 
         return "chats/chat";
     }
