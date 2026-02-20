@@ -144,11 +144,12 @@ body > header.chat-header {
 
 /* контейнер под верхним header */
 .chat-layout {
-    margin-top: 140px; /* высота site-header */
+    margin-top: 140px;
     display: flex;
     justify-content: center;
-    gap: 40px;
-    padding: 30px;
+    align-items: stretch;
+    gap: 0;        /* УБРАЛИ */
+    padding: 0;    /* И ЭТО */
 }
 
 /* левая "книжка" */
