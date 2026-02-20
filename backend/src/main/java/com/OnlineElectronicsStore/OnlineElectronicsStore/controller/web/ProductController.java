@@ -47,7 +47,7 @@ public class ProductController {
 
         model.addAttribute("products", products); // ✅ ОДИН раз
         model.addAttribute("categories", categoryService.getAll());
-        model.addAttribute("selectedCategoryId", categoryId); // ✅ из запроса
+        model.addAttribute("selectedCategoryId", categoryId); //
         model.addAttribute("isProductsPage", true);
 
         if (userDetails != null) {

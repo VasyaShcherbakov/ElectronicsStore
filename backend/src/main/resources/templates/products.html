@@ -28,14 +28,17 @@
     <span th:text="${errorMessage}"></span>
     <button class="close-btn" onclick="closeAlert()">✖</button>
 </div>
+
 <main>
+
 <div class="page-container">
 
     <div class="header">
 
         <div class="header-right">
-        <!--    <a th:href="@{/login}" sec:authorize="isAnonymous()">Вихід</a>-->
+
             <a th:href="@{/register}" sec:authorize="isAnonymous()">Реєстрація</a>
+
         </div>
 
     </div>

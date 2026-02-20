@@ -68,7 +68,7 @@ public class CartService {
         if (product.getOwner() != null &&
                 java.util.Objects.equals(user.getId(), product.getOwner().getId())) {
 
-            throw new RuntimeException("Нельзя добавить свой товар");
+            throw new RuntimeException("Неможна добавити в корзину свій товар");
         }
 
         Cart cart = getOrCreateCart(username);
