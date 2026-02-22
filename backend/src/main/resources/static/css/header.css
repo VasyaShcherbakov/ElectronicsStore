@@ -94,3 +94,7 @@
     font-size: 14px;
     color: #FFFFF0;
 }
+
+.header-left {
+    margin-left: -100px;
+}
