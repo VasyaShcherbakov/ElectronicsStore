@@ -80,3 +80,17 @@
 .nav-products {
     padding: 8px 14px;
 }
+
+.header-subtitle {
+    margin: 6px 0 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #FFFFFF;
+    text-shadow: 0 0 6px rgba(0,255,200,0.6);
+}
+
+.header-description {
+    margin: 4px 0 0;
+    font-size: 14px;
+    color: #FFFFF0;
+}
