@@ -71,14 +71,7 @@ margin: 0; font-size: 35px; font-weight: 700;
 
                     <span class="cart-title">🛒 Корзина</span>
 
-                    <span class="cart-info" th:if="${cartSize > 0}">
-        <span class="cart-count">
-            Товарів: <b th:text="${cartSize}"></b>
-        </span>
-        <span class="cart-total">
-            Сума: <b th:text="${cartTotal}"></b> грн
-        </span>
-        </span>
+
 
                 </a>
 
@@ -109,7 +102,15 @@ margin: 0; font-size: 35px; font-weight: 700;
                 </form>
 
             </nav>
-            <div class="designer-square"></div>
+            <div class="designer-square"> <span class="cart-info" th:if="${cartSize > 0}">
+        <span class="cart-count">
+            Товарів: <b th:text="${cartSize}"></b>
+        </span>
+        <span class="cart-total">
+            Сума: <b th:text="${cartTotal}"></b> грн
+        </span>
+        </span></div>
+
         </div>
         </div>
     </div>
