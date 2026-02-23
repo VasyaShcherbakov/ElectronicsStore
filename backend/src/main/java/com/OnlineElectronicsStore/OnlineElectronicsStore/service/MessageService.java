@@ -27,7 +27,18 @@ public class MessageService {
         message.setCreatedAt(LocalDateTime.now());
         message.setRead(false);
 
+        User recipient;
+
+        if (chat.getSeller().equals(sender)) {
+            recipient = chat.getBuyer();
+        } else {
+            recipient = chat.getSeller();
+        }
+
+        message.setRecipient(recipient);
+
         messageRepository.save(message);
+
     }
 
     public List<Message> getMessages(Chat chat) {
