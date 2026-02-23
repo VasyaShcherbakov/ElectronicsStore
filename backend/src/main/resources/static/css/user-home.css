@@ -19,8 +19,7 @@
         }
 
         .page-title {
-            margin: 30px auto;
-            text-align: center;
+            margin: 30px;
             font-size: 36px;
             font-weight: 700;
             background: linear-gradient(90deg, #42a5f5, #1e88e5);
@@ -233,12 +232,12 @@
     word-break: break-word;
 }
 
- .page-header {
-     display: flex;
-     justify-content: space-between;
-     align-items: center;
-     margin-bottom: 20px;
- }
+.page-header {
+    display: flex;
+    justify-content: center;  /* центрируем весь блок */
+    align-items: center;
+    gap: 12px;
+}
 
  /* колокольчик */
  .notification-bell {
