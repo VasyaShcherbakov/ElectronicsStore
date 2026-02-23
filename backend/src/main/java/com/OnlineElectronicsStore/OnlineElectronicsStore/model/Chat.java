@@ -29,6 +29,9 @@ public class Chat {
         return messages;
     }
 
+
+
+
     public void setMessages(List<Message> messages) {
         this.messages = messages;
     }

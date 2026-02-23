@@ -72,6 +72,30 @@ public class ChatController {
 
         List<Chat> chats = chatService.getUserChats(user);
 
+        chats.sort((c1, c2) -> {
+
+            if (c1.getMessages().isEmpty() && c2.getMessages().isEmpty()) {
+                return 0;
+            }
+
+            if (c1.getMessages().isEmpty()) {
+                return 1;
+            }
+
+            if (c2.getMessages().isEmpty()) {
+                return -1;
+            }
+
+            return c2.getMessages()
+                    .get(c2.getMessages().size() - 1)
+                    .getCreatedAt()
+                    .compareTo(
+                            c1.getMessages()
+                                    .get(c1.getMessages().size() - 1)
+                                    .getCreatedAt()
+                    );
+        });
+
         model.addAttribute("currentUser", userService.getCurrentUser());
         model.addAttribute("chats", chats);
         model.addAttribute("user", user);
