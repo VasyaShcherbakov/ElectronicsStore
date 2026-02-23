@@ -8,7 +8,7 @@
     background: rgba(255, 255, 255, 0.18);
     backdrop-filter: blur(10px);
     box-shadow: 0 6px 18px rgba(0,0,0,0.18);
-    transform: translateX(-50px);
+    transform: none;
 }
 
 /* WELCOME ТЕКСТ */
@@ -97,4 +97,54 @@
 
 .header-left {
     margin-left: -100px;
+}
+
+ .designer-square {
+    width: 90px;
+    height: 90px;
+    border-radius: 24px;
+
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(12px);
+
+    box-shadow:
+        0 15px 35px rgba(0,0,0,0.25),
+        inset 0 0 15px rgba(255,255,255,0.3);
+
+    border: 1px solid rgba(255,255,255,0.4);
+    margin-left: 0px;
+    transition: all 0.3s ease;
+}
+
+.designer-square:hover {
+    transform: translateY(-6px) scale(1.05);
+    box-shadow:
+        0 20px 45px rgba(0,0,0,0.35),
+        inset 0 0 20px rgba(255,255,255,0.4);
+}
+
+.nav-with-square {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    margin-left: auto;
+    padding-left: 300px;
+}
+
+.header-bg {
+    background: linear-gradient(135deg, #1e88e5, #42a5f5);
+    padding: 25px 35px;
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    color: white;
+}
+
+/* Вот тут ограничиваем ширину */
+.header-container {
+    max-width: 1200px;   /* максимум */
+    width: 100%;         /* адаптив */
+    margin: 0 auto;      /* центрируем */
+    display: flex;
+    align-items: center;
 }
