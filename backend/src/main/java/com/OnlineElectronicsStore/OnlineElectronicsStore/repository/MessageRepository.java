@@ -10,7 +10,9 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     List<Message> findByChatOrderByCreatedAtAsc(Chat chat);
 
-    long countByChatAndReadFalseAndSenderNot(Chat chat, User sender);
+    int countByRecipientAndIsReadFalse(User recipient);
+
+    List<Message> findByRecipientAndIsReadFalse(User recipient);
 
 }
 

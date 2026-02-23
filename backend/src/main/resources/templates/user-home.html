@@ -16,7 +16,18 @@
 
 <div th:replace="fragments/header :: site-header"></div>
 
-<h2 class="page-title">Ваш особистий кабінет</h2>
+<div class="page-header">
+    <h2 class="page-title">Ваш особистий кабінет</h2>
+
+    <a href="/chats" class="notification-bell">
+        🔔
+        <span class="notification-count"
+              th:if="${unreadCount > 0}"
+              th:text="${unreadCount}">
+        </span>
+    </a>
+</div>
+
 
 <main>
     <div class="page-container">
@@ -34,7 +45,6 @@
             <input type="text" name="query" placeholder="Поиск товаров" th:value="${query}">
             <button type="submit">Поиск</button>
         </form>
-
 
         <table>
             <caption>Мої товари виставлені на продаж</caption>

@@ -4,6 +4,7 @@ package com.OnlineElectronicsStore.OnlineElectronicsStore.controller.web;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Product;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.User;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.CategoryService;
+import com.OnlineElectronicsStore.OnlineElectronicsStore.service.MessageService;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.ProductServiceImpl;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.UserService;
 import org.slf4j.Logger;
@@ -28,11 +29,13 @@ public class UserController {
     private final ProductServiceImpl productService;
     private final CategoryService categoryService;
     private final UserService userService;
+    private final MessageService messageService;
 
-    public UserController(ProductServiceImpl productService, CategoryService categoryService, UserService userService ) {
+    public UserController(ProductServiceImpl productService, CategoryService categoryService, UserService userService, MessageService messageService ) {
         this.productService = productService;
         this.categoryService = categoryService;
         this.userService = userService;
+        this.messageService = messageService;
     }
 
 
@@ -74,6 +77,11 @@ public class UserController {
 
         List<Product> products = productService.getProductsForUser(user, query);
 
+        User currentUser = userService.getCurrentUser();
+
+        int unreadCount = messageService.getUnreadCount(currentUser);
+
+        model.addAttribute("unreadCount", unreadCount);
         model.addAttribute("products", products);
         model.addAttribute("user", user);
         model.addAttribute("query", query);

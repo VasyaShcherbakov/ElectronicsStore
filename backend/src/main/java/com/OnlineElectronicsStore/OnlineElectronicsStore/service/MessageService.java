@@ -33,5 +33,27 @@ public class MessageService {
     public List<Message> getMessages(Chat chat) {
         return messageRepository.findByChatOrderByCreatedAtAsc(chat);
     }
+
+    public int getUnreadCount(User user) {
+        return messageRepository.countByRecipientAndIsReadFalse(user);
+    }
+
+    public void markMessagesAsRead(User user) {
+        List<Message> unreadMessages = messageRepository.findByRecipientAndIsReadFalse(user);
+
+        unreadMessages.forEach(m -> m.setRead(true));
+
+        messageRepository.saveAll(unreadMessages);
+    }
+
+   /* @Transactional
+    public void markMessagesAsRead(User user) {
+
+        List<Message> unreadMessages =
+                messageRepository.findByRecipientAndIsReadFalse(user);
+
+        unreadMessages.forEach(message -> message.setRead(true));
+    }*/
+
 }
 
