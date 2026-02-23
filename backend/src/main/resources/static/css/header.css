@@ -135,9 +135,8 @@
 .nav-with-square {
     display: flex;
     align-items: center;
-    gap: 50px;
+    gap: 20px;
     margin-left: auto;
-    padding-left: 300px;
 }
 
 .header-bg {
