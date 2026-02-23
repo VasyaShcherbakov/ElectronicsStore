@@ -71,11 +71,7 @@ margin: 0; font-size: 35px; font-weight: 700;
 
                     <span class="cart-title">🛒 Корзина</span>
 
-
-
                 </a>
-
-
 
                 <a href="/login"
                    sec:authorize="isAnonymous()"
@@ -102,16 +98,21 @@ margin: 0; font-size: 35px; font-weight: 700;
                 </form>
 
             </nav>
-            <div class="designer-square"> <span class="cart-info" th:if="${cartSize > 0}">
-        <span class="cart-count">
-            Товарів: <b th:text="${cartSize}"></b>
+                <a th:href="@{/cart}" class="cart-link" style="text-decoration: none; color: inherit;">
+                    <div class="designer-square">
+        <span class="cart-info" th:if="${cartSize > 0}">
+            <span class="cart-count">
+                Товарів: <b th:text="${cartSize}"></b>
+            </span>
+            <span class="cart-total">
+                Сума: <b th:text="${cartTotal}"></b> грн
+            </span>
         </span>
-        <span class="cart-total">
-            Сума: <b th:text="${cartTotal}"></b> грн
-        </span>
-        </span></div>
+                    </div>
+                </a>
 
-        </div>
+
+            </div>
         </div>
     </div>
     </div>
