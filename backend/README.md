@@ -214,3 +214,48 @@ GlobalExceptionHandler забезпечує:
 
 Система легко масштабується та може бути адаптована під мікросервісну архітектуру.
 
+---
+
+Запуск проєкту (Docker)
+
+Вимоги
+
+Docker
+
+Docker Compose
+
+
+
+---
+
+1. Клонування репозиторію
+
+git clone https://github.com/your-username/online-electronics-store.git
+cd online-electronics-store
+
+
+---
+
+2. Запуск застосунку
+
+docker compose up --build
+
+Після запуску:
+
+Backend буде доступний за адресою:
+
+
+http://localhost:8080
+
+
+---
+
+3. Зупинка контейнерів
+
+docker compose down
+
+Або - Ctrl + C
+
+Якщо потрібно повністю очистити базу даних:
+
+docker compose down -v
