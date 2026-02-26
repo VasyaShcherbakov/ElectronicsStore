@@ -3,6 +3,9 @@ package com.OnlineElectronicsStore.OnlineElectronicsStore.controller.rest;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Chat;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Message;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.User;
+import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.CartItemRepository;
+import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.CartRepository;
+import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.UserRepository;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.security.JwtAuthFilter;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.ChatService;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.MessageService;
@@ -13,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
@@ -20,8 +25,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 
 @WebMvcTest(ChatRestController.class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -42,14 +47,28 @@ class ChatRestControllerTest {
     @MockitoBean
     private JwtAuthFilter jwtAuthFilter;
 
+    @MockitoBean
+    private CartRepository cartRepository;
+
+    @MockitoBean
+    private CartItemRepository cartItemRepository;
+
+    @MockitoBean
+    private UserRepository userRepository;
+
 
     private User testUser;
     private Chat testChat;
     private Message testMessage;
 
-
     @BeforeEach
     void setup() {
+
+        // 🔥 создаём Authentication вручную
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken("testUser", null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         testUser = new User();
         testUser.setId(1L);
         testUser.setUsername("testUser");
