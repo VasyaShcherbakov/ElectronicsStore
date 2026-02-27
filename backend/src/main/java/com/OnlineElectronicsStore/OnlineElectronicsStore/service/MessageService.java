@@ -27,11 +27,44 @@ public class MessageService {
         message.setCreatedAt(LocalDateTime.now());
         message.setRead(false);
 
+        User recipient;
+
+        if (chat.getSeller().equals(sender)) {
+            recipient = chat.getBuyer();
+        } else {
+            recipient = chat.getSeller();
+        }
+
+        message.setRecipient(recipient);
+
         messageRepository.save(message);
+
     }
 
     public List<Message> getMessages(Chat chat) {
         return messageRepository.findByChatOrderByCreatedAtAsc(chat);
     }
+
+    public int getUnreadCount(User user) {
+        return messageRepository.countByRecipientAndIsReadFalse(user);
+    }
+
+    public void markMessagesAsRead(User user) {
+        List<Message> unreadMessages = messageRepository.findByRecipientAndIsReadFalse(user);
+
+        unreadMessages.forEach(m -> m.setRead(true));
+
+        messageRepository.saveAll(unreadMessages);
+    }
+
+   /* @Transactional
+    public void markMessagesAsRead(User user) {
+
+        List<Message> unreadMessages =
+                messageRepository.findByRecipientAndIsReadFalse(user);
+
+        unreadMessages.forEach(message -> message.setRead(true));
+    }*/
+
 }
 

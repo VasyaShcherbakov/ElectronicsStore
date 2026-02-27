@@ -2,7 +2,6 @@ package com.OnlineElectronicsStore.OnlineElectronicsStore.model;
 
 
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -27,7 +26,18 @@ public class Message {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(name = "read", nullable = false)
-    private boolean read = false;
+    private boolean isRead = false;
+
+    public User getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(User recipient) {
+        this.recipient = recipient;
+    }
+
+    @ManyToOne
+    private User recipient;
 
 
     public Message() {
@@ -74,10 +84,10 @@ public class Message {
     }
 
     public boolean isRead() {
-        return read;
+        return isRead;
     }
 
     public void setRead(boolean read) {
-        this.read = read;
+        this.isRead = read;
     }
 }

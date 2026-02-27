@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CartItemMapper {
 
-    // ✅ Entity → DTO
+
     public CartItemDto toDto(CartItem item) {
         if (item == null) {
             return null;
@@ -22,7 +22,8 @@ public class CartItemMapper {
         return dto;
     }
 
-    // ✅ DTO → Entity (если нужно собирать из JSON обратно)
+
+
     public CartItem toEntity(CartItemDto dto, Product product) {
         if (dto == null) {
             return null;

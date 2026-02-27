@@ -2,7 +2,7 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Оформление заказа</title>
+    <title>Оформлення замовлення</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" th:href="@{/css/checkout.css}">
@@ -12,22 +12,22 @@
 <body>
 
 <div class="card">
-    <h2>🛒 Оформление заказа</h2>
+    <h2>🛒 Оформлення замовлення</h2>
 
     <form th:action="@{/order/checkout}"
           th:object="${orderDto}"
           method="post">
 
-        <!-- ✅ CSRF TOKEN -->
+
         <input type="hidden"
                th:name="${_csrf.parameterName}"
                th:value="${_csrf.token}" />
 
         <div class="form-group">
-            <label>👤 Ваше имя</label>
+            <label>👤 Ваше ім'я</label>
             <input type="text"
                    th:field="*{customerName}"
-                   placeholder="Имя"
+                   placeholder="ім'я"
                    required>
         </div>
 
@@ -40,17 +40,17 @@
         </div>
 
         <div class="form-group">
-            <label>🏠 Адрес доставки</label>
+            <label>🏠 Адреса доставки</label>
             <input type="text"
                    th:field="*{address}"
-                   placeholder="Адрес"
+                   placeholder="Адреса"
                    required>
         </div>
 
         <hr>
 
         <div class="form-group">
-            <label>💳 Номер карты (тест)</label>
+            <label>💳 Номер карти (тест)</label>
             <input type="text" placeholder="1234 5678 9012 3456">
         </div>
 
@@ -65,15 +65,13 @@
         </div>
 
         <button type="submit" class="btn-submit">
-            ✅ Подтвердить заказ
+            ✅ Підтвердити замовлення
         </button>
 
     </form>
 
-
-
-
 </div>
 
 </body>
+
 </html>

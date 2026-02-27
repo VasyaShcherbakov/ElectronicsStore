@@ -1,9 +1,11 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.model;
+
 import jakarta.persistence.*;
 
 @Entity
 
 public class CartItem {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,7 +23,7 @@ public class CartItem {
 
     private int quantity;
 
-    // Геттеры и сеттеры
+
     public Long getId() { return id; }
 
     public Cart getCart() { return cart; }

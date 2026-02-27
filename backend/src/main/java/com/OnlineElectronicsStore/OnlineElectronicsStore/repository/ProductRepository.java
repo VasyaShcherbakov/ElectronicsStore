@@ -5,8 +5,8 @@ import com.OnlineElectronicsStore.OnlineElectronicsStore.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
-
 public interface ProductRepository extends JpaRepository<Product, Long> {
+
     List<Product> findByNameContainingIgnoreCase(String name);
     List<Product> findByCategoryId(Long categoryId);
     List<Product> findByOwner(User owner);
@@ -14,5 +14,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             String name,
             String description
     );
+
 }
 

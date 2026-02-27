@@ -2,11 +2,11 @@ package com.OnlineElectronicsStore.OnlineElectronicsStore.model;
 
 
 import jakarta.persistence.*;
-
 import java.util.List;
 
 @Entity
 public class Chat {
+
     @Id
     @GeneratedValue
     private Long id;
@@ -28,6 +28,9 @@ public class Chat {
     public List<Message> getMessages() {
         return messages;
     }
+
+
+
 
     public void setMessages(List<Message> messages) {
         this.messages = messages;

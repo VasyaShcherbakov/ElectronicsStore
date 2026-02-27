@@ -2,27 +2,22 @@ package com.OnlineElectronicsStore.OnlineElectronicsStore.controller.rest;
 
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Product;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.User;
-import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.ProductRepository;
-import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.UserRepository;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.ProductServiceImpl;
+import com.OnlineElectronicsStore.OnlineElectronicsStore.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.nio.file.*;
 import java.util.List;
-import java.util.Optional;
 
 @Tag(
         name = "User",
@@ -33,17 +28,11 @@ import java.util.Optional;
 @SecurityRequirement(name = "bearerAuth")
 public class UserRestController {
 
-    private final UserRepository userRepository;
-    private final ProductRepository productRepository;
+    private final UserService userService;
     private final ProductServiceImpl productService;
 
-    public UserRestController(
-            UserRepository userRepository,
-            ProductRepository productRepository,
-            ProductServiceImpl productService
-    ) {
-        this.userRepository = userRepository;
-        this.productRepository = productRepository;
+    public UserRestController(ProductServiceImpl productService,UserService userService) {
+        this.userService = userService;
         this.productService = productService;
     }
 
@@ -53,12 +42,14 @@ public class UserRestController {
             summary = "Додати новий товар",
             description = "Додає новий товар від імені користувача з можливістю завантаження зображення"
     )
+    
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Товар успішно створено"),
             @ApiResponse(responseCode = "400", description = "Некоректні дані товару"),
             @ApiResponse(responseCode = "401", description = "Користувач не авторизований"),
             @ApiResponse(responseCode = "500", description = "Помилка збереження файлу")
     })
+
     @PostMapping(
             value = "/add",
             consumes = { "multipart/form-data" }
@@ -67,32 +58,23 @@ public class UserRestController {
             @ModelAttribute Product product,
             @RequestParam("imageFile")
             @Schema(description = "Зображення товару", type = "string", format = "binary")
-            MultipartFile imageFile
+            MultipartFile imageFile,
+            @AuthenticationPrincipal UserDetails userDetails
     ) {
-        try {
-            if (!imageFile.isEmpty()) {
-                String uploadDir = "uploads/";
-                String fileName = imageFile.getOriginalFilename();
-                Path uploadPath = Paths.get(uploadDir);
 
-                if (!Files.exists(uploadPath)) {
-                    Files.createDirectories(uploadPath);
-                }
-
-                Path filePath = uploadPath.resolve(fileName);
-                Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-                product.setImagePath(fileName);
-                product.setImageUrl("/uploads/" + fileName);
-            }
-
-            Product savedProduct = productRepository.save(product);
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedProduct);
-
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Помилка збереження файлу: " + e.getMessage());
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("User not authenticated");
         }
+
+        Product savedProduct = productService.addProduct(
+                product,
+                imageFile,
+                userDetails.getUsername()
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(savedProduct);
     }
 
     // ================= USER HOME =================
@@ -110,33 +92,29 @@ public class UserRestController {
             @ApiResponse(responseCode = "401", description = "Користувач не авторизований"),
             @ApiResponse(responseCode = "404", description = "Користувача не знайдено")
     })
+
     @GetMapping("/main")
     public ResponseEntity<?> userHome(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestParam(
-                    value = "query",
-                    required = false
-            )
-            @Schema(description = "Пошук товарів за назвою")
-            String query
+            @RequestParam(value = "query", required = false) String query
     ) {
+
         if (userDetails == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("Користувач не авторизований");
         }
 
-        Optional<User> userOpt = userRepository.findByUsername(userDetails.getUsername());
-        if (userOpt.isEmpty()) {
+        User user = userService.findByUsername(userDetails.getUsername());
+        if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Користувача не знайдено");
         }
 
-        User user = userOpt.get();
-        List<Product> products = (query != null && !query.isEmpty())
-                ? productRepository.findByNameContainingIgnoreCase(query)
-                : productService.getAllProducts();
+        List<Product> products = productService.getProductsForUser(user, query);
 
-        return ResponseEntity.ok(new UserHomeResponse(user, products, query));
+        return ResponseEntity.ok(
+                new UserHomeResponse(user, products, query)
+        );
     }
 
     // ================= DTO =================

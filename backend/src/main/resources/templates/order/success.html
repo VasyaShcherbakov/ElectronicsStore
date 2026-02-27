@@ -2,7 +2,7 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Заказ оформлен</title>
+    <title>Замовлення оформленно</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" th:href="@{/css/success.css}">
@@ -15,22 +15,22 @@
 
     <div class="success-icon">✅</div>
 
-    <h2>Заказ оформлен!</h2>
+    <h2>Замовлення оформленно!</h2>
 
     <p class="order-info">
-        Спасибо за покупку 🙌<br>
-        Продавец уже получил ваш заказ.
+        Дякуємо за покупку 🙌<br>
+        Продавець вже майже ознайомленний з ващим замовленням.
     </p>
 
     <a th:if="${order.chat != null}"
        th:href="@{/chats/{id}(id=${order.chat.id})}"
        class="btn btn-primary">
-        💬 Связаться с продавцом
+        💬 Звязок з продавцем
     </a>
 
     <a href="/"
        class="btn btn-secondary">
-        ⬅ Вернуться на главную
+        ⬅ Вернутись на головну
     </a>
 
 </div>

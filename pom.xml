@@ -12,6 +12,6 @@
 
     <modules>
         <module>backend</module>
-        <!-- frontend можно тоже подключить плагином, но это необязательно -->
+
     </modules>
 </project>

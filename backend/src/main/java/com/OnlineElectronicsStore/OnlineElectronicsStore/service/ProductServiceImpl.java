@@ -6,6 +6,7 @@ import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Product;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.User;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.ProductRepository;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,13 +14,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 
 public class ProductServiceImpl {
     private final ProductRepository productRepository;
-
     private final UserRepository userRepository;
 
 
@@ -28,36 +30,58 @@ public class ProductServiceImpl {
         this.userRepository = userRepository;
     }
 
+    @Transactional
+    public Product addProduct(Product product,
+                              MultipartFile imageFile,
+                              String username) {
+
+        // если username null — это уже ошибка бизнес-логики
+        if (username == null) {
+            throw new RuntimeException("User not authenticated");
+        }
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // кто выложил товар
+        product.setOwner(user);
+
+        // пока не в корзине
+        product.setUser(null);
+
+        // загрузка картинки
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                String uploadDir = "uploads/";
+                Files.createDirectories(Paths.get(uploadDir));
+
+                String fileName = UUID.randomUUID() + "_" + imageFile.getOriginalFilename();
+                Path filePath = Paths.get(uploadDir).resolve(fileName);
+
+                Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+                product.setImagePath(fileName);
+                product.setImageUrl(fileName);
+
+            } catch (IOException ex) {
+                throw new RuntimeException("Ошибка загрузки изображения", ex);
+            }
+        }
+
+        return productRepository.save(product);
+    }
+
+    public List<Product> getProductsForUser(User user, String query) {
+        if (query != null && !query.isEmpty()) {
+            return productRepository.findByNameContainingIgnoreCase(query);
+        }
+        return productRepository.findByOwner(user); // <-- здесь правильный метод
+    }
+
+
     public List<Product> getProductsByUser(User user) {
         return productRepository.findByOwner(user);
     }
-
-
-    public void addProduct(Product product, MultipartFile imageFile, String username) throws IOException {
-        if (imageFile != null && !imageFile.isEmpty()) {
-            System.out.println("Сохраняем картинку...");
-            String uploadDir = "src/main/resources/static/uploads/";
-            String fileName = System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
-            Path uploadPath = Paths.get(uploadDir);
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
-            Path filePath = uploadPath.resolve(fileName);
-            imageFile.transferTo(filePath.toFile());
-            product.setImageUrl("/uploads/" + fileName);
-        }
-        User user = userRepository.findByUsername(username).orElse(null);
-        if (user != null) {
-            System.out.println("Пользователь найден: " + user.getUsername());
-            product.setUser(user);
-        } else {
-            System.out.println("Пользователь не найден!");
-        }
-        productRepository.save(product);
-        System.out.println("Товар сохранен в базе!");
-    }
-
-
 
 
     public List<Product> getAllProducts() {
@@ -93,6 +117,39 @@ public class ProductServiceImpl {
                         query,
                         query
                 );
+    }
+
+    @Transactional
+    public void updateProduct(Product formProduct, MultipartFile imageFile) {
+
+        Product product = getProductById(formProduct.getId());
+
+        product.setName(formProduct.getName());
+        product.setDescription(formProduct.getDescription());
+        product.setPrice(formProduct.getPrice());
+        product.setQuantity(formProduct.getQuantity());
+
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                String uploadDir = "uploads/";
+                Files.createDirectories(Paths.get(uploadDir));
+
+                String fileName = imageFile.getOriginalFilename();
+                Path filePath = Paths.get(uploadDir).resolve(fileName);
+
+                Files.copy(imageFile.getInputStream(),
+                        filePath,
+                        StandardCopyOption.REPLACE_EXISTING);
+
+                product.setImagePath(fileName);
+                product.setImageUrl(fileName);
+
+            } catch (IOException e) {
+                throw new RuntimeException("Ошибка загрузки файла", e);
+            }
+        }
+
+        productRepository.save(product);
     }
 
 

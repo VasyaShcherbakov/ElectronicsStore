@@ -7,6 +7,8 @@ import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.ChatReposito
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ChatService {
 
@@ -49,6 +51,21 @@ public class ChatService {
     public Chat getById(Long chatId) {
         return chatRepository.findById(chatId)
                 .orElseThrow(() -> new RuntimeException("Chat not found"));
+    }
+
+    public List<Chat> getUserChats(User user) {
+        return chatRepository.findByBuyerOrSeller(user, user);
+    }
+    public Chat getChatForUser(Long chatId, User user) {
+        Chat chat = chatRepository.findById(chatId)
+                .orElseThrow(() -> new RuntimeException("Chat not found"));
+
+        if (!user.equals(chat.getBuyer()) &&
+                !user.equals(chat.getSeller())) {
+            throw new RuntimeException("Access denied");
+        }
+
+        return chat;
     }
 
 }

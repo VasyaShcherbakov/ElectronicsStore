@@ -31,6 +31,11 @@ public class UserSummaryDto {
         this.email = email;
     }
 
+    public UserSummaryDto(Long id, String username) {
+        this.id = id;
+        this.username = username;
+    }
+
     // ====== Геттери та сеттери ======
 
     public Long getId() {

@@ -47,9 +47,9 @@ public class ProductDto {
     )
     private UserSummaryDto seller; // хто виклав товар
 
-    public ProductDto() {}
 
-    // ====== Геттери та сеттери ======
+
+    public ProductDto() {}
 
     public Long getId() {
         return id;

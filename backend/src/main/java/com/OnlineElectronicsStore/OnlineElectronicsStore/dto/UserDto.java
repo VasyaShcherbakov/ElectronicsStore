@@ -47,7 +47,7 @@ public class UserDto {
         this.role = role;
     }
 
-    // ====== Геттери та сеттери ======
+
 
     public Long getId() {
         return id;

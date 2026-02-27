@@ -2,7 +2,7 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${title} ?: 'Ошибка'">Ошибка</title>
+    <title th:text="${title} ?: 'Помилка'">Помилка</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" th:href="@{/css/error.css}">
@@ -16,21 +16,21 @@
     <div class="error-icon">⚠️</div>
 
     <h1 class="error-title"
-        th:text="${title} ?: 'Произошла ошибка'">
-        Произошла ошибка
+        th:text="${title} ?: 'Відбулась помилка'">
+        Відбулась помилка
     </h1>
 
     <p class="error-message"
-       th:text="${message} ?: 'Что-то пошло не так. Попробуйте ещё раз.'">
-        Детали ошибки
+       th:text="${message} ?: 'Щось пішло не так , попробуйте ще раз.'">
+        Деталі помилки
     </p>
 
     <div class="error-code" th:if="${code != null}">
-        Код ошибки: <span th:text="${code}"></span>
+        Код помилки: <span th:text="${code}"></span>
     </div>
 
     <a th:href="${backUrl} ?: '/'" class="back-btn">
-        ⬅ Вернуться назад
+        ⬅ Вернутись назад
     </a>
 
 </div>

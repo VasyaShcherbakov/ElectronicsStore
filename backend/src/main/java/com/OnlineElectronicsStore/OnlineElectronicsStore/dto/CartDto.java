@@ -1,7 +1,6 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -36,7 +35,7 @@ public class CartDto {
     )
     private UserSummaryDto user;
 
-    // ====== Геттери та сеттери ======
+
 
     public Long getId() {
         return id;

@@ -5,7 +5,7 @@ services:
     image: postgres:16
     container_name: local-postgres
     environment:
-      POSTGRES_DB: postgres
+      POSTGRES_DB: online_electronics_store_v2
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: Vasya_3010
     ports:
@@ -19,7 +19,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - DB_URL=jdbc:postgresql://postgres:5432/postgres
+      - DB_URL=jdbc:postgresql://postgres:5432/online_electronics_store_v2
       - DB_USERNAME=postgres
       - DB_PASSWORD=Vasya_3010
     depends_on:

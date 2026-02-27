@@ -17,7 +17,7 @@ public class ProductMapper {
         dto.setPrice(product.getPrice());
         dto.setImageUrl(product.getImageUrl());
 
-        // 🧩 Категория
+
         if (product.getCategory() != null) {
             CategoryDto categoryDto = new CategoryDto();
             categoryDto.setId(product.getCategory().getId());
@@ -25,7 +25,7 @@ public class ProductMapper {
             dto.setCategory(categoryDto);
         }
 
-        // 👤 Владелец товара
+
         if (product.getUser() != null) {
             dto.setSeller(new UserSummaryDto(
                     product.getUser().getId(),
@@ -46,7 +46,6 @@ public class ProductMapper {
         product.setDescription(dto.getDescription());
         product.setPrice(dto.getPrice());
         product.setImageUrl(dto.getImageUrl());
-        // ⚠️ Category и User не устанавливаем напрямую — ими управляют сервисы при сохранении
 
         return product;
     }

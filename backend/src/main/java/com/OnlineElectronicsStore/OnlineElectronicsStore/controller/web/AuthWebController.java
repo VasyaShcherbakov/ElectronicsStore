@@ -1,9 +1,5 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.controller.web;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-
-import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Product;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.User;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.ProductRepository;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.UserRepository;
@@ -13,19 +9,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.List;
 
 @Controller
 public class AuthWebController {
@@ -51,7 +42,6 @@ public class AuthWebController {
 
 
 
-
     @GetMapping("/whoami")
     @ResponseBody
     public String whoAmI() {
@@ -61,13 +51,12 @@ public class AuthWebController {
 
 
 
-
     @PostMapping("/register")
     public String registerUser(@ModelAttribute("user") @Valid User user,
                                BindingResult bindingResult,
                                Model model) {
         if (bindingResult.hasErrors()) {
-            return "register"; // Показываем форму с ошибками
+            return "register";
         }
 
         try {

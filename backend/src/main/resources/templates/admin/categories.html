@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="ru"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Управление категориями</title>
+    <title>Керування Категоріями</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
@@ -100,19 +99,99 @@
         ul.category-list li:last-child {
             border-bottom: none;
         }
+
+        /* === BACK BUTTON === */
+.back-button {
+    display: inline-block;
+    padding: 10px 18px;
+    border-radius: 6px;
+    background-color: #4a90e2;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.back-button:hover {
+    background-color: #357abd;
+}
+
+     /* === HEADER === */
+.top-header {
+    width: 100%;
+    background: linear-gradient(90deg, #42a5f5, #1e88e5);
+    padding: 20px 0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.header-container {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+}
+
+.header-title {
+    color: white;
+    font-size: 24px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+/* === BACK BUTTON === */
+.back-button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    background-color: white;
+    color: #1e88e5;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.back-button:hover {
+    background-color: #e3f2fd;
+}
+
+        .back-button {
+    display: inline-block;
+    padding: 10px 18px;
+    background-color: #4f46e5;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    font-family: sans-serif;
+    transition: all 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #4338ca;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
     </style>
 </head>
 
 <body>
 
-<h2 class="page-title">Управление категориями</h2>
+<header class="top-header">
+    <div class="header-container">
+        <h2 class="header-title">Керування Категоріями</h2>
+        <a th:href="@{/user/home/main}" class="back-button">← Назад</a>
+    </div>
+</header>
 
 <main>
     <div class="page-container">
 
-        <!-- ADD CATEGORY -->
+
         <div class="card">
-            <h3>Добавить категорию</h3>
+            <h3>Добавити категорію</h3>
 
             <form th:action="@{/admin/add}"
                   th:object="${category}"
@@ -124,16 +203,16 @@
 
                 <input type="text"
                        th:field="*{name}"
-                       placeholder="Название категории"
+                       placeholder="Назва категорії"
                        required>
 
-                <button type="submit">Добавить</button>
+                <button type="submit">Добавити</button>
             </form>
         </div>
 
         <!-- CATEGORY LIST -->
         <div class="card">
-            <h3>Список категорий</h3>
+            <h3>Список категорій</h3>
 
             <ul class="category-list">
                 <li th:each="cat : ${categories}"
@@ -149,7 +228,7 @@
 
                 <form th:action="@{/admin/delete/{id}(id=${cat.id})}"
                       method="post"
-                      onsubmit="return confirm('Удалить категорию?');">
+                      onsubmit="return confirm('Видалити категорію?');">
 
                     <input type="hidden"
                            th:name="${_csrf.parameterName}"
@@ -158,7 +237,7 @@
                     <button type="submit"
                             style="background:#e53935; color:white; border:none;
                            padding:6px 12px; border-radius:6px; cursor:pointer;">
-                        Удалить
+                        Видалити
                     </button>
                 </form>
             </li>

@@ -1,31 +1,21 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.controller.web;
 
-import com.OnlineElectronicsStore.OnlineElectronicsStore.exception.ImageUploadException;
+
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Product;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.User;
-import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.ProductRepository;
-import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.UserRepository;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.CategoryService;
+import com.OnlineElectronicsStore.OnlineElectronicsStore.service.MessageService;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.ProductServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.OnlineElectronicsStore.OnlineElectronicsStore.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
-import java.util.UUID;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 @Controller
@@ -35,17 +25,20 @@ public class UserController {
     private static final Logger log =
             LoggerFactory.getLogger(UserController.class);
 
-    private final UserRepository userRepository;
-    private final ProductRepository productRepository;
+
     private final ProductServiceImpl productService;
     private final CategoryService categoryService;
+    private final UserService userService;
+    private final MessageService messageService;
 
-    public UserController(UserRepository userRepository, ProductRepository productRepository, ProductServiceImpl productService, CategoryService categoryService ) {
-        this.userRepository = userRepository;
-        this.productRepository = productRepository;
+    public UserController(ProductServiceImpl productService, CategoryService categoryService, UserService userService, MessageService messageService ) {
         this.productService = productService;
         this.categoryService = categoryService;
+        this.userService = userService;
+        this.messageService = messageService;
     }
+
+
 
     @PostMapping("/add")
     public String addProduct(@ModelAttribute Product product,
@@ -56,58 +49,41 @@ public class UserController {
             return "redirect:/login";
         }
 
-        User user = userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        // 🔥 ВАЖНО
-        product.setOwner(user);   // кто ВЫЛОЖИЛ товар
-        product.setUser(null);    // товар пока НИ У КОГО в корзине
-
-        // 📸 загрузка картинки
-        if (imageFile != null && !imageFile.isEmpty()) {
-            try {
-                String uploadDir = "uploads/";
-                Files.createDirectories(Paths.get(uploadDir));
-
-                String fileName = UUID.randomUUID() + "_" + imageFile.getOriginalFilename();
-                Path filePath = Paths.get(uploadDir).resolve(fileName);
-
-                Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-                product.setImagePath(fileName);
-                product.setImageUrl(fileName);
-
-            } catch (IOException ex) {
-                throw new RuntimeException("Ошибка загрузки изображения", ex);
-            }
-        }
-
-        Product savedProduct = productRepository.save(product);
-
-        log.info("Добавлен товар id={} от owner={}",
-                savedProduct.getId(),
-                savedProduct.getOwner().getUsername());
+        productService.addProduct(
+                product,
+                imageFile,
+                userDetails.getUsername()
+        );
 
         return "redirect:/user/home/main";
     }
+
+
 
     @GetMapping("/main")
     public String userHome(@AuthenticationPrincipal UserDetails userDetails,
                            @RequestParam(value = "query", required = false) String query,
                            Model model) {
+
         if (userDetails == null) {
             return "redirect:/login";
         }
-        User user = userRepository.findByUsername(userDetails.getUsername()).orElse(null);
+
+        User user = userService.findByUsername(userDetails.getUsername());
+
         if (user == null) {
             return "redirect:/login";
         }
-        List<Product> products = (query != null && !query.isEmpty())
-                ? productRepository.findByNameContainingIgnoreCase(query)
-                : productService.getProductsByUser(user);
+
+        List<Product> products = productService.getProductsForUser(user, query);
+
+        User currentUser = userService.getCurrentUser();
+
+        int unreadCount = messageService.getUnreadCount(currentUser);
+
+        model.addAttribute("unreadCount", unreadCount);
         model.addAttribute("products", products);
         model.addAttribute("user", user);
-        model.addAttribute("user_role", user.getUsername());
         model.addAttribute("query", query);
         model.addAttribute("categories", categoryService.getAll());
         model.addAttribute("product", new Product());

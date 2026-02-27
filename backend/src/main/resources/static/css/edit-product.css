@@ -7,14 +7,10 @@
             font-family: Arial, Helvetica, sans-serif;
         }
 
-        body {
-            min-height: 100vh;
-            background-color: #d0e7ff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
+     body {
+         margin: 0;
+         background-color: #d0e7ff;
+     }
 
         /* === CARD === */
         .edit-card {
@@ -24,6 +20,7 @@
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            margin: 60px auto 40px auto;
         }
 
         .edit-card h1 {

@@ -11,14 +11,8 @@
 <body>
 <header th:fragment="site-header">
     <link rel="stylesheet" th:href="@{/css/header.css}">
-    <div style="
-        background: linear-gradient(135deg, #1e88e5, #42a5f5);
-        padding: 25px 35px;
-        border-bottom-left-radius: 24px;
-        border-bottom-right-radius: 24px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        color: white;
-    ">
+    <div class="header-bg">
+        <div class="header-bg-inside">
         <div style="
             max-width: 1200px;
             margin: 0 auto;
@@ -28,27 +22,34 @@
             gap: 20px;
         ">
 
-            <!-- ЛЕВАЯ ЧАСТЬ -->
-            <div>
-                <h1 style="margin: 0; font-size: 32px; font-weight: 700;">
+
+            <div class="header-left">
+                <h1 style="
+margin: 0; font-size: 35px; font-weight: 700;
+    color: #E0FFFF;
+    text-shadow:
+        0 0 7px #fff,
+        0 0 10px #fff,
+        0 0 21px #0fa,
+        0 0 42px #0fa;">
                     ⚡ ЕлектроМаркет
                 </h1>
-                <p style="margin: 6px 0 0; font-size: 15px; opacity: 0.95;">
+                <p class="header-subtitle">
                     Купівля та продаж електроніки від користувачів
                 </p>
-                <p style="margin: 2px 0 0; font-size: 14px; opacity: 0.85;">
-                    Тут ви можете продати свою стару електронну техніку<br>
-                    або переглянути товари інших користувачів
+
+                <p class="header-description">
+                    Тут ви можете продати свою стару електронну техніку
                 </p>
             </div>
 
-            <!-- ПРАВАЯ ЧАСТЬ -->
+            <div class="nav-with-square">
             <nav class="nav-capsule">
 
-                <!-- Welcome -->
+
                 <div class="nav-welcome"
                      sec:authorize="isAuthenticated()"
-                     th:unless="${isProductsPage}"> <!-- Показывать, пока НЕ наступит isProductsPage -->
+                     th:unless="${isProductsPage}">
 
                     Ласкаво просимо, <strong th:text="${user.username}">user</strong>!
                 </div>
@@ -60,7 +61,7 @@
                     Мої товари на продаж
                 </a>
 
-                <a href="/products" class="nav-btn">
+                <a href="/products" class="nav-btn nav-products">
                     Товари 📦
                 </a>
 
@@ -70,19 +71,8 @@
 
                     <span class="cart-title">🛒 Корзина</span>
 
-                    <span class="cart-info" th:if="${cartSize > 0}">
-        <span class="cart-count">
-            Товаров: <b th:text="${cartSize}"></b>
-        </span>
-        <span class="cart-total">
-            Сумма: <b th:text="${cartTotal}"></b> грн
-        </span>
-        </span>
-
                 </a>
 
-
-                <!-- Аноним -->
                 <a href="/login"
                    sec:authorize="isAnonymous()"
                    class="nav-btn white">
@@ -95,7 +85,6 @@
                     Реєстрація
                 </a>
 
-                <!-- Выход -->
                 <form th:action="@{/logout}"
                       method="post"
                       sec:authorize="isAuthenticated()"
@@ -109,10 +98,26 @@
                 </form>
 
             </nav>
+                <a th:href="@{/cart}" class="cart-link" style="text-decoration: none; color: inherit;">
+                    <div class="designer-square">
+        <span class="cart-info" th:if="${cartSize > 0}">
+            <span class="cart-count">
+                Товарів: <b th:text="${cartSize}"></b>
+            </span>
+            <span class="cart-total">
+                Сума: <b th:text="${cartTotal}"></b> грн
+            </span>
+        </span>
+                    </div>
+                </a>
+
+
+            </div>
         </div>
     </div>
-
+    </div>
 </header>
 
 </body>
+
 </html>

@@ -1,19 +1,21 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.model;
 
-
 import jakarta.persistence.*;
-
 import java.util.List;
 
 @Entity
 public class ProductCategory {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     private String name;
 
+
     @OneToMany(mappedBy = "category")
+
     private List<Product> products;
 
     public Long getId() {
@@ -39,6 +41,5 @@ public class ProductCategory {
     public void setProducts(List<Product> products) {
         this.products = products;
     }
-
 
 }

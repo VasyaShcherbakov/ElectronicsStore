@@ -19,43 +19,47 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final CartRepository cartRepository;
-    private final PasswordEncoder passwordEncoder; // 👈 Изменили тип на PasswordEncoder
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserService(UserRepository userRepository,
                        CartRepository cartRepository,
-                       PasswordEncoder passwordEncoder) { // 👈 Этот бин уже есть в SecurityConfig
+                       PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.cartRepository = cartRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
-    // ✅ Реализация метода, который Spring Security вызывает при логине
+    // Метод при логіні
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден: " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("Користувача не знайдено: " + username));
     }
 
-    // ✅ Метод регистрации нового пользователя
+    // Метод реєстраціх нового користувача
     public void registerUser(User user) {
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-            throw new RuntimeException("Пользователь с таким именем уже существует!");
+            throw new RuntimeException("Користвуч з таким іменем вже існує");
         }
 
         user.setRole(Role.USER);
-        System.out.println("Создаём пользователя с ролью: " + user.getRole());
+        System.out.println("Створюємо користувача з ролью:" + user.getRole());
 
-        // Шифруем пароль перед сохранением
+        // Шифруем пароль перед зберіганням
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        // Сохраняем пользователя
+        // Зберігаєм користувача
         userRepository.save(user);
 
-        // ✅ Создаём корзину и привязываем к пользователю
+        // Створюємо корзину і зберігаємо з користувачем
         Cart cart = new Cart();
         cart.setUser(user);
         cartRepository.save(cart);
+    }
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username).orElse(null);
     }
 
     public User getCurrentUser() {
@@ -63,14 +67,14 @@ public class UserService implements UserDetailsService {
                 SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
-            throw new RuntimeException("Пользователь не авторизован");
+            throw new RuntimeException("Користувач авторизований");
         }
 
         String username = authentication.getName();
 
         return userRepository.findByUsername(username)
                 .orElseThrow(() ->
-                        new RuntimeException("Пользователь не найден: " + username)
+                        new RuntimeException("Користувача не знайдено: " + username)
                 );
     }
 

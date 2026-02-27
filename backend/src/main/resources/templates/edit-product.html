@@ -2,7 +2,7 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Редактировать товар</title>
+    <title>Редагувати товар</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" th:href="@{/css/edit-product.css}">
@@ -11,9 +11,11 @@
 
 <body>
 
+<div th:replace="fragments/header :: site-header"></div>
+
 <div class="edit-card">
 
-    <h1>Редактировать товар</h1>
+    <h1>Редагувати товар</h1>
 
     <form th:action="@{/products/update}"
           method="post"
@@ -22,48 +24,48 @@
         <input type="hidden" name="id" th:value="${product.id}">
 
         <div class="form-group">
-            <label>Название</label>
+            <label>Назва</label>
             <input type="text" name="name"
                    th:value="${product.name}" required>
         </div>
 
         <div class="form-group">
-            <label>Описание</label>
+            <label>Опис</label>
             <textarea name="description"
                       required
                       th:text="${product.description}"></textarea>
         </div>
 
         <div class="form-group">
-            <label>Цена</label>
+            <label>Ціна</label>
             <input type="number" step="0.01"
                    name="price"
                    th:value="${product.price}" required>
         </div>
 
         <div class="form-group">
-            <label>Количество</label>
+            <label>Кількість</label>
             <input type="number"
                    name="quantity"
                    th:value="${product.quantity}" required>
         </div>
 
-        <!-- 🔥 ВАЖНО: загрузка нового файла -->
+
         <div class="form-group">
-            <label>Новое изображение (если нужно заменить)</label>
+            <label>Нове зображення ( якщо потрібно змітинити )</label>
             <input type="file" name="imageFile">
         </div>
 
-        <!-- 👀 Превью текущей картинки -->
+
         <div class="image-preview"
              th:if="${product.imageUrl != null}">
-            <p>Текущее изображение:</p>
+            <p>Поточне зображення:</p>
             <img th:src="@{'/uploads/' + ${product.imageUrl}}"
-                 alt="Изображение товара">
+                 alt="Зображення товару">
         </div>
 
         <div class="buttons">
-            <button type="submit">Сохранить</button>
+            <button type="submit">Зберегти</button>
             <button type="button"
                     onclick="history.back()"
                     class="btn-back">

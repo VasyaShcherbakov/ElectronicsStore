@@ -1,15 +1,13 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.model;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
-
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Collection;
 import java.util.List;
 
@@ -18,6 +16,7 @@ import java.util.List;
 
 
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,23 +26,28 @@ public class User implements UserDetails {
     @Size(min = 3, max = 20, message = "Имя пользователя должно быть от 3 до 20 символов")
     private String username;
 
+
     @NotBlank(message = "Пароль не может быть пустым")
     @Size(min = 6, message = "Пароль должен содержать минимум 6 символов")
-
     private String password;
+
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role = Role.USER;
 
+
     @Email(message = "Введите корректный email")
     private String email;
+
 
     @Pattern(regexp = "\\+?[0-9\\-\\s]{7,15}", message = "Введите корректный номер телефона")
     private String phoneNumber;
 
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Cart cart;
@@ -51,6 +55,7 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Product> products;
+
 
     public List<Product> getProducts() {
         return products;
@@ -61,19 +66,21 @@ public class User implements UserDetails {
     }
 
     public String getEmail() { return email; }
+
     public void setEmail(String email) { this.email = email; }
 
     public String getPhoneNumber() { return phoneNumber; }
+
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
 
     public Gender getGender() { return gender; }
+
     public void setGender(Gender gender) { this.gender = gender; }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
-
 
     @Override
     public boolean isAccountNonExpired() {
@@ -96,7 +103,7 @@ public class User implements UserDetails {
     }
 
 
-    // Геттеры и сеттеры
+
     public Long getId() {
         return id;
     }
@@ -129,15 +136,3 @@ public class User implements UserDetails {
         this.role = role;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-

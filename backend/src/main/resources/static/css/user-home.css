@@ -19,8 +19,7 @@
         }
 
         .page-title {
-            margin: 30px auto;
-            text-align: center;
+            margin: 30px;
             font-size: 36px;
             font-weight: 700;
             background: linear-gradient(90deg, #42a5f5, #1e88e5);
@@ -232,3 +231,45 @@
     white-space: normal;
     word-break: break-word;
 }
+
+.page-header {
+    display: flex;
+    justify-content: center;  /* центрируем весь блок */
+    align-items: center;
+    gap: 12px;
+}
+
+ /* колокольчик */
+ .notification-bell {
+     position: relative;
+     font-size: 26px;
+     text-decoration: none;
+     transition: transform 0.2s ease;
+ }
+
+ .notification-bell:hover {
+     transform: scale(1.1);
+ }
+
+ /* красный кружочек */
+ .notification-count {
+     position: absolute;
+     top: -6px;
+     right: -8px;
+
+     background: red;
+     color: white;
+
+     font-size: 12px;
+     font-weight: bold;
+
+     width: 20px;
+     height: 20px;
+
+     border-radius: 50%;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+
+     box-shadow: 0 0 6px rgba(0,0,0,0.3);
+ }
