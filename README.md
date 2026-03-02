@@ -56,7 +56,7 @@ Online Electronics Store — це повнофункціональний backend
 Сторінка містить усі товари, які користувач додав до кошика.
 Доступна лише для авторизованих користувачів.
 
-![My Chats](docs/images/search-by-basket.png)
+![My Chats](docs/images/basket.png)
 
 ---
 
@@ -72,7 +72,7 @@ Online Electronics Store — це повнофункціональний backend
 
 номер картки
 
-![My Chats](docs/images/search-by-order.png)
+![My Chats](docs/images/order.png)
 
 ---
 
@@ -80,7 +80,7 @@ Online Electronics Store — це повнофункціональний backend
 
 Після підтвердження замовлення користувач бачить сторінку успішного оформлення.
 
-![My Chats](docs/images/search-by-order-success.png)
+![My Chats](docs/images/order_success.png)
 
 ---
 
