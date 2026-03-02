@@ -313,7 +313,7 @@ Docker Compose
 
 1. Клонування
 
-git clone https://github.com/your-username/online-electronics-store.git
+git clone https://github.com/VasyaShcherbakov/ElectronicsStore
 cd online-electronics-store
 
 
