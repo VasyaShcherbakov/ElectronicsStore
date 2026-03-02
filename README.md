@@ -43,11 +43,11 @@ Online Electronics Store — це повнофункціональний backend
 
 Пошук за назвою або категорією
 
-![My Chats](docs/images/products-search.png)
+![My Chats](docs/images/products_search.png)
 
 Пошук за категорією
 
-![My Chats](docs/images/search-by-category.png)
+![My Chats](docs/images/search_by_category.png)
 
 ---
 
@@ -88,7 +88,7 @@ Online Electronics Store — це повнофункціональний backend
 
 Після створення замовлення покупець може спілкуватися з продавцем щодо конкретного замовлення.
 
-![My Chats](docs/images/chat-with the-seller.png)
+![My Chats](docs/images/chat_with_the_seller.png)
 
 ---
 
@@ -119,7 +119,7 @@ Online Electronics Store — це повнофункціональний backend
 
 видаляти існуючі
 
-![My Chats](docs/images/kategory-admin.png)
+![My Chats](docs/images/kategory_admin.png)
 
 ---
 
