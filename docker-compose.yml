@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_DB: online_electronics_store_v2
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: Vasya_3010
+      POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
     volumes:
@@ -22,10 +22,12 @@ services:
     depends_on:
       - postgres
     environment:
-      - SPRING_PROFILES_ACTIVE=dev
-      - DB_URL=jdbc:postgresql://postgres:5432/online_electronics_store_v2
-      - DB_USERNAME=postgres
-      - DB_PASSWORD=Vasya_3010
+      DB_URL: jdbc:postgresql://postgres:5432/online_electronics_store_v2
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      JWT_SECRET: super-secret-jwt-key
+      JWT_ACCESS_EXPIRATION: 900000
+      JWT_REFRESH_EXPIRATION: 604800000
     volumes:
       - ./uploads:/app/uploads
 
