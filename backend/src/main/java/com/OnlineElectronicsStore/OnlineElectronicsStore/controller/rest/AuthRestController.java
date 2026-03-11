@@ -86,6 +86,7 @@ public class AuthRestController {
             @ApiResponse(responseCode = "200", description = "Успішний вхід, токен виданий"),
             @ApiResponse(responseCode = "401", description = "Невірні облікові дані")
     })
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> loginRequest) {
 
@@ -93,18 +94,30 @@ public class AuthRestController {
         String password = loginRequest.get("password");
 
         try {
+
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(username, password)
+                    new UsernamePasswordAuthenticationToken(
+                            username,
+                            password
+                    )
             );
 
-            String token = jwtService.generateToken(username);
-            return ResponseEntity.ok(Map.of(
-                    "token", token,
-                    "username", username
-            ));
+            String authenticatedUsername = authentication.getName();
+
+            String accessToken = jwtService.generateAccessToken(authenticatedUsername);
+            String refreshToken = jwtService.generateRefreshToken(authenticatedUsername);
+
+            return ResponseEntity.ok(
+                    Map.of(
+                            "accessToken", accessToken,
+                            "refreshToken", refreshToken
+                    )
+            );
 
         } catch (Exception e) {
+
             log.error("Помилка входу: {}", e.getMessage());
+
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("error", "Неправильне ім'я користувача або пароль"));
         }
@@ -121,6 +134,7 @@ public class AuthRestController {
             @ApiResponse(responseCode = "200", description = "Користувач авторизований"),
             @ApiResponse(responseCode = "401", description = "Не авторизовано")
     })
+
     @GetMapping("/whoami")
     public ResponseEntity<?> whoAmI(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
