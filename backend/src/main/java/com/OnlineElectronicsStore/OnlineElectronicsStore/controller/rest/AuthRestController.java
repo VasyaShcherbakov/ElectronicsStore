@@ -5,6 +5,7 @@ import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.ProductRepos
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.UserRepository;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.security.JwtService;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.service.UserService;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -135,6 +136,41 @@ public class AuthRestController {
             @ApiResponse(responseCode = "401", description = "Не авторизовано")
     })
 
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshToken(@RequestBody Map<String, String> request) {
+
+        String refreshToken = request.get("refreshToken");
+
+        try {
+
+            DecodedJWT decodedJWT = jwtService.validateToken(refreshToken);
+
+            String type = jwtService.extractType(decodedJWT);
+
+            // проверяем что это refresh токен
+            if (!"refresh".equals(type)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("error", "Invalid refresh token"));
+            }
+
+            String username = jwtService.extractUsername(decodedJWT);
+
+            String newAccessToken = jwtService.generateAccessToken(username);
+
+            return ResponseEntity.ok(
+                    Map.of(
+                            "accessToken", newAccessToken
+                    )
+            );
+
+        } catch (Exception e) {
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Refresh token expired or invalid"));
+        }
+    }
+
     @GetMapping("/whoami")
     public ResponseEntity<?> whoAmI(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -144,7 +180,6 @@ public class AuthRestController {
         return ResponseEntity.ok(Map.of("username", authentication.getName()));
     }
 
-    // ================= ME =================
 
     @Operation(
             summary = "Профіль поточного користувача",
