@@ -53,7 +53,7 @@ public class AuthRestController {
         this.jwtService = jwtService;
     }
 
-    // ================= REGISTER =================
+
 
     @Operation(
             summary = "Реєстрація користувача",
@@ -77,7 +77,7 @@ public class AuthRestController {
         }
     }
 
-    // ================= LOGIN =================
+
 
     @Operation(
             summary = "Вхід користувача",
@@ -124,18 +124,16 @@ public class AuthRestController {
         }
     }
 
-    // ================= WHO AM I =================
+
 
     @Operation(
-            summary = "Хто я",
-            description = "Повертає ім'я автентифікованого користувача."
+            summary = "Оновлення access токена",
+            description = "Приймає refresh токен та повертає новий access токен"
     )
-    @SecurityRequirement(name = "bearerAuth")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Користувач авторизований"),
-            @ApiResponse(responseCode = "401", description = "Не авторизовано")
+            @ApiResponse(responseCode = "200", description = "Access токен успішно оновлено"),
+            @ApiResponse(responseCode = "401", description = "Refresh токен недійсний або прострочений")
     })
-
 
     @PostMapping("/refresh")
     public ResponseEntity<?> refreshToken(@RequestBody Map<String, String> request) {
@@ -170,6 +168,17 @@ public class AuthRestController {
                     .body(Map.of("error", "Refresh token expired or invalid"));
         }
     }
+
+
+    @Operation(
+            summary = "Хто я",
+            description = "Повертає ім'я автентифікованого користувача."
+    )
+    @SecurityRequirement(name = "bearerAuth")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Користувач авторизований"),
+            @ApiResponse(responseCode = "401", description = "Не авторизовано")
+    })
 
     @GetMapping("/whoami")
     public ResponseEntity<?> whoAmI(Authentication authentication) {
