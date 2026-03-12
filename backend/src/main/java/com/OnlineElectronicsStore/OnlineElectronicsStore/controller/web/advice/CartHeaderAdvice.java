@@ -1,4 +1,3 @@
-/*
 package com.OnlineElectronicsStore.OnlineElectronicsStore.controller.web.advice;
 
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.Cart;
@@ -73,4 +72,3 @@ public class CartHeaderAdvice {
         model.addAttribute("cartTotal", cartTotal);
     }
 }
-*/
