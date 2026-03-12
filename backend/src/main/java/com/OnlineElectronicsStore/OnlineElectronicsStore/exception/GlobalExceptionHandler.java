@@ -1,3 +1,4 @@
+/*
 package com.OnlineElectronicsStore.OnlineElectronicsStore.exception;
 
 import org.springframework.http.HttpStatus;
@@ -52,4 +53,4 @@ public class GlobalExceptionHandler {
         model.addAttribute("backUrl", "/");
         return "error";
     }
-}
+}*/

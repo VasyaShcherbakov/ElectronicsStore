@@ -22,7 +22,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.Map;
 
 @Tag(
@@ -53,7 +54,7 @@ public class AuthRestController {
         this.jwtService = jwtService;
     }
 
-
+    private static final Logger logger = LoggerFactory.getLogger(AuthRestController.class);
 
     @Operation(
             summary = "Реєстрація користувача",
@@ -138,32 +139,32 @@ public class AuthRestController {
     @PostMapping("/refresh")
     public ResponseEntity<?> refreshToken(@RequestBody Map<String, String> request) {
 
+        logger.info("➡️ Incoming request to /refresh");
+
         String refreshToken = request.get("refreshToken");
+        logger.info("Received refresh token: {}", refreshToken);
 
         try {
-
             DecodedJWT decodedJWT = jwtService.validateToken(refreshToken);
-
             String type = jwtService.extractType(decodedJWT);
+            logger.info("Token type: {}", type);
 
-            // проверяем что это refresh токен
             if (!"refresh".equals(type)) {
+                logger.warn("Invalid token type: {}", type);
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(Map.of("error", "Invalid refresh token"));
             }
 
             String username = jwtService.extractUsername(decodedJWT);
+            logger.info("Token belongs to user: {}", username);
 
             String newAccessToken = jwtService.generateAccessToken(username);
+            logger.info("Generated new access token for user: {}", username);
 
-            return ResponseEntity.ok(
-                    Map.of(
-                            "accessToken", newAccessToken
-                    )
-            );
+            return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
 
         } catch (Exception e) {
-
+            logger.error("Failed to refresh token", e);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("error", "Refresh token expired or invalid"));
         }
