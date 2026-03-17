@@ -25,11 +25,4 @@ public class AuthMapper {
         return user;
     }
 
-    /**
-     * Create response (token + userDto).
-     */
-    public AuthResponseDto toAuthResponse(String token, User user) {
-        UserDto userDto = userMapper.toDto(user);
-        return new AuthResponseDto(token, userDto);
-    }
 }

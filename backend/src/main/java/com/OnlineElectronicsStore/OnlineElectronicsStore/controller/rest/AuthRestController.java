@@ -1,5 +1,8 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.controller.rest;
 
+import com.OnlineElectronicsStore.OnlineElectronicsStore.dto.UserSummaryDto;
+import com.OnlineElectronicsStore.OnlineElectronicsStore.dto.auth.AuthResponseDto;
+import com.OnlineElectronicsStore.OnlineElectronicsStore.mapper.UserSummaryMapper;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.User;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.ProductRepository;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.UserRepository;
@@ -41,17 +44,19 @@ public class AuthRestController {
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final UserSummaryMapper userSummaryMapper;
 
     public AuthRestController(ProductRepository productRepository,
                               UserService userService,
                               UserRepository userRepository,
                               AuthenticationManager authenticationManager,
-                              JwtService jwtService) {
+                              JwtService jwtService, UserSummaryMapper userSummaryMapper) {
         this.productRepository = productRepository;
         this.userService = userService;
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
+        this.userSummaryMapper = userSummaryMapper;
     }
 
     private static final Logger logger = LoggerFactory.getLogger(AuthRestController.class);
@@ -89,6 +94,7 @@ public class AuthRestController {
             @ApiResponse(responseCode = "401", description = "Невірні облікові дані")
     })
 
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> loginRequest) {
 
@@ -98,23 +104,31 @@ public class AuthRestController {
         try {
 
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            username,
-                            password
-                    )
+                    new UsernamePasswordAuthenticationToken(username, password)
             );
 
             String authenticatedUsername = authentication.getName();
 
+            // 1. Генерация токенов
             String accessToken = jwtService.generateAccessToken(authenticatedUsername);
             String refreshToken = jwtService.generateRefreshToken(authenticatedUsername);
 
-            return ResponseEntity.ok(
-                    Map.of(
-                            "accessToken", accessToken,
-                            "refreshToken", refreshToken
-                    )
+            // 2. Получаем пользователя из БД
+            User user = userRepository.findByUsername(authenticatedUsername)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            // 3. Маппим в DTO
+            UserSummaryDto userDto = userSummaryMapper.toDto(user);
+
+            // 4. Собираем ответ
+            AuthResponseDto response = new AuthResponseDto(
+                    accessToken,
+                    refreshToken,
+                    userDto
             );
+
+
+            return ResponseEntity.ok(response);
 
         } catch (Exception e) {
 

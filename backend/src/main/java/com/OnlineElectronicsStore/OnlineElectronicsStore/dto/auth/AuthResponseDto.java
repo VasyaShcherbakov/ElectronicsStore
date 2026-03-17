@@ -1,6 +1,7 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.dto.auth;
 
 import com.OnlineElectronicsStore.OnlineElectronicsStore.dto.UserDto;
+import com.OnlineElectronicsStore.OnlineElectronicsStore.dto.UserSummaryDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(
@@ -13,35 +14,55 @@ public class AuthResponseDto {
             description = "JWT токен для доступу до захищених ендпоінтів",
             example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
     )
-    private String token;
+    private String accessToken;
+
+    @Schema(
+            name = "RefreshToken",
+            description = "Токен для оновлення сесії (refresh token). Використовується, коли термін дії access token закінчився.",
+            example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    )
+
+    private String refreshToken;
+
 
     @Schema(
             description = "Дані авторизованого користувача"
     )
-    private UserDto user;
+    private UserSummaryDto user;
+
+
+
 
     // ===== Constructors =====
-    public AuthResponseDto() {}
-
-    public AuthResponseDto(String token, UserDto user) {
-        this.token = token;
+    public AuthResponseDto(String accessToken, String refreshToken, UserSummaryDto user) {
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
         this.user = user;
     }
 
     // ===== Getters & Setters =====
-    public String getToken() {
-        return token;
+
+    public String getAccessToken() {
+        return accessToken;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 
-    public UserDto getUser() {
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public UserSummaryDto getUser() {
         return user;
     }
 
-    public void setUser(UserDto user) {
+    public void setUser(UserSummaryDto user) {
         this.user = user;
     }
 }
