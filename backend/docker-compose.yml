@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_DB: online_electronics_store_v2
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: Vasya_3010
+      POSTGRES_PASSWORD: dev_password
     ports:
       - "5432:5432"
     volumes:
@@ -21,7 +21,7 @@ services:
     environment:
       - DB_URL=jdbc:postgresql://postgres:5432/online_electronics_store_v2
       - DB_USERNAME=postgres
-      - DB_PASSWORD=Vasya_3010
+      - DB_PASSWORD=dev_password
     depends_on:
       - postgres
 
