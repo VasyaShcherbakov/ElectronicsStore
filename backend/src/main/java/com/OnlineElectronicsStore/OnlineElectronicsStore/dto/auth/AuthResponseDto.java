@@ -28,13 +28,13 @@ public class AuthResponseDto {
     @Schema(
             description = "Дані авторизованого користувача"
     )
-    private UserSummaryDto user;
+    private UserDto user;
 
 
 
 
     // ===== Constructors =====
-    public AuthResponseDto(String accessToken, String refreshToken, UserSummaryDto user) {
+    public AuthResponseDto(String accessToken, String refreshToken, UserDto user) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.user = user;
@@ -58,11 +58,11 @@ public class AuthResponseDto {
         this.refreshToken = refreshToken;
     }
 
-    public UserSummaryDto getUser() {
+    public UserDto getUser() {
         return user;
     }
 
-    public void setUser(UserSummaryDto user) {
+    public void setUser(UserDto user) {
         this.user = user;
     }
 }

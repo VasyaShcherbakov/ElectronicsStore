@@ -1,7 +1,9 @@
 package com.OnlineElectronicsStore.OnlineElectronicsStore.controller.rest;
 
+import com.OnlineElectronicsStore.OnlineElectronicsStore.dto.UserDto;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.dto.UserSummaryDto;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.dto.auth.AuthResponseDto;
+import com.OnlineElectronicsStore.OnlineElectronicsStore.mapper.UserMapper;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.mapper.UserSummaryMapper;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.model.User;
 import com.OnlineElectronicsStore.OnlineElectronicsStore.repository.ProductRepository;
@@ -118,7 +120,7 @@ public class AuthRestController {
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
             // 3. Маппим в DTO
-            UserSummaryDto userDto = userSummaryMapper.toDto(user);
+            UserDto userDto = UserMapper.toDto(user);
 
             // 4. Собираем ответ
             AuthResponseDto response = new AuthResponseDto(
