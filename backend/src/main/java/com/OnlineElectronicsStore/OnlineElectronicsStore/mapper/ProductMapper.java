@@ -26,11 +26,11 @@ public class ProductMapper {
         }
 
 
-        if (product.getUser() != null) {
+        if (product.getOwner() != null) {
             dto.setSeller(new UserSummaryDto(
-                    product.getUser().getId(),
-                    product.getUser().getUsername(),
-                    product.getUser().getEmail()
+                    product.getOwner().getId(),
+                    product.getOwner().getUsername(),
+                    product.getOwner().getEmail()
             ));
         }
 
@@ -49,4 +49,5 @@ public class ProductMapper {
 
         return product;
     }
+
 }
