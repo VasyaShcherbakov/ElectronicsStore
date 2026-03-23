@@ -1,5 +1,4 @@
 
-        /* === RESET === */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -11,7 +10,6 @@ body {
     background-color: #d0e7ff;
 }
 
-        /* === CARD === */
         .chat-card {
             background: #fff;
             width: 100%;
@@ -24,7 +22,7 @@ body {
             overflow: hidden;
         }
 
-        /* === HEADER === */
+
         .chat-header {
             padding: 15px;
             background-color: #2196f3;
@@ -34,7 +32,7 @@ body {
             text-align: center;
         }
 
-        /* === MESSAGES === */
+
         .chat-messages {
             flex: 1;
             padding: 15px;
@@ -102,36 +100,36 @@ body {
         .chat-input button:hover {
             background-color: #1976d2;
         }
+
 /* === FIXED CHAT HEADER === */
 header.chat-header {
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;        /* важно! */
+    right: 0;
     width: 100%;
     z-index: 9999;
 }
 
-/* === BODY RESET ДЛЯ ЧАТА === */
 html, body {
     margin: 0;
     padding: 0;
     width: 100%;
 }
 
-/* отступ под фиксированный хедер */
 body {
-  /*  padding-top: 140px;*/ /* чуть больше, чтобы наверняка */
-    background-color: #d0e7ff; /* чтобы совпадало со стилем сайта */
+
+    background-color: #d0e7ff;
 }
 
-/* === ЗАЩИТА ОТ "УЛЕТАНИЯ" === */
+
 body > header.chat-header {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
     transform: none !important;
 }
+
 /* === CARD HEADER === */
 .chat-card-header {
     padding: 16px;
@@ -142,7 +140,6 @@ body > header.chat-header {
     text-align: center;
 }
 
-/* контейнер под верхним header */
 .chat-layout {
     margin-top: 100px;
     display: flex;
@@ -152,13 +149,13 @@ body > header.chat-header {
     padding: 0;    /* И ЭТО */
 }
 
-/* левая "книжка" */
+
 .chat-card-header {
     width: 350px;
     flex-shrink: 0;
 }
 
-/* правая часть - сам чат */
+
 .chat-card {
     width: 500px;
 }
@@ -169,10 +166,10 @@ body > header.chat-header {
     justify-content: center;
     align-items: stretch;
     gap: 0;
-    position: relative; /* важно */
+    position: relative;
 }
 
-/* Дизайнерская полоска */
+
 .chat-layout::before {
     content: "";
     position: absolute;

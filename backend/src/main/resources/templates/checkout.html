@@ -11,7 +11,14 @@
 
 <body>
 
+<div class="demo-banner">
+    ⚠️ Demo mode: Even real payments do not count. This is a demonstration project. Checkout is implemented without integration of payment systems.
+</div>
+
 <div class="card">
+    <div class="payment-warning">
+        ⚠️ Demo mode: Жодні реальні платежі не виконуються
+    </div>
     <h2>🛒 Оформлення замовлення</h2>
 
     <form th:action="@{/order/checkout}"
@@ -67,7 +74,9 @@
         <button type="submit" class="btn-submit">
             ✅ Підтвердити замовлення
         </button>
-
+        <p class="demo-note">
+            Це демонстраційний проєкт. Checkout реалізовано без інтеграції платіжних систем.
+        </p>
     </form>
 
 </div>

@@ -19,13 +19,11 @@
             justify-content: center;-->
         }
 
-        /* === КОНТЕЙНЕР === */
         .page-container {
             max-width: 1200px;
             margin: 0 auto;
         }
 
-        /* === ХЕДЕР === */
         .header {
             display: flex;
             justify-content: space-between;
@@ -60,12 +58,10 @@
             margin-right: 10px;
         }
 
-        /* === ЗАГОЛОВОК === */
         h1 {
             margin-bottom: 20px;
         }
 
-        /* === ПОИСК === */
         .search-form {
             margin-bottom: 30px;
             max-width: 500px;
@@ -91,7 +87,6 @@
             background-color: #357abd;
         }
 
-        /* === СЕТКА ТОВАРОВ === */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -128,7 +123,6 @@
             color: #7f0000;
         }
 
-        /* === КАРТОЧКА === */
         .product-card {
             background: #ffffff;
             border-radius: 12px;
@@ -160,7 +154,6 @@
             margin-bottom: 6px;
         }
 
-        /* === ФУТЕР КАРТОЧКИ === */
         .product-footer {
             padding: 12px;
             display: flex;

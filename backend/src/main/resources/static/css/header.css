@@ -20,7 +20,6 @@
     transform: none;
 }
 
-/* WELCOME ТЕКСТ */
 .nav-welcome {
     color: white;
     font-size: 14px;
@@ -50,7 +49,6 @@
     transform: translateY(-1px);
 }
 
-/* БЕЛЫЕ КНОПКИ (вход / выход) */
 .nav-btn.white {
     background: white;
     color: #1e88e5;

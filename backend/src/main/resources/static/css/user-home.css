@@ -29,7 +29,6 @@
             letter-spacing: 2px;
         }
 
-
         .page-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -203,9 +202,9 @@
         border-radius: 6px;
         border: 1px solid #ccc;
 
-        resize: vertical;        /* можно тянуть вниз */
-        white-space: pre-wrap;   /* сохраняет переносы */
-        word-wrap: break-word;   /* ломает длинные слова */
+        resize: vertical;
+        white-space: pre-wrap;
+        word-wrap: break-word;
         }
 
 
@@ -234,12 +233,11 @@
 
 .page-header {
     display: flex;
-    justify-content: center;  /* центрируем весь блок */
+    justify-content: center;
     align-items: center;
     gap: 12px;
 }
 
- /* колокольчик */
  .notification-bell {
      position: relative;
      font-size: 26px;
@@ -251,7 +249,6 @@
      transform: scale(1.1);
  }
 
- /* красный кружочек */
  .notification-count {
      position: absolute;
      top: -6px;
