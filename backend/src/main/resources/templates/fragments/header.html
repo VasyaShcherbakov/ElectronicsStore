@@ -1,129 +1,113 @@
-<!DOCTYPE html>
+<!doctype html>
 <html
-        xmlns:th="http://www.thymeleaf.org"
-        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <meta charset="UTF-8">
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+  <head>
+    <meta charset="UTF-8" />
     <title>Магазин електронiки</title>
+  </head>
 
-</head>
-
-<body>
-<header th:fragment="site-header">
-    <link rel="stylesheet" th:href="@{/css/header.css}">
-    <div class="header-bg">
+  <body>
+    <header th:fragment="site-header">
+      <link rel="stylesheet" th:href="@{/css/header.css}" />
+      <div class="header-bg">
         <div class="header-bg-inside">
-        <div style="
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-        ">
+          <div class="header-left">
+            <h1>⚡ ЕлектроМаркет</h1>
+            <p class="header-subtitle">
+              Купівля та продаж електроніки від користувачів
+            </p>
+            <p class="header-description">
+              Тут ви можете продати свою стару електронну техніку
+            </p>
+          </div>
 
-
-            <div class="header-left">
-                <h1 style="
-margin: 0; font-size: 35px; font-weight: 700;
-    color: #E0FFFF;
-    text-shadow:
-        0 0 7px #fff,
-        0 0 10px #fff,
-        0 0 21px #0fa,
-        0 0 42px #0fa;">
-                    ⚡ ЕлектроМаркет
-                </h1>
-                <p class="header-subtitle">
-                    Купівля та продаж електроніки від користувачів
-                </p>
-
-                <p class="header-description">
-                    Тут ви можете продати свою стару електронну техніку
-                </p>
-            </div>
-
-            <div class="nav-with-square">
-
-            <nav class="nav-capsule">
-
-
-                <div class="nav-welcome"
-                     sec:authorize="isAuthenticated()"
-                     th:unless="${isProductsPage}">
-
-                    Ласкаво просимо, <strong th:text="${user.username}">user</strong>!
-                </div>
-
-                <a href="/user/home"
-                   sec:authorize="isAuthenticated()"
-                   th:if="${isProductsPage}"
-                   class="nav-btn">
-                    Мої товари на продаж
+          <div class="nav-with-square">
+            <div>
+              <div
+                class="nav-welcome"
+                sec:authorize="isAuthenticated()"
+                th:unless="${isProductsPage}"
+              >
+                Ласкаво просимо,
+                <strong th:text="${user.username}">user</strong>!
+              </div>
+              <nav class="nav-capsule">
+                <a
+                  href="/user/home"
+                  sec:authorize="isAuthenticated()"
+                  th:if="${isProductsPage}"
+                  class="nav-btn"
+                >
+                  Мої товари на продаж
                 </a>
 
-                <a href="/products" class="nav-btn nav-products">
-                    Товари 📦
+                <a href="/products" class="nav-btn nav-products"> Товари 📦 </a>
+
+                <a
+                  href="/cart"
+                  sec:authorize="isAuthenticated()"
+                  class="nav-btn cart-btn"
+                >
+                  <span class="cart-title">🛒 Корзина</span>
                 </a>
 
-                <a href="/cart"
-                   sec:authorize="isAuthenticated()"
-                   class="nav-btn cart-btn">
-
-                    <span class="cart-title">🛒 Корзина</span>
-
+                <a
+                  href="/login"
+                  sec:authorize="isAnonymous()"
+                  class="nav-btn white"
+                >
+                  Вхід
                 </a>
 
-                <a href="/login"
-                   sec:authorize="isAnonymous()"
-                   class="nav-btn white">
-                    Вхід
+                <a
+                  href="/register"
+                  sec:authorize="isAnonymous()"
+                  class="nav-btn white"
+                >
+                  Реєстрація
                 </a>
 
-                <a href="/register"
-                   sec:authorize="isAnonymous()"
-                   class="nav-btn white">
-                    Реєстрація
-                </a>
-
-                <form th:action="@{/logout}"
-                      method="post"
-                      sec:authorize="isAuthenticated()"
-                      style="margin:0;">
-                    <input type="hidden"
-                           th:name="${_csrf.parameterName}"
-                           th:value="${_csrf.token}" />
-                    <button class="nav-btn white">
-                        Вихід
-                    </button>
+                <form
+                  th:action="@{/logout}"
+                  method="post"
+                  sec:authorize="isAuthenticated()"
+                  style="margin: 0"
+                >
+                  <input
+                    type="hidden"
+                    th:name="${_csrf.parameterName}"
+                    th:value="${_csrf.token}"
+                  />
+                  <button class="nav-btn white">Вихід</button>
                 </form>
-
-            </nav>
-
-
-                <a th:href="@{/cart}" class="cart-link" style="text-decoration: none; color: inherit;">
-                    <div class="designer-square">
-        <span class="cart-info" th:if="${cartSize > 0}">
-            <span class="cart-count">
-                Товарів: <b th:text="${cartSize}"></b>
-            </span>
-            <span class="cart-total">
-                Сума: <b th:text="${cartTotal}"></b> грн
-            </span>
-        </span>
-                    </div>
-                </a>
-
-
+              </nav>
             </div>
+
+            <a
+              th:href="@{/cart}"
+              th:if="${cartSize > 0}"
+              class="cart-link"
+              style="text-decoration: none; color: inherit"
+            >
+              <div class="designer-square">
+                <span class="cart-info">
+                  <span class="cart-count">
+                    Товарів: <b th:text="${cartSize}"></b>
+                  </span>
+                  <span class="cart-total">
+                    Сума: <b th:text="${cartTotal}"></b> грн
+                  </span>
+                </span>
+              </div>
+            </a>
+          </div>
         </div>
-    </div>
-    </div>
-    <div class="demo-warning">
-         ⚠️ Demo mode: This is a portfolio project. No real transactions
-    </div>
-</header>
-
-</body>
-
+        <div class="demo-warning">
+          ⚠️ Demo mode: This is a portfolio project. No real transactions
+        </div>
+      </div>
+    </header>
+  </body>
 </html>
