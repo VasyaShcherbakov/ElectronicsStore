@@ -1,90 +1,88 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Корзина</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" th:href="@{/css/cart.css}">
+    <link rel="stylesheet" th:href="@{/css/cart.css}" />
+  </head>
 
-</head>
+  <body>
+    <div th:replace="fragments/success-header :: success-header"></div>
 
-<body>
+    <div class="page-container">
+      <h1>Корзина</h1>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>🖼️ Фото</th>
+              <th>🏷️ Назва</th>
+              <th>📄 Опис</th>
+              <th>💰 Ціна</th>
+              <th>🔢 Кількість</th>
+              <th>🗑️ Видатили</th>
+              <th>🪙 Сума</th>
+            </tr>
+          </thead>
 
-<div th:replace="fragments/success-header :: success-header"></div>
+          <tbody>
+            <tr th:each="item : ${cartItems}">
+              <td>
+                <img
+                  th:if="${item.product.imageUrl != null}"
+                  th:src="@{'/uploads/' + ${item.product.imageUrl}}"
+                  alt="Фото"
+                  class="product-img"
+                />
+              </td>
 
-<div class="page-container">
+              <td th:text="${item.product.name}"></td>
+              <td
+                th:text="${item.product.description}"
+                class="product-description"
+              ></td>
+              <td th:text="${item.product.price}"></td>
+              <td th:text="${item.quantity}"></td>
 
-    <h1>Корзина</h1>
-
-    <table>
-        <thead>
-        <tr>
-            <th>🏷️ Назва</th>
-            <th>📄 Опис</th>
-            <th>💰 Ціна</th>
-            <th>🔢 Кількість</th>
-            <th>🗑️ Видатили</th>
-            <th>🪙 Сума</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        <tr th:each="item : ${cartItems}">
-
-
-            <td>
-                <img th:if="${item.product.imageUrl != null}"
-                     th:src="@{'/uploads/' + ${item.product.imageUrl}}"
-                     alt="Фото"
-                     style="
-                        width: 80px;
-                        height: 80px;
-                        object-fit: cover;
-                        border-radius: 8px;
-                     ">
-            </td>
-
-            <td th:text="${item.product.name}"></td>
-            <td th:text="${item.product.description}"></td>
-            <td th:text="${item.product.price}"></td>
-            <td th:text="${item.quantity}"></td>
-
-            <td>
+              <td>
                 <form th:action="@{'/cart/remove/' + ${item.id}}" method="post">
-                    <input type="hidden"
-                           th:name="${_csrf.parameterName}"
-                           th:value="${_csrf.token}" />
-                    <button type="submit" class="btn-remove">
-                        Видалити
-                    </button>
+                  <input
+                    type="hidden"
+                    th:name="${_csrf.parameterName}"
+                    th:value="${_csrf.token}"
+                  />
+                  <button type="submit" class="btn-remove">Видалити</button>
                 </form>
-            </td>
+              </td>
 
-            <td th:text="${item.product.price * item.quantity} + ' грн'"></td>
+              <td th:text="${item.product.price * item.quantity} + ' грн'"></td>
+            </tr>
+          </tbody>
 
-        </tr>
-        </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="6">В суммі:</td>
+              <td th:text="${total} + ' грн'"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
 
-        <tfoot>
-        <tr>
-            <td colspan="5">В суммі:</td>
-            <td th:text="${total} + ' грн'"></td>
-        </tr>
-        </tfoot>
-    </table>
-
-    <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+      <div
+        style="display: flex; justify-content: space-between; margin-top: 20px"
+      >
         <a href="/products" class="btn-back">Вернутись до товарів</a>
-        <a th:if="${!isCartEmpty}"
-           href="/order/checkout"
-           class="btn-back"
-           style="background-color:#28a745;">
-            Оформити замовлення
+        <a
+          th:if="${!isCartEmpty}"
+          href="/order/checkout"
+          class="btn-back"
+          style="background-color: #28a745"
+        >
+          Оформити замовлення
         </a>
+      </div>
     </div>
-
-</div>
-
-</body>
+  </body>
 </html>
