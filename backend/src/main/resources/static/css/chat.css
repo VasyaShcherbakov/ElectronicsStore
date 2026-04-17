@@ -13,7 +13,8 @@ body {
         .chat-card {
             background: #fff;
             width: 100%;
-            max-width: 500px;
+            min-width: 300px;
+            /* max-width: 500px; */
             height: 600px;
             border-radius: 12px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
@@ -133,6 +134,7 @@ body > header.chat-header {
 /* === CARD HEADER === */
 .chat-card-header {
     padding: 16px;
+    border-radius: 12px;
     background: linear-gradient(135deg, #6a11cb, #2575fc);
     color: white;
     font-size: 16px;
@@ -141,34 +143,19 @@ body > header.chat-header {
 }
 
 .chat-layout {
-    margin-top: 100px;
+    position: relative;
+    margin: 50px 0;
     display: flex;
     justify-content: center;
     align-items: stretch;
-    gap: 0;        /* УБРАЛИ */
-    padding: 0;    /* И ЭТО */
+    gap: 15px;
+    padding: 15px;
 }
 
 
 .chat-card-header {
-    width: 350px;
-    flex-shrink: 0;
+    min-width: 350px;
 }
-
-
-.chat-card {
-    width: 500px;
-}
-
-.chat-layout {
-    margin-top: 110px;
-    display: flex;
-    justify-content: center;
-    align-items: stretch;
-    gap: 0;
-    position: relative;
-}
-
 
 .chat-layout::before {
     content: "";
@@ -181,4 +168,16 @@ body > header.chat-header {
     border-radius: 10px;
     background: linear-gradient(90deg, #6a11cb, #2575fc);
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+@media screen and (max-width: 800px) {
+    .chat-layout {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.chat-card-header {
+    min-width: 300px;
+}
+ 
 }
