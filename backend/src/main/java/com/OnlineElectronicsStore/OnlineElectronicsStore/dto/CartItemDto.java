@@ -14,6 +14,12 @@ public class CartItemDto {
     private Long productId;
 
     @Schema(
+            description = "ID елемента кошика",
+            example = "5"
+    )
+    private Long id;
+
+    @Schema(
             description = "Назва товару",
             example = "Ноутбук Lenovo ThinkPad"
     )
@@ -32,7 +38,13 @@ public class CartItemDto {
     )
     private BigDecimal price;
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Long getProductId() {
         return productId;
