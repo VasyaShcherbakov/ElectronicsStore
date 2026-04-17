@@ -18,6 +18,7 @@ public class CartMapper {
                 cart.getItems().stream()
                         .map(item -> {
                             CartItemDto ci = new CartItemDto();
+                            ci.setId(item.getId());
                             ci.setProductId(item.getProduct().getId());
                             ci.setProductName(item.getProduct().getName());
                             ci.setQuantity(item.getQuantity());
