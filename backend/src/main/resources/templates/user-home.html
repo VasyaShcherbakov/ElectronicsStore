@@ -1,125 +1,145 @@
-<!DOCTYPE html>
-<html lang="ru"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-
-<head>
-    <meta charset="UTF-8">
+<!doctype html>
+<html
+  lang="ru"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+  <head>
+    <meta charset="UTF-8" />
     <title>Ваш особистий кабінет</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" th:href="@{/css/user-home.css}">
+    <link rel="stylesheet" th:href="@{/css/user-home.css}" />
+  </head>
 
-</head>
+  <body>
+    <div th:replace="fragments/header :: site-header"></div>
+    <main>
+      <div class="page-container">
+        <div class="page-header">
+          <h2 class="page-title">Ваш особистий кабінет</h2>
 
-<body>
-
-<div th:replace="fragments/header :: site-header"></div>
-
-<div class="page-header">
-    <h2 class="page-title">Ваш особистий кабінет</h2>
-
-    <a href="/chats" class="notification-bell">
-        🔔
-        <span class="notification-count"
+          <a href="/chats" class="notification-bell">
+            🔔
+            <span
+              class="notification-count"
               th:if="${unreadCount > 0}"
-              th:text="${unreadCount}">
-        </span>
-    </a>
-</div>
-
-
-<main>
-    <div class="page-container">
-
-        <div sec:authorize="hasAuthority('ADMIN')" style="margin-bottom: 20px;">
-            <a href="/admin/categories" class="btn btn-warning">
-                🛠️ Адмінка - Керування Категоріями 🛠️
-            </a>
+              th:text="${unreadCount}"
+            >
+            </span>
+          </a>
+        </div>
+        <div sec:authorize="hasAuthority('ADMIN')" style="margin-bottom: 20px">
+          <a href="/admin/categories" class="btn btn-warning">
+            🛠️ Адмінка - Керування Категоріями 🛠️
+          </a>
         </div>
         <div class="nav-buttons">
-            <a th:href="@{/chats}">💬 Мої повідомлення </a>
+          <a th:href="@{/chats}">💬 Мої повідомлення </a>
         </div>
 
         <form action="/user/home" method="get" class="search-form">
-            <input type="text" name="query" placeholder="Поиск товаров" th:value="${query}">
-            <button type="submit">Поиск</button>
+          <input
+            type="text"
+            name="query"
+            placeholder="Поиск товаров"
+            th:value="${query}"
+          />
+          <button type="submit">Поиск</button>
         </form>
 
-        <table>
-            <caption>Мої товари виставлені на продаж</caption>
+        <div class="table-container">
+          <table>
+            <caption>
+              Мої товари виставлені на продаж
+            </caption>
 
             <thead>
-            <tr>
+              <tr>
                 <th>Назва</th>
-                <th>Опис</th>
+                <th class="product-description-col">Опис</th>
                 <th>Ціна</th>
-                <th>Кількість</th>
-                <th>Зображення</th>
+                <th class="product-quantity-col">Кількість</th>
+                <th class="product-image-col">Зображення</th>
                 <th>Дата</th>
                 <th>Дії</th>
-            </tr>
+              </tr>
             </thead>
             <tbody>
-            <tr th:each="product : ${products}">
+              <tr th:each="product : ${products}">
                 <td th:text="${product.name}"></td>
-                <td class="description" th:text="${product.description}"></td>
+                <td th:text="${product.description}"></td>
                 <td th:text="${product.price + ' грн'}"></td>
                 <td th:text="${product.quantity}"></td>
                 <td>
-                    <img th:if="${product.imageUrl != null and not #strings.isEmpty(product.imageUrl)}"
-                         th:src="@{'/uploads/' + ${product.imageUrl}}"
-                         class="product-image"
-                         alt="Зображення">
+                  <img
+                    th:if="${product.imageUrl != null and not #strings.isEmpty(product.imageUrl)}"
+                    th:src="@{'/uploads/' + ${product.imageUrl}}"
+                    class="product-image"
+                    alt="Зображення"
+                  />
                 </td>
-                <td th:text="${#temporals.format(product.createdAt, 'dd.MM.yyyy HH:mm')}"></td>
+                <td
+                  th:text="${#temporals.format(product.createdAt, 'dd.MM.yyyy HH:mm')}"
+                ></td>
                 <td class="actions">
-                    <a th:href="@{/products/{id}(id=${product.id})}" class="btn-details">
-                            Деталі🔍
-                    </a>
-                    <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn-cart">
-                        ✏️ Редагувати товар
-                    </a>
-
+                  <a
+                    th:href="@{/products/{id}(id=${product.id})}"
+                    class="btn-details"
+                  >
+                    Деталі🔍
+                  </a>
+                  <a
+                    th:href="@{/products/edit/{id}(id=${product.id})}"
+                    class="btn-cart"
+                  >
+                    Редагувати✏️
+                  </a>
                 </td>
-            </tr>
+              </tr>
             </tbody>
-        </table>
-
-
-
-        <div class="add-product">
-            <h3>Добавити товар</h3>
-
-            <form th:action="@{/user/home/add}"
-                  th:object="${product}"
-                  method="post"
-                  enctype="multipart/form-data">
-
-                <input type="file" name="imageFile" placeholder="Зображення">
-
-                <input type="text" th:field="*{name}" placeholder="Назва">
-
-                <textarea th:field="*{description}"
-                          placeholder="Опис"
-                          rows="5"></textarea>
-
-                <input type="number" th:field="*{price}" placeholder="Ціна">
-                <input type="number" th:field="*{quantity}" placeholder="Кількість">
-
-
-                <select th:field="*{category}" required>
-                    <option value="" disabled selected>Виберіть категорію</option>
-                    <option th:each="cat : ${categories}"
-                            th:value="${cat.id}"
-                            th:text="${cat.name}"></option>
-                </select>
-
-                <button type="submit">Добавити</button>
-            </form>
+          </table>
         </div>
 
-    </div>
-</main>
-</body>
+        <div class="add-product">
+          <h3>Добавити товар</h3>
+
+          <form
+            th:action="@{/user/home/add}"
+            th:object="${product}"
+            method="post"
+            enctype="multipart/form-data"
+          >
+            <input type="file" name="imageFile" placeholder="Зображення" />
+
+            <input type="text" th:field="*{name}" placeholder="Назва" />
+
+            <textarea
+              th:field="*{description}"
+              placeholder="Опис"
+              rows="5"
+            ></textarea>
+
+            <input type="number" th:field="*{price}" placeholder="Ціна" />
+            <input
+              type="number"
+              th:field="*{quantity}"
+              placeholder="Кількість"
+            />
+
+            <select th:field="*{category}" required>
+              <option value="" disabled selected>Виберіть категорію</option>
+              <option
+                th:each="cat : ${categories}"
+                th:value="${cat.id}"
+                th:text="${cat.name}"
+              ></option>
+            </select>
+
+            <button type="submit">Добавити</button>
+          </form>
+        </div>
+      </div>
+    </main>
+  </body>
 </html>
