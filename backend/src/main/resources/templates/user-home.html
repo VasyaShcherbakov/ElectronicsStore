@@ -67,8 +67,15 @@
                 <td th:text="${product.price + ' грн'}"></td>
                 <td th:text="${product.quantity}"></td>
                 <td>
-                    <img th:if="${product.imageUrl != null and not #strings.isEmpty(product.imageUrl)}"
-                         th:src="@{'/uploads/' + ${product.imageUrl}}"
+                    <!-- если есть URL -->
+                    <img th:if="${product.imageUrl != null and !#strings.isEmpty(product.imageUrl)}"
+                         th:src="${product.imageUrl}"
+                         class="product-image"
+                         alt="Зображення">
+
+                    <!-- если есть файл -->
+                    <img th:if="${product.imageUrl == null and product.imagePath != null}"
+                         th:src="@{'/uploads/' + ${product.imagePath}}"
                          class="product-image"
                          alt="Зображення">
                 </td>
@@ -98,6 +105,9 @@
 
                 <input type="file" name="imageFile" placeholder="Зображення">
 
+                <!-- ВОТ ЭТО ДОБАВИЛ -->
+                <input type="text" name="imageUrl" placeholder="Або вставте URL картинки">
+
                 <input type="text" th:field="*{name}" placeholder="Назва">
 
                 <textarea th:field="*{description}"
@@ -106,7 +116,6 @@
 
                 <input type="number" th:field="*{price}" placeholder="Ціна">
                 <input type="number" th:field="*{quantity}" placeholder="Кількість">
-
 
                 <select th:field="*{category}" required>
                     <option value="" disabled selected>Виберіть категорію</option>
@@ -117,6 +126,7 @@
 
                 <button type="submit">Добавити</button>
             </form>
+        </div>
         </div>
 
     </div>
