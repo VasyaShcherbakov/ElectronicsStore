@@ -110,9 +110,12 @@
             method="post"
             enctype="multipart/form-data"
           >
-            <input type="file" name="imageFile" placeholder="Зображення" />
 
-            <input type="text" th:field="*{name}" placeholder="Назва" />
+              <input type="file" name="imageFile" placeholder="Зображення" />
+
+              <input type="text" name="imageUrl" placeholder="Або вставте URL картинки">
+
+              <input type="text" th:field="*{name}" placeholder="Назва" />
 
             <textarea
               th:field="*{description}"
