@@ -18,7 +18,8 @@
         /* === CONTAINER === */
         .page-container {
             width: 100%;
-            max-width: 8000px;
+            max-width: 1200px;
+            padding: 15px;
             margin: 80px auto 40px auto;
              }
 
@@ -86,14 +87,6 @@
         }
 
 /* === HEADER FIXED === */
-header[th\\:fragment="site-header"] > div {
-    position: sticky;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 999;
-}
-
 .page-container {
     margin-top: 50px;
 }
@@ -158,4 +151,11 @@ body {
 
 .page-header .back-button:last-child:hover {
     background-color: #059669;
+}
+
+@media screen and (max-width: 700px) {
+    .page-header {
+    flex-direction: column;
+}
+    
 }

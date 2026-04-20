@@ -1,122 +1,123 @@
-<!DOCTYPE html>
-<html lang="ru"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <meta charset="UTF-8">
+<!doctype html>
+<html
+  lang="ru"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+  <head>
+    <meta charset="UTF-8" />
     <title>Список товарів</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" th:href="@{/css/products.css}">
+    <link rel="stylesheet" th:href="@{/css/products.css}" />
+  </head>
 
-</head>
-
-<script>
+  <script>
     function closeAlert() {
-        const alert = document.getElementById("errorAlert");
-        if (alert) {
-            alert.style.display = "none";
-        }
+      const alert = document.getElementById("errorAlert");
+      if (alert) {
+        alert.style.display = "none";
+      }
     }
-</script>
+  </script>
 
-<body>
+  <body>
+    <div th:replace="fragments/header :: site-header"></div>
 
-<div th:replace="fragments/header :: site-header"></div>
-
-<div th:if="${errorMessage}" class="alert" id="errorAlert">
-    <span th:text="${errorMessage}"></span>
-    <button class="close-btn" onclick="closeAlert()">✖</button>
-</div>
-
-<main>
-
-<div class="page-container">
-
-    <div class="header">
-
-        <div class="header-right">
-
-            <a th:href="@{/register}" sec:authorize="isAnonymous()">Реєстрація</a>
-
-        </div>
-
+    <div th:if="${errorMessage}" class="alert" id="errorAlert">
+      <span th:text="${errorMessage}"></span>
+      <button class="close-btn" onclick="closeAlert()">✖</button>
     </div>
 
-    <h1>Список товарів</h1>
-    <form method="get" action="/products" style="margin-bottom: 20px;">
-        <select name="categoryId" onchange="this.form.submit()">
-            <option value="">📦 Всі категорії</option>
+    <main>
+      <div class="page-container">
+        <h1>Список товарів</h1>
+        <section class="search-section">
+          <form method="get" action="/products" class="category-form">
+            <select name="categoryId" onchange="this.form.submit()">
+              <option value="">📦 Всі категорії</option>
+              <option
+                th:each="cat : ${categories}"
+                th:value="${cat.id}"
+                th:text="${cat.name}"
+                th:selected="${cat.id == selectedCategoryId}"
+              ></option>
+            </select>
+          </form>
 
-            <option th:each="cat : ${categories}"
-                    th:value="${cat.id}"
-                    th:text="${cat.name}"
-                    th:selected="${cat.id == selectedCategoryId}">
-            </option>
-        </select>
-    </form>
+          <form action="/products/search" method="get" class="search-form">
+            <input
+              type="text"
+              name="query"
+              placeholder="Поиск товаров"
+              th:value="${query}"
+            />
+            <button type="submit">Поиск</button>
+          </form>
+        </section>
 
-    <form action="/products/search" method="get" class="search-form">
-        <input type="text" name="query" placeholder="Поиск товаров" th:value="${query}">
-        <button type="submit">Поиск</button>
-    </form>
-
-
-    <div class="products-grid">
-
-        <div class="product-card" th:each="product : ${products}">
-
+        <div class="products-grid">
+          <div class="product-card" th:each="product : ${products}">
             <a th:href="@{/products/{id}(id=${product.id})}">
-                <img th:if="${product.imageUrl != null and not #strings.isEmpty(product.imageUrl)}"
-                     th:src="@{'/uploads/' + ${product.imageUrl}}"
-                     alt="Зображення товару">
+              <img
+                th:if="${product.imageUrl != null and not #strings.isEmpty(product.imageUrl)}"
+                th:src="@{'/uploads/' + ${product.imageUrl}}"
+                alt="Зображення товару"
+              />
             </a>
 
             <div class="product-body">
-                <h3 th:text="'📦 ' + ${product.name}">Назва</h3>
+              <h3 th:text="'📦 ' + ${product.name}">Назва</h3>
 
-                <p>📂 <strong th:text="${product.category.name}"></strong></p>
-                <p style="font-size:13px; opacity:0.75;">
-                    👤 Продавець:
-                    <strong th:text="${product.owner.username}"></strong>
-                </p>
-                <p><strong>💰 Цiна:</strong> <span th:text="${product.price}"></span> грн</p>
-                <p><strong>📥 Кiлькiсть в продавця:</strong> <span th:text="${product.quantity}"></span></p>
-                <p><strong>📅 Дата:</strong>
-                    <span th:text="${#temporals.format(product.createdAt, 'dd.MM.yyyy HH:mm')}"></span>
-                </p>
+              <p>📂 <strong th:text="${product.category.name}"></strong></p>
+              <p>
+                <strong>👤 Продавець:</strong>
+                <span th:text="${product.owner.username}"></span>
+              </p>
+              <p>
+                <strong>💰 Цiна:</strong>
+                <span th:text="${product.price}"></span> грн
+              </p>
+              <p>
+                <strong>📥 Кiлькiсть в продавця:</strong>
+                <span th:text="${product.quantity}"></span>
+              </p>
+              <p>
+                <strong>📅 Дата:</strong>
+                <span
+                  th:text="${#temporals.format(product.createdAt, 'dd.MM.yyyy HH:mm')}"
+                ></span>
+              </p>
             </div>
 
             <div class="product-footer">
+              <form
+                th:action="@{/cart/add/{id}(id=${product.id})}"
+                method="post"
+                sec:authorize="isAuthenticated()"
+              >
+                <input
+                  type="hidden"
+                  th:name="${_csrf.parameterName}"
+                  th:value="${_csrf.token}"
+                />
 
-                <form th:action="@{/cart/add/{id}(id=${product.id})}"
-                      method="post"
-                      sec:authorize="isAuthenticated()">
+                <button type="submit" class="btn-buy">Купити</button>
+              </form>
+              <a href="/login" sec:authorize="isAnonymous()" class="btn-buy">
+                Логін для покупки
+              </a>
 
-                    <input type="hidden"
-                           th:name="${_csrf.parameterName}"
-                           th:value="${_csrf.token}" />
-
-                    <button type="submit" class="btn-buy">Купити</button>
-                </form>
-                <a href="/login"
-                   sec:authorize="isAnonymous()"
-                   class="btn-buy">
-                    Логін для покупки
-                </a>
-
-                <a th:href="@{/products/{id}(id=${product.id})}"
-                   class="btn-details">
-                    Деталі🔍
-                </a>
-
+              <a
+                th:href="@{/products/{id}(id=${product.id})}"
+                class="btn-details"
+              >
+                Деталі🔍
+              </a>
             </div>
-
+          </div>
         </div>
-
-    </div>
-
-</div>
-</main>
-</body>
+      </div>
+    </main>
+  </body>
 </html>

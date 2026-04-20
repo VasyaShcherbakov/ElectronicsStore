@@ -37,13 +37,13 @@
                 <a
                   href="/user/home"
                   sec:authorize="isAuthenticated()"
-                  th:if="${isProductsPage}"
                   class="nav-btn"
                 >
-                  Мої товари на продаж
+                <!-- th:if="${isProductsPage}" -->
+                  📦 Мої товари
                 </a>
 
-                <a href="/products" class="nav-btn nav-products"> Товари 📦 </a>
+                <a href="/products" class="nav-btn nav-products">🏪 Магазин</a>
 
                 <a
                   href="/cart"
