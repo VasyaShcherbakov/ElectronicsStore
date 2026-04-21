@@ -104,45 +104,99 @@
         <div class="add-product">
           <h3>Добавити товар</h3>
 
-          <form
-            th:action="@{/user/home/add}"
-            th:object="${product}"
-            method="post"
-            enctype="multipart/form-data"
-          >
+            <form
+                    th:action="@{/user/home/add}"
+                    th:object="${product}"
+                    method="post"
+                    enctype="multipart/form-data"
+                    id="productForm"
+            >
 
-              <input type="file" name="imageFile" placeholder="Зображення" />
+                <!-- КАРТИНКА -->
+                <input type="file" name="imageFile" id="imageFile" />
 
-              <input type="text" name="imageUrl" placeholder="Або вставте URL картинки">
+                <input type="text"
+                       name="imageUrl"
+                       id="imageUrl"
+                       placeholder="Або вставте URL картинки">
 
-              <input type="text" th:field="*{name}" placeholder="Назва" />
+                <!-- сообщение об ошибке -->
+                <div id="imageError" style="color:red; font-size:12px;"></div>
 
-            <textarea
-              th:field="*{description}"
-              placeholder="Опис"
-              rows="5"
-            ></textarea>
+                <!-- ДАННЫЕ ТОВАРА -->
+                <input type="text" th:field="*{name}" placeholder="Назва" required />
 
-            <input type="number" th:field="*{price}" placeholder="Ціна" />
-            <input
-              type="number"
-              th:field="*{quantity}"
-              placeholder="Кількість"
-            />
+                <textarea
+                        th:field="*{description}"
+                        placeholder="Опис"
+                        rows="5"
+                ></textarea>
 
-            <select th:field="*{category}" required>
-              <option value="" disabled selected>Виберіть категорію</option>
-              <option
-                th:each="cat : ${categories}"
-                th:value="${cat.id}"
-                th:text="${cat.name}"
-              ></option>
-            </select>
+                <input type="number" th:field="*{price}" placeholder="Ціна" required />
 
-            <button type="submit">Добавити</button>
-          </form>
+                <input
+                        type="number"
+                        th:field="*{quantity}"
+                        placeholder="Кількість"
+                        required
+                />
+
+                <select th:field="*{category}" required>
+                    <option value="" disabled selected>Виберіть категорію</option>
+                    <option
+                            th:each="cat : ${categories}"
+                            th:value="${cat.id}"
+                            th:text="${cat.name}"
+                    ></option>
+                </select>
+
+                <button type="submit">Добавити</button>
+            </form>
         </div>
       </div>
     </main>
+
+    <script>
+        const fileInput = document.getElementById('imageFile');
+        const urlInput = document.getElementById('imageUrl');
+        const errorDiv = document.getElementById('imageError');
+        const form = document.getElementById('productForm');
+
+        function validateInputs() {
+            const hasFile = fileInput.files.length > 0;
+            const hasUrl = urlInput.value.trim() !== '';
+
+
+            if (hasFile && hasUrl) {
+                errorDiv.textContent = "Обери або файл, або URL 😄";
+            } else {
+                errorDiv.textContent = "";
+            }
+
+
+            urlInput.disabled = hasFile;
+            fileInput.disabled = hasUrl;
+        }
+
+        fileInput.addEventListener('change', validateInputs);
+        urlInput.addEventListener('input', validateInputs);
+
+
+        form.addEventListener('submit', function(e) {
+            const hasFile = fileInput.files.length > 0;
+            const hasUrl = urlInput.value.trim() !== '';
+
+            if (hasFile && hasUrl) {
+                e.preventDefault();
+                errorDiv.textContent = "Не можна вибрати і файл, і URL одночасно!";
+            }
+
+            if (!hasFile && !hasUrl) {
+                e.preventDefault();
+                errorDiv.textContent = "Додай файл або URL!";
+            }
+        });
+    </script>
+
   </body>
 </html>
