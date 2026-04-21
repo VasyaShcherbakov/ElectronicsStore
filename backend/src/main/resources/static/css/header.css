@@ -157,13 +157,23 @@
 .demo-warning {
   text-align: center;
   margin-top: 20px;
+  font-size: 14px;
+  color: red;
+  font-weight: bold;
+  /* Создаем белую обводку со всех сторон */
+  text-shadow:
+    -1px -1px 0 #fff,
+     1px -1px 0 #fff,
+    -1px  1px 0 #fff,
+     1px  1px 0 #fff;
 }
 
-/* Вот тут ограничиваем ширину */
+
+
 .header-container {
-  max-width: 1200px; /* максимум */
-  width: 100%; /* адаптив */
-  margin: 0 auto; /* центрируем */
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
   display: flex;
   align-items: center;
 }
