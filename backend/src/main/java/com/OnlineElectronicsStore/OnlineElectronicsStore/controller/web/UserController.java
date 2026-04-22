@@ -43,6 +43,7 @@ public class UserController {
     @PostMapping("/add")
     public String addProduct(@ModelAttribute Product product,
                              @RequestParam("imageFile") MultipartFile imageFile,
+                             @RequestParam("imageUrl") String imageUrl,
                              @AuthenticationPrincipal UserDetails userDetails) {
 
         if (userDetails == null) {
@@ -52,6 +53,7 @@ public class UserController {
         productService.addProduct(
                 product,
                 imageFile,
+                imageUrl,
                 userDetails.getUsername()
         );
 

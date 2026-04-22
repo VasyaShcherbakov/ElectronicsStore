@@ -71,14 +71,23 @@
                 <td th:text="${product.description}"></td>
                 <td th:text="${product.price + ' грн'}"></td>
                 <td th:text="${product.quantity}"></td>
-                <td>
-                  <img
-                    th:if="${product.imageUrl != null and not #strings.isEmpty(product.imageUrl)}"
-                    th:src="@{'/uploads/' + ${product.imageUrl}}"
-                    class="product-image"
-                    alt="Зображення"
-                  />
-                </td>
+                  <td>
+
+                      <img
+                              th:if="${product.imageUrl != null and product.imageUrl.startsWith('http')}"
+                              th:src="${product.imageUrl}"
+                              class="product-image"
+                              alt="Зображення"
+                      />
+
+                      <img
+                              th:if="${product.imageUrl != null and !product.imageUrl.startsWith('http')}"
+                              th:src="@{'/uploads/' + ${product.imageUrl}}"
+                              class="product-image"
+                              alt="Зображення"
+                      />
+
+                  </td>
                 <td
                   th:text="${#temporals.format(product.createdAt, 'dd.MM.yyyy HH:mm')}"
                 ></td>
@@ -112,7 +121,7 @@
                     id="productForm"
             >
 
-                <!-- КАРТИНКА -->
+
                 <input type="file" name="imageFile" id="imageFile" />
 
                 <input type="text"
@@ -120,10 +129,10 @@
                        id="imageUrl"
                        placeholder="Або вставте URL картинки">
 
-                <!-- сообщение об ошибке -->
+
                 <div id="imageError" style="color:red; font-size:12px;"></div>
 
-                <!-- ДАННЫЕ ТОВАРА -->
+
                 <input type="text" th:field="*{name}" placeholder="Назва" required />
 
                 <textarea
@@ -155,48 +164,6 @@
         </div>
       </div>
     </main>
-
-    <script>
-        const fileInput = document.getElementById('imageFile');
-        const urlInput = document.getElementById('imageUrl');
-        const errorDiv = document.getElementById('imageError');
-        const form = document.getElementById('productForm');
-
-        function validateInputs() {
-            const hasFile = fileInput.files.length > 0;
-            const hasUrl = urlInput.value.trim() !== '';
-
-
-            if (hasFile && hasUrl) {
-                errorDiv.textContent = "Обери або файл, або URL 😄";
-            } else {
-                errorDiv.textContent = "";
-            }
-
-
-            urlInput.disabled = hasFile;
-            fileInput.disabled = hasUrl;
-        }
-
-        fileInput.addEventListener('change', validateInputs);
-        urlInput.addEventListener('input', validateInputs);
-
-
-        form.addEventListener('submit', function(e) {
-            const hasFile = fileInput.files.length > 0;
-            const hasUrl = urlInput.value.trim() !== '';
-
-            if (hasFile && hasUrl) {
-                e.preventDefault();
-                errorDiv.textContent = "Не можна вибрати і файл, і URL одночасно!";
-            }
-
-            if (!hasFile && !hasUrl) {
-                e.preventDefault();
-                errorDiv.textContent = "Додай файл або URL!";
-            }
-        });
-    </script>
 
   </body>
 </html>

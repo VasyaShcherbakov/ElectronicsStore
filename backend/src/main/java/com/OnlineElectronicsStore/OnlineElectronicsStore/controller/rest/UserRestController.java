@@ -56,9 +56,11 @@ public class UserRestController {
     )
     public ResponseEntity<?> addProduct(
             @ModelAttribute Product product,
-            @RequestParam("imageFile")
+
             @Schema(description = "Зображення товару", type = "string", format = "binary")
-            MultipartFile imageFile,
+            @RequestParam("imageFile") MultipartFile imageFile,
+            @RequestParam("imageUrl") String imageUrl,
+
             @AuthenticationPrincipal UserDetails userDetails
     ) {
 
@@ -70,6 +72,7 @@ public class UserRestController {
         Product savedProduct = productService.addProduct(
                 product,
                 imageFile,
+                imageUrl,
                 userDetails.getUsername()
         );
 

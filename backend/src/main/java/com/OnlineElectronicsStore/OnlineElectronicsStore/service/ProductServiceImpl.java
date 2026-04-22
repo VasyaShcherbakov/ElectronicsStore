@@ -33,6 +33,7 @@ public class ProductServiceImpl {
     @Transactional
     public Product addProduct(Product product,
                               MultipartFile imageFile,
+                              String imageUrl,
                               String username) {
 
         // если username null — это уже ошибка бизнес-логики
@@ -66,6 +67,14 @@ public class ProductServiceImpl {
             } catch (IOException ex) {
                 throw new RuntimeException("Ошибка загрузки изображения", ex);
             }
+        }
+
+        else if (imageUrl != null && !imageUrl.trim().isEmpty()) {
+            product.setImageUrl(imageUrl.trim());
+        }
+
+        else {
+            product.setImageUrl("default.jpg");
         }
 
         return productRepository.save(product);
