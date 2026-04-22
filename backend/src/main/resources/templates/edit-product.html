@@ -60,8 +60,20 @@
         <div class="image-preview"
              th:if="${product.imageUrl != null}">
             <p>Поточне зображення:</p>
-            <img th:src="@{'/uploads/' + ${product.imageUrl}}"
-                 alt="Зображення товару">
+            <img
+                    th:if="${product.imageUrl != null and product.imageUrl.startsWith('http')}"
+                    th:src="${product.imageUrl}"
+                    class="product-image"
+                    alt="Зображення"
+            />
+
+            <img
+                    th:if="${product.imageUrl != null and !product.imageUrl.startsWith('http')}"
+                    th:src="@{'/uploads/' + ${product.imageUrl}}"
+                    class="product-image"
+                    alt="Зображення"
+            />
+
         </div>
 
         <div class="buttons">

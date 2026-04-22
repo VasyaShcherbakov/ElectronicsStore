@@ -29,14 +29,23 @@
 
           <tbody>
             <tr th:each="item : ${cartItems}">
-              <td>
-                <img
-                  th:if="${item.product.imageUrl != null}"
-                  th:src="@{'/uploads/' + ${item.product.imageUrl}}"
-                  alt="Фото"
-                  class="product-img"
-                />
-              </td>
+                <td>
+
+                    <img
+                            th:if="${item.product.imageUrl != null and item.product.imageUrl.startsWith('http')}"
+                            th:src="${item.product.imageUrl}"
+                            class="product-img"
+                            alt="Зображення"
+                    />
+
+                    <img
+                            th:if="${item.product.imageUrl != null and !item.product.imageUrl.startsWith('http')}"
+                            th:src="@{'/uploads/' + ${item.product.imageUrl}}"
+                            class="product-img"
+                            alt="Зображення"
+                    />
+
+                </td>
 
               <td th:text="${item.product.name}"></td>
               <td

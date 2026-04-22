@@ -59,11 +59,20 @@
         <div class="products-grid">
           <div class="product-card" th:each="product : ${products}">
             <a th:href="@{/products/{id}(id=${product.id})}">
-              <img
-                th:if="${product.imageUrl != null and not #strings.isEmpty(product.imageUrl)}"
-                th:src="@{'/uploads/' + ${product.imageUrl}}"
-                alt="Зображення товару"
-              />
+                <img
+                        th:if="${product.imageUrl != null and product.imageUrl.startsWith('http')}"
+                        th:src="${product.imageUrl}"
+                        class="product-image"
+                        alt="Зображення"
+                />
+
+                <img
+                        th:if="${product.imageUrl != null and !product.imageUrl.startsWith('http')}"
+                        th:src="@{'/uploads/' + ${product.imageUrl}}"
+                        class="product-image"
+                        alt="Зображення"
+                />
+
             </a>
 
             <div class="product-body">

@@ -17,10 +17,20 @@
 
     <div class="product-card">
 
-        <img th:if="${product.imageUrl != null and not #strings.isEmpty(product.imageUrl)}"
-             th:src="@{'/uploads/' + ${product.imageUrl}}"
-             alt="Зображення товару"
-             class="product-image"/>
+        <img
+                th:if="${product.imageUrl != null and product.imageUrl.startsWith('http')}"
+                th:src="${product.imageUrl}"
+                class="product-image"
+                alt="Зображення"
+        />
+
+        <img
+                th:if="${product.imageUrl != null and !product.imageUrl.startsWith('http')}"
+                th:src="@{'/uploads/' + ${product.imageUrl}}"
+                class="product-image"
+                alt="Зображення"
+        />
+
 
         <div class="product-content">
 
