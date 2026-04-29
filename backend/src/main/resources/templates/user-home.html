@@ -71,23 +71,21 @@
                 <td th:text="${product.description}"></td>
                 <td th:text="${product.price + ' грн'}"></td>
                 <td th:text="${product.quantity}"></td>
-                  <td>
+                <td>
+                  <img
+                    th:if="${product.imageUrl != null and product.imageUrl.startsWith('http')}"
+                    th:src="${product.imageUrl}"
+                    class="product-image"
+                    alt="Зображення"
+                  />
 
-                      <img
-                              th:if="${product.imageUrl != null and product.imageUrl.startsWith('http')}"
-                              th:src="${product.imageUrl}"
-                              class="product-image"
-                              alt="Зображення"
-                      />
-
-                      <img
-                              th:if="${product.imageUrl != null and !product.imageUrl.startsWith('http')}"
-                              th:src="@{'/uploads/' + ${product.imageUrl}}"
-                              class="product-image"
-                              alt="Зображення"
-                      />
-
-                  </td>
+                  <img
+                    th:if="${product.imageUrl != null and !product.imageUrl.startsWith('http')}"
+                    th:src="@{'/uploads/' + ${product.imageUrl}}"
+                    class="product-image"
+                    alt="Зображення"
+                  />
+                </td>
                 <td
                   th:text="${#temporals.format(product.createdAt, 'dd.MM.yyyy HH:mm')}"
                 ></td>
@@ -113,57 +111,68 @@
         <div class="add-product">
           <h3>Добавити товар</h3>
 
-            <form
-                    th:action="@{/user/home/add}"
-                    th:object="${product}"
-                    method="post"
-                    enctype="multipart/form-data"
-                    id="productForm"
-            >
+          <form
+            th:action="@{/user/home/add}"
+            th:object="${product}"
+            method="post"
+            enctype="multipart/form-data"
+            id="productForm"
+          >
+            <div class="input-img-container">
+              <input type="file" name="imageFile" id="imageFile" />
+              <input
+                type="text"
+                name="imageUrl"
+                id="imageUrl"
+                placeholder="Або вставте URL картинки"
+                style="display: none"
+              />
+              <button type="button" id="btn-toggle-type">URL</button>
+            </div>
 
+            <div id="imageError" style="color: red; font-size: 12px"></div>
 
-                <input type="file" name="imageFile" id="imageFile" />
+            <input
+              type="text"
+              th:field="*{name}"
+              placeholder="Назва"
+              required
+            />
 
-                <input type="text"
-                       name="imageUrl"
-                       id="imageUrl"
-                       placeholder="Або вставте URL картинки">
+            <textarea
+              th:field="*{description}"
+              placeholder="Опис"
+              rows="5"
+            ></textarea>
 
+            <input
+              type="number"
+              th:field="*{price}"
+              placeholder="Ціна"
+              required
+            />
 
-                <div id="imageError" style="color:red; font-size:12px;"></div>
+            <input
+              type="number"
+              th:field="*{quantity}"
+              placeholder="Кількість"
+              required
+            />
 
+            <select th:field="*{category}" required>
+              <option value="" disabled selected>Виберіть категорію</option>
+              <option
+                th:each="cat : ${categories}"
+                th:value="${cat.id}"
+                th:text="${cat.name}"
+              ></option>
+            </select>
 
-                <input type="text" th:field="*{name}" placeholder="Назва" required />
-
-                <textarea
-                        th:field="*{description}"
-                        placeholder="Опис"
-                        rows="5"
-                ></textarea>
-
-                <input type="number" th:field="*{price}" placeholder="Ціна" required />
-
-                <input
-                        type="number"
-                        th:field="*{quantity}"
-                        placeholder="Кількість"
-                        required
-                />
-
-                <select th:field="*{category}" required>
-                    <option value="" disabled selected>Виберіть категорію</option>
-                    <option
-                            th:each="cat : ${categories}"
-                            th:value="${cat.id}"
-                            th:text="${cat.name}"
-                    ></option>
-                </select>
-
-                <button type="submit">Добавити</button>
-            </form>
+            <button type="submit">Добавити</button>
+          </form>
         </div>
       </div>
     </main>
-
+    <script th:src="@{/js/user-home.js}"></script>
   </body>
 </html>

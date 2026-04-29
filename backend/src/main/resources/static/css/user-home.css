@@ -253,12 +253,37 @@ tbody tr:hover {
   margin-bottom: 15px;
 }
 
-.add-product input {
+.add-product form > input {
   width: 100%;
   padding: 10px;
   margin-bottom: 12px;
   border-radius: 6px;
   border: 1px solid #ccc;
+  height: 40px;
+}
+
+.add-product form > div {
+  margin-bottom: 12px;
+}
+
+.input-img-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#imageUrl,
+#imageFile {
+  width: 73%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  height: 40px;
+}
+
+#btn-toggle-type {
+  width: 25%;
+  height: 40px;
 }
 
 .add-product button {
